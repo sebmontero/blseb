@@ -163,7 +163,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
 .cal-toggle-row{display:inline-flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;margin-bottom:8px;background:#f5f2ee;border-radius:8px}
 .cal-toggle-lbl{font-size:12px;font-weight:600;color:#999}
 .cal-toggle-arr{font-size:13px;color:#ccc}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .cal-dow{font-size:9px;color:#bbb;text-align:center;padding:2px 0 4px;font-weight:700}
 .cal-day{font-size:10px;text-align:center;padding:5px 1px;border-radius:50%;color:#888;aspect-ratio:1;display:flex;align-items:center;justify-content:center}
 .cal-day.cp{background:#fde8e8;color:#a33;   font-weight:700;cursor:pointer}
@@ -502,6 +502,33 @@ const WK = {
 const SECTIONS=['home','push','pull','upper','legs','prog-push','prog-pull','prog-upper','prog-legs','prog-cardio'];
 const TABS=['home','push','pull','upper','legs'];
 const WKMAP={'push':'cp','pull':'cl','upper':'cu','legs':'cg','cardio':'cc'};
+const CARDIO_COLORS={bicicleta:'#2f7d4f',caminar:'#c07000',natacion:'#2255a3',remadora:'#a33'};
+
+// ── CALENDAR DAY CELL (shared by modal/inline/home calendars) ───
+function cardioRingStyle(ss){
+  const cs=(ss||[]).filter(s=>s.workout==='cardio');
+  if(!cs.length) return '';
+  const byType={};
+  cs.forEach(s=>{byType[s.tipo]=(byType[s.tipo]||0)+(s.minutos||0);});
+  let acc=0;const shadows=[];
+  Object.keys(byType).forEach(tipo=>{
+    const mins=byType[tipo];
+    const thick=Math.min(4,Math.max(1.5,mins/20));
+    acc+=thick;
+    shadows.push(`0 0 0 ${acc.toFixed(1)}px ${CARDIO_COLORS[tipo]||'#888'}`);
+  });
+  return `box-shadow:${shadows.join(',')};`;
+}
+function calDayCell(key,d,ss){
+  let cls='',clk='';
+  if(ss&&ss.length){
+    const wkType=ss.find(s=>s.workout!=='cardio');
+    cls=wkType?WKMAP[wkType.workout]||'':'';
+    clk=` onclick="showDetail('${key}')"`;
+  }
+  const ring=cardioRingStyle(ss);
+  return `<div class="cal-day ${cls}" style="position:relative;cursor:${ss&&ss.length?'pointer':'default'};${ring}"${clk}>${d}</div>`;
+}
 
 // ── FIREBASE (loaded via CDN scripts above) ──────────────
 const USER_DOC = 'seb';
@@ -785,16 +812,7 @@ function renderCalModal(){
   for(let i=0;i<fd;i++)html+='<div class="cal-day"></div>';
   for(let d=1;d<=dim;d++){
     const key=calY+'-'+String(calM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const ss=dm[key];let cls='',clk='',star='';
-    if(ss&&ss.length){
-      const hasCardio=ss.some(s=>s.workout==='cardio');
-      const hasWorkout=ss.some(s=>s.workout!=='cardio');
-      const wkType=ss.find(s=>s.workout!=='cardio');
-      cls=wkType?WKMAP[wkType.workout]||'':(hasCardio?'cc':'');
-      if(hasCardio&&hasWorkout) star='<span style="position:absolute;bottom:-4px;right:-4px;width:17px;height:17px;border-radius:50%;background:#2f7d4f;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;line-height:1;color:#fff;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,0.25)">+</span>';
-      clk=` onclick="showDetail('${key}')"`;
-    } 
-    html+=`<div class="cal-day ${cls}" style="position:relative;cursor:${ss?'pointer':'default'}"${clk}>${d}${star}</div>`;
+    html+=calDayCell(key,d,dm[key]);
   }
   document.getElementById('cal-grid').innerHTML=html;
 }
@@ -824,16 +842,7 @@ function renderCalInline(wk){
   for(let i=0;i<fd;i++)html+='<div class="cal-day"></div>';
   for(let d=1;d<=dim;d++){
     const key=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const ss=dm[key];let cls='',clk='',star='';
-    if(ss&&ss.length){
-      const hasCardio=ss.some(s=>s.workout==='cardio');
-      const hasWorkout=ss.some(s=>s.workout!=='cardio');
-      const wkType=ss.find(s=>s.workout!=='cardio');
-      cls=wkType?WKMAP[wkType.workout]||'':(hasCardio?'cc':'');
-      if(hasCardio&&hasWorkout) star='<span style="position:absolute;bottom:-4px;right:-4px;width:17px;height:17px;border-radius:50%;background:#2f7d4f;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;line-height:1;color:#fff;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,0.25)">+</span>';
-      clk=` onclick="showDetail('${key}')"`;
-    }
-    html+=`<div class="cal-day ${cls}" style="position:relative;cursor:${ss?'pointer':'default'}"${clk}>${d}${star}</div>`;
+    html+=calDayCell(key,d,dm[key]);
   }
   html+='</div>';
   el.innerHTML=html;
@@ -1024,7 +1033,9 @@ function closeExChart(){
 
 // ── EDIT ENTRY ───────────────────────────────────────────
 let editState={};
+let editMode='exercise';
 function openEditEntry(wk, exId, date){
+  editMode='exercise';
   const ex=findExById(wk,exId);if(!ex)return;
   const hist=getEx(exId);
   const sess=hist.find(s=>s.date===date)||{date,sets:[{kg:0,r:0},{kg:0,r:0},{kg:0,r:0}],range:ex.range};
@@ -1050,6 +1061,7 @@ function openEditEntry(wk, exId, date){
   document.getElementById('popup-edit').classList.add('open');
 }
 function saveEditEntry(){
+  if(editMode==='cardio'){ saveEditCardioEntries(); return; }
   const {wk,exId,date,hist}=editState;
   const sets=[0,1,2].map(i=>({
     kg:parseFloat(document.getElementById('edit-kg-'+i).value)||0,
@@ -1085,6 +1097,61 @@ function deleteWeek(wk,date){
   renderProgTable(wk);renderCalInline(wk);
 }
 
+// ── EDIT CARDIO ENTRIES ───────────────────────────────────
+let editCardioState={};
+const CARDIO_LABELS={bicicleta:'Bicicleta',caminar:'Caminar',natacion:'Natación',remadora:'Remadora'};
+function cardioWkKey(dateStr){
+  const d=new Date(dateStr+'T00:00:00'),day=d.getDay()||7,mon=new Date(d);
+  mon.setDate(d.getDate()-(day-1));return mon.toISOString().split('T')[0];
+}
+function openEditCardio(wkStart,tipo){
+  editMode='cardio';
+  const sessions=getH().filter(s=>s.workout==='cardio'&&s.tipo===tipo&&cardioWkKey(s.date)===wkStart).sort((a,b)=>a.date.localeCompare(b.date));
+  if(!sessions.length) return;
+  editCardioState={tipo,origDates:sessions.map(s=>s.date),sessions:JSON.parse(JSON.stringify(sessions))};
+  document.getElementById('edit-title').textContent=CARDIO_LABELS[tipo]+' — semana';
+  renderCardioEditBody();
+  document.getElementById('popup-edit').classList.add('open');
+}
+function renderCardioEditBody(){
+  const {sessions}=editCardioState;
+  let html='<div style="display:flex;flex-direction:column;gap:10px">';
+  sessions.forEach((s,i)=>{
+    html+=`<div style="display:flex;align-items:center;gap:6px">
+      <span style="font-size:11px;color:#999;width:36px;flex-shrink:0">${fmtD(s.date)}</span>
+      <input type="number" inputmode="numeric" id="ec-min-${i}" value="${s.minutos||''}" placeholder="min" style="width:56px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
+      <span style="font-size:10px;color:#ccc">min</span>
+      <input type="number" inputmode="numeric" id="ec-fc-${i}" value="${s.fc||''}" placeholder="FC" style="width:56px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
+      <span style="font-size:10px;color:#ccc">fc</span>
+      <span onclick="deleteCardioEntry(${i})" style="color:#ccc;cursor:pointer;font-size:16px;padding:0 4px;margin-left:auto">✕</span>
+    </div>`;
+  });
+  html+='</div>';
+  document.getElementById('edit-body').innerHTML=html;
+}
+function deleteCardioEntry(i){
+  editCardioState.sessions.splice(i,1);
+  renderCardioEditBody();
+}
+function saveEditCardioEntries(){
+  const {sessions,origDates,tipo}=editCardioState;
+  const updated=sessions.map((s,i)=>({
+    ...s,
+    minutos:parseInt(document.getElementById('ec-min-'+i).value)||0,
+    fc:parseInt(document.getElementById('ec-fc-'+i).value)||null
+  })).filter(s=>s.minutos>0);
+  let h=getH().filter(s=>!(s.workout==='cardio'&&s.tipo===tipo&&origDates.includes(s.date)));
+  h=h.concat(updated);
+  setH(h);
+  closeEditPopup();
+  refreshCardioViews();
+}
+function refreshCardioViews(){
+  if(document.getElementById('sec-home').classList.contains('active')) renderHome();
+  const progEl=document.getElementById('sec-prog-cardio');
+  if(progEl&&progEl.classList.contains('active')){renderProgCardio();renderCalInline('cardio');}
+}
+
 // ── PROG CARDIO ──────────────────────────────────────────
 function renderProgCardio(targetId){
   const el=document.getElementById(targetId||'tbl-prog-cardio');if(!el)return;
@@ -1101,23 +1168,18 @@ function renderProgCardio(targetId){
     const d=new Date(wk+'T00:00:00');
     return `<span style="cursor:pointer" onclick="deleteCardioWeek('${wk}')" title="Click para borrar">Sem ${i+1}<br><small style="color:#bbb;font-weight:400">${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}</small></span>`;
   });
-  let html='<table class="prog-tbl"><thead><tr><th></th>'+wkLabels.map(l=>'<th>'+l+'</th>').join('')+'</tr></thead><tbody>';
-  // Bicicleta row
-  html+='<tr><td class="td-ex">🚴 Bici</td>';
-  wkKeys.forEach(wk=>{const b=weeks[wk].sessions.filter(s=>s.tipo==='bicicleta');const mins=b.reduce((a,s)=>a+(s.minutos||0),0);html+='<td class="prog-cell">'+(b.length?mins+'/'+b.length:'—')+'</td>';});
-  html+='</tr>';
-  // Caminar row
-  html+='<tr><td class="td-ex">🚶 Caminar</td>';
-  wkKeys.forEach(wk=>{const c=weeks[wk].sessions.filter(s=>s.tipo==='caminar');const mins=c.reduce((a,s)=>a+(s.minutos||0),0);html+='<td class="prog-cell">'+(c.length?mins+'/'+c.length:'—')+'</td>';});
-  html+='</tr>';
-  // Natación row
-  html+='<tr><td class="td-ex">🏊 Natación</td>';
-  wkKeys.forEach(wk=>{const n=weeks[wk].sessions.filter(s=>s.tipo==='natacion');const mins=n.reduce((a,s)=>a+(s.minutos||0),0);html+='<td class="prog-cell">'+(n.length?mins+'/'+n.length:'—')+'</td>';});
-  html+='</tr>';
-  // Remadora row
-  html+='<tr><td class="td-ex">🚣 Remadora</td>';
-  wkKeys.forEach(wk=>{const r=weeks[wk].sessions.filter(s=>s.tipo==='remadora');const mins=r.reduce((a,s)=>a+(s.minutos||0),0);html+='<td class="prog-cell">'+(r.length?mins+'/'+r.length:'—')+'</td>';});
-  html+='</tr>';
+  let html='<table class="prog-tbl"><thead><tr><th>Cardio</th>'+wkLabels.map(l=>'<th>'+l+'</th>').join('')+'</tr></thead><tbody>';
+  const cardioRows=[{tipo:'bicicleta',label:'Bici'},{tipo:'caminar',label:'Caminar'},{tipo:'natacion',label:'Natación'},{tipo:'remadora',label:'Remadora'}];
+  cardioRows.forEach(row=>{
+    html+=`<tr><td class="td-ex">${row.label}</td>`;
+    wkKeys.forEach(wk=>{
+      const s=weeks[wk].sessions.filter(x=>x.tipo===row.tipo);
+      const mins=s.reduce((a,x)=>a+(x.minutos||0),0);
+      const clk=s.length?` onclick="openEditCardio('${wk}','${row.tipo}')" style="cursor:pointer"`:'';
+      html+=`<td class="prog-cell"${clk}>${s.length?mins+'/'+s.length:'—'}</td>`;
+    });
+    html+='</tr>';
+  });
   // Total row
   html+='<tr><td class="td-ex" style="font-weight:700">Total</td>';
   wkKeys.forEach(wk=>{const n=weeks[wk].sessions.length;html+='<td class="prog-cell" style="font-weight:700">'+weeks[wk].totalMin+'/'+n+'</td>';});
@@ -1167,16 +1229,7 @@ function renderHomeCal(){
   for(let i=0;i<fd;i++) html+='<div class="cal-day"></div>';
   for(let d=1;d<=dim;d++){
     const key=homeCalY+'-'+String(homeCalM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const ss=dm[key];let cls='',clk='',star='';
-    if(ss&&ss.length){
-      const hasCardio=ss.some(s=>s.workout==='cardio');
-      const hasWorkout=ss.some(s=>s.workout!=='cardio');
-      const wkType=ss.find(s=>s.workout!=='cardio');
-      cls=wkType?WKMAP[wkType.workout]||'':(hasCardio?'cc':'');
-      if(hasCardio&&hasWorkout) star='<span style="position:absolute;bottom:-4px;right:-4px;width:17px;height:17px;border-radius:50%;background:#2f7d4f;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;line-height:1;color:#fff;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,0.25)">+</span>';
-      clk=` onclick="showDetail('${key}')"`;
-    }
-    html+=`<div class="cal-day ${cls}" style="position:relative;cursor:${ss?'pointer':'default'}"${clk}>${d}${star}</div>`;
+    html+=calDayCell(key,d,dm[key]);
   }
   const grid=document.getElementById('home-cal-grid');
   if(grid) grid.innerHTML=html;
@@ -1215,18 +1268,25 @@ function renderHomeExTable(){
   ];
   const tbl=document.getElementById('home-ex-tbl');
   if(!tbl) return;
-  let html='<thead><tr><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:left">Ejercicio</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">M\u00e1ximo hist\u00f3rico</th></tr></thead>';
+  const ROW_COLORS={push:{bg:'#fde8e8',fg:'#a33'},pull:{bg:'#e8eefe',fg:'#2255a3'},upper:{bg:'#e8f7ed',fg:'#2a6e3f'},legs:{bg:'#fef8e0',fg:'#856404'}};
+  const cutoff=new Date();cutoff.setDate(cutoff.getDate()-30);
+  let html='<thead><tr><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:left">Ejercicio</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">\u00daltimo</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">Prom. mes</th></tr></thead>';
   KEY_EXERCISES.forEach(ex=>{
-    const data=getEx(ex.id);
-    let maxKg='\u2014';
+    const data=[...getEx(ex.id)].sort((a,b)=>a.date.localeCompare(b.date));
+    let lastKg='\u2014',avgKg='\u2014';
     if(data.length){
-      const allKg=data.flatMap(s=>s.sets.map(x=>x.kg)).filter(k=>k>0);
-      if(allKg.length) maxKg=Math.max(...allKg);
+      const lastValid=(data[data.length-1].sets||[]).filter(s=>s.kg>0);
+      if(lastValid.length) lastKg=lastValid[lastValid.length-1].kg;
+      const recent=[];
+      data.forEach(d=>{if(new Date(d.date+'T00:00:00')>=cutoff)(d.sets||[]).forEach(s=>{if(s.kg>0)recent.push(s.kg);});});
+      if(recent.length) avgKg=Math.round((recent.reduce((a,b)=>a+b,0)/recent.length)*10)/10;
     }
     const tab=KEY_TO_TAB[ex.id];
-    html+=`<tr>
-      <td class="home-ex-name" style="cursor:pointer;color:#1a1a1a" onclick="goTab('${tab}')">${ex.es} <span style="font-size:10px;color:#ccc">\u203a</span></td>
-      <td class="home-ex-kg">${maxKg} kg</td>
+    const col=ROW_COLORS[tab]||{bg:'#f5f2ee',fg:'#1a1a1a'};
+    html+=`<tr style="background:${col.bg}">
+      <td class="home-ex-name" style="cursor:pointer;color:${col.fg}" onclick="goTab('${tab}')">${ex.es} <span style="font-size:10px;color:${col.fg};opacity:0.6">\u203a</span></td>
+      <td class="home-ex-kg" style="color:${col.fg}">${lastKg} kg</td>
+      <td class="home-ex-kg" style="color:${col.fg}">${avgKg} kg</td>
     </tr>`;
   });
   tbl.innerHTML=html;
