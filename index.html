@@ -163,9 +163,10 @@ tr.ex-done .ex-name{text-decoration:line-through}
 .cal-toggle-row{display:inline-flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;margin-bottom:8px;background:#f5f2ee;border-radius:8px}
 .cal-toggle-lbl{font-size:12px;font-weight:600;color:#999}
 .cal-toggle-arr{font-size:13px;color:#ccc}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .cal-dow{font-size:9px;color:#bbb;text-align:center;padding:2px 0 4px;font-weight:700}
-.cal-day{font-size:10px;text-align:center;padding:5px 1px;border-radius:50%;color:#888;aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+.cal-daywrap{position:relative;aspect-ratio:1}
+.cal-day{position:absolute;inset:0;font-size:10px;text-align:center;border-radius:50%;color:#888;display:flex;align-items:center;justify-content:center}
 .cal-day.cp{background:#fde8e8;color:#a33;   font-weight:700;cursor:pointer}
 .cal-day.cl{background:#e8eefe;color:#2255a3;font-weight:700;cursor:pointer}
 .cal-day.cu{background:#e8f7ed;color:#2a6e3f;font-weight:700;cursor:pointer}
@@ -247,7 +248,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
       <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8eefe"></div>Pull</div>
       <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8f7ed"></div>Upper</div>
       <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fef8e0"></div>Legs</div>
-      <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #2f7d4f"></div>Cardio (anillo · grosor = min)</div>
+      <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #3a3a3a"></div>Cardio: — bici · - - caminar · ··· natación · ═ remo (grosor = min)</div>
     </div>
   </div>
   <div class="card">
@@ -439,7 +440,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
       <div class="cl-item"><div class="cl-dot" style="background:#e8eefe"></div>Pull</div>
       <div class="cl-item"><div class="cl-dot" style="background:#e8f7ed"></div>Upper</div>
       <div class="cl-item"><div class="cl-dot" style="background:#fef8e0"></div>Legs</div>
-      <div class="cl-item"><div class="cl-dot" style="background:#fff;border:2px solid #2f7d4f"></div>Cardio (anillo)</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#fff;border:2px solid #3a3a3a"></div>Cardio: línea = tipo, grosor = min</div>
     </div>
     <div class="cal-grid" id="cal-grid"></div>
     <button class="btn-close" onclick="closeCal()">Cerrar</button>
@@ -503,22 +504,26 @@ const WK = {
 const SECTIONS=['home','push','pull','upper','legs','prog-push','prog-pull','prog-upper','prog-legs','prog-cardio'];
 const TABS=['home','push','pull','upper','legs'];
 const WKMAP={'push':'cp','pull':'cl','upper':'cu','legs':'cg','cardio':'cc'};
-const CARDIO_COLORS={bicicleta:'#2f7d4f',caminar:'#c07000',natacion:'#2255a3',remadora:'#a33'};
 
 // ── CALENDAR DAY CELL (shared by modal/inline/home calendars) ───
-function cardioRingStyle(ss){
+const CARDIO_RING_COLOR='#3a3a3a';
+const CARDIO_LINESTYLE={bicicleta:'solid',caminar:'dashed',natacion:'dotted',remadora:'double'};
+function cardioRings(ss){
   const cs=(ss||[]).filter(s=>s.workout==='cardio');
-  if(!cs.length) return '';
+  if(!cs.length) return {html:'',title:''};
   const byType={};
   cs.forEach(s=>{byType[s.tipo]=(byType[s.tipo]||0)+(s.minutos||0);});
-  let acc=0;const shadows=[];
+  let inset=-3,html='';
+  const titleParts=[];
   Object.keys(byType).forEach(tipo=>{
     const mins=byType[tipo];
-    const thick=Math.min(4,Math.max(1.5,mins/20));
-    acc+=thick;
-    shadows.push(`0 0 0 ${acc.toFixed(1)}px ${CARDIO_COLORS[tipo]||'#888'}`);
+    const thick=Math.min(4,Math.max(1.5,mins/18));
+    const style=CARDIO_LINESTYLE[tipo]||'solid';
+    html+=`<div style="position:absolute;inset:${inset}px;border-radius:50%;border:${thick}px ${style} ${CARDIO_RING_COLOR};pointer-events:none"></div>`;
+    inset-=(thick+2);
+    titleParts.push(`${CARDIO_LABELS[tipo]||tipo}: ${mins} min`);
   });
-  return `box-shadow:${shadows.join(',')};`;
+  return {html,title:titleParts.join(' · ')};
 }
 function calDayCell(key,d,ss){
   let cls='',clk='';
@@ -527,8 +532,9 @@ function calDayCell(key,d,ss){
     cls=wkType?WKMAP[wkType.workout]||'':'';
     clk=` onclick="showDetail('${key}')"`;
   }
-  const ring=cardioRingStyle(ss);
-  return `<div class="cal-day ${cls}" style="position:relative;cursor:${ss&&ss.length?'pointer':'default'};${ring}"${clk}>${d}</div>`;
+  const rings=cardioRings(ss);
+  const title=rings.title?` title="${rings.title}"`:'';
+  return `<div class="cal-daywrap"${title}><div class="cal-day ${cls}"${clk} style="cursor:${ss&&ss.length?'pointer':'default'}">${d}</div>${rings.html}</div>`;
 }
 
 // ── DATE UTILS (Santiago de Chile, timezone-safe) ─────────
@@ -554,10 +560,9 @@ function initialCalAnchor(){
   return addDaysStr(weekStartStr(todaySantiago()),-14);
 }
 function windowLabel(anchor){
-  const first=ymd(anchor),last=ymd(addDaysStr(anchor,34));
-  if(first.y===last.y&&first.m===last.m) return MONTHS_ES[first.m-1]+' '+first.y;
-  if(first.y===last.y) return MONTHS_ES[first.m-1].slice(0,3)+'–'+MONTHS_ES[last.m-1].slice(0,3)+' '+first.y;
-  return MONTHS_ES[first.m-1].slice(0,3)+' '+first.y+' – '+MONTHS_ES[last.m-1].slice(0,3)+' '+last.y;
+  // Mes "principal" = el mes del día del medio de las 5 semanas visibles (índice 17 de 35).
+  const mid=ymd(addDaysStr(anchor,17));
+  return MONTHS_ES[mid.m-1]+' '+mid.y;
 }
 function buildCalGrid(anchor,dm){
   const dows=['Lu','Ma','Mi','Ju','Vi','Sa','Do'];
@@ -953,7 +958,8 @@ function renderProgTable(wk){
       });
     });
     const swDate=ex.predecessor?ex.predecessor.switchDate:null;
-    const transDate=swDate||(currData.length?[...currData].sort((a,b)=>a.date.localeCompare(b.date))[0].date:null);
+    const firstCurrDate=currData.length?[...currData].sort((a,b)=>a.date.localeCompare(b.date))[0].date:null;
+    const transDate=firstCurrDate||swDate;
     const chartIcon=` <span class="ic-chart" onclick="openExChart('${wk}','${ex.id}');event.stopPropagation()" title="Ver evolución">📈</span>`;
     const prevLabel=ex.predecessor?`<span class="ex-prev">antes: ${ex.predecessor.es}</span>`:'';
     const unit=UNIT_MAP[ex.id];
@@ -1293,8 +1299,8 @@ function renderHomeExTable(){
   const tbl=document.getElementById('home-ex-tbl');
   if(!tbl) return;
   const ROW_COLORS={push:{bg:'#fde8e8',fg:'#a33'},pull:{bg:'#e8eefe',fg:'#2255a3'},upper:{bg:'#e8f7ed',fg:'#2a6e3f'},legs:{bg:'#fef8e0',fg:'#856404'}};
-  const cutoff=addDaysStr(todaySantiago(),-30);
-  let html='<thead><tr><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:left">Ejercicio</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">\u00daltimo</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">Prom. mes</th></tr></thead>';
+  const cutoff=addDaysStr(todaySantiago(),-28);
+  let html='<thead><tr><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:left">Ejercicio</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">\u00daltimo</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">M\u00e1x Men</th></tr></thead>';
   KEY_EXERCISES.forEach(ex=>{
     const data=[...getEx(ex.id)].sort((a,b)=>a.date.localeCompare(b.date));
     let lastKg='\u2014',avgKg='\u2014';
@@ -1303,7 +1309,7 @@ function renderHomeExTable(){
       if(lastValid.length) lastKg=lastValid[lastValid.length-1].kg;
       const recent=[];
       data.forEach(d=>{if(d.date>=cutoff)(d.sets||[]).forEach(s=>{if(s.kg>0)recent.push(s.kg);});});
-      if(recent.length) avgKg=Math.round((recent.reduce((a,b)=>a+b,0)/recent.length)*10)/10;
+      if(recent.length) avgKg=Math.max(...recent);
     }
     const tab=KEY_TO_TAB[ex.id];
     const col=ROW_COLORS[tab]||{bg:'#f5f2ee',fg:'#1a1a1a'};
