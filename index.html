@@ -192,7 +192,8 @@ tr.ex-done .ex-name{text-decoration:line-through}
 .popup.open{display:flex}
 .popup-box{background:#fff;border-radius:16px;padding:18px;width:300px;max-height:78vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
 .popup-date{font-size:14px;font-weight:700;margin-bottom:12px}
-.popup-ex{padding:8px 0;border-top:1px solid #f0ede8}
+.popup-ex{padding:8px 0;border-top:1px solid #f0ede8;cursor:pointer}
+.popup-ex:active{background:#f7f5f0}
 .popup-ex:first-child{border-top:none}
 .popup-ex-name{font-size:13px;font-weight:600;margin-bottom:3px}
 .popup-sets{font-size:12px;color:#777;font-family:monospace}
@@ -246,7 +247,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
       <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8eefe"></div>Pull</div>
       <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8f7ed"></div>Upper</div>
       <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fef8e0"></div>Legs</div>
-      <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#efefef"></div>Cardio</div>
+      <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #2f7d4f"></div>Cardio (anillo · grosor = min)</div>
     </div>
   </div>
   <div class="card">
@@ -438,7 +439,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
       <div class="cl-item"><div class="cl-dot" style="background:#e8eefe"></div>Pull</div>
       <div class="cl-item"><div class="cl-dot" style="background:#e8f7ed"></div>Upper</div>
       <div class="cl-item"><div class="cl-dot" style="background:#fef8e0"></div>Legs</div>
-      <div class="cl-item"><div class="cl-dot" style="background:#efefef"></div>Cardio</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#fff;border:2px solid #2f7d4f"></div>Cardio (anillo)</div>
     </div>
     <div class="cal-grid" id="cal-grid"></div>
     <button class="btn-close" onclick="closeCal()">Cerrar</button>
@@ -528,6 +529,57 @@ function calDayCell(key,d,ss){
   }
   const ring=cardioRingStyle(ss);
   return `<div class="cal-day ${cls}" style="position:relative;cursor:${ss&&ss.length?'pointer':'default'};${ring}"${clk}>${d}</div>`;
+}
+
+// ── DATE UTILS (Santiago de Chile, timezone-safe) ─────────
+// "Hoy" siempre se calcula forzando America/Santiago, sin importar el reloj/zona del dispositivo.
+function todaySantiago(){
+  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Santiago',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  const g=t=>parts.find(x=>x.type===t).value;
+  return g('year')+'-'+g('month')+'-'+g('day');
+}
+// Toda la aritmética de fechas de acá en adelante opera solo sobre strings 'YYYY-MM-DD'
+// usando Date.UTC como ancla neutra — nunca se parsea una fecha con la zona horaria
+// local del navegador, que es lo que puede desfasar un día según el dispositivo.
+function ymd(dateStr){const [y,m,d]=dateStr.split('-').map(Number);return {y,m,d};}
+function dateStrToUTCms(dateStr){const {y,m,d}=ymd(dateStr);return Date.UTC(y,m-1,d);}
+function utcMsToDateStr(ms){const d=new Date(ms);return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');}
+function addDaysStr(dateStr,n){return utcMsToDateStr(dateStrToUTCms(dateStr)+n*86400000);}
+function weekdayOfStr(dateStr){const wd=new Date(dateStrToUTCms(dateStr)).getUTCDay();return wd===0?7:wd;} // 1=Lu..7=Do
+function weekStartStr(dateStr){return addDaysStr(dateStr,-(weekdayOfStr(dateStr)-1));}
+
+// ── CONTINUOUS 5-WEEK CALENDAR (shared) ──────────────────
+const MONTHS_ES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function initialCalAnchor(){
+  return addDaysStr(weekStartStr(todaySantiago()),-14);
+}
+function windowLabel(anchor){
+  const first=ymd(anchor),last=ymd(addDaysStr(anchor,34));
+  if(first.y===last.y&&first.m===last.m) return MONTHS_ES[first.m-1]+' '+first.y;
+  if(first.y===last.y) return MONTHS_ES[first.m-1].slice(0,3)+'–'+MONTHS_ES[last.m-1].slice(0,3)+' '+first.y;
+  return MONTHS_ES[first.m-1].slice(0,3)+' '+first.y+' – '+MONTHS_ES[last.m-1].slice(0,3)+' '+last.y;
+}
+function buildCalGrid(anchor,dm){
+  const dows=['Lu','Ma','Mi','Ju','Vi','Sa','Do'];
+  let html=dows.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
+  for(let i=0;i<35;i++){
+    const key=addDaysStr(anchor,i);
+    html+=calDayCell(key,ymd(key).d,dm[key]);
+  }
+  return html;
+}
+function attachSwipe(el,onPrev,onNext){
+  if(!el||el._swipeBound) return;
+  el._swipeBound=true;
+  let startX=null,startY=null;
+  el.addEventListener('touchstart',e=>{const t=e.touches[0];startX=t.clientX;startY=t.clientY;},{passive:true});
+  el.addEventListener('touchend',e=>{
+    if(startX===null)return;
+    const t=e.changedTouches[0];
+    const dx=t.clientX-startX,dy=t.clientY-startY;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.5){dx<0?onNext():onPrev();}
+    startX=null;
+  });
 }
 
 // ── FIREBASE (loaded via CDN scripts above) ──────────────
@@ -798,27 +850,20 @@ function saveCardio(){
 }
 
 // ── MODAL CALENDAR ───────────────────────────────────────
-let calY,calM;
-function openCal(){const n=new Date();calY=n.getFullYear();calM=n.getMonth();renderCalModal();document.getElementById('modal-cal').classList.add('open');}
+let calAnchor;
+function openCal(){calAnchor=initialCalAnchor();renderCalModal();document.getElementById('modal-cal').classList.add('open');}
 function closeCal(e){if(!e||e.target===document.getElementById('modal-cal'))document.getElementById('modal-cal').classList.remove('open');}
-function calNav(d){calM+=d;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}renderCalModal();}
+function calNav(d){calAnchor=addDaysStr(calAnchor,d*35);renderCalModal();}
 function renderCalModal(){
   const h=getH(),dm={};h.forEach(s=>{if(!dm[s.date])dm[s.date]=[];dm[s.date].push(s);});
-  const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  document.getElementById('cal-title').textContent=months[calM]+' '+calY;
-  const fd=(new Date(calY,calM,1).getDay()+6)%7,dim=new Date(calY,calM+1,0).getDate();
-  const dows=['Lu','Ma','Mi','Ju','Vi','Sa','Do'];
-  let html=dows.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
-  for(let i=0;i<fd;i++)html+='<div class="cal-day"></div>';
-  for(let d=1;d<=dim;d++){
-    const key=calY+'-'+String(calM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    html+=calDayCell(key,d,dm[key]);
-  }
-  document.getElementById('cal-grid').innerHTML=html;
+  document.getElementById('cal-title').textContent=windowLabel(calAnchor);
+  const grid=document.getElementById('cal-grid');
+  grid.innerHTML=buildCalGrid(calAnchor,dm);
+  attachSwipe(grid,()=>calNav(-1),()=>calNav(1));
 }
 
 // ── INLINE CAL (collapsible) ─────────────────────────────
-const icalSt={},icalOpen={};
+const icalSt={};
 function toggleCalInline(wk){
   const body=document.getElementById('cal-body-'+wk);
   if(!body) return;
@@ -828,31 +873,20 @@ function toggleCalInline(wk){
 }
 function renderCalInline(wk){
   const cid='cal-body-'+wk,el=document.getElementById(cid);if(!el)return;
-  const now=new Date();if(!icalSt[cid])icalSt[cid]={y:now.getFullYear(),m:now.getMonth()};
-  const {y,m}=icalSt[cid];
+  if(!icalSt[cid]) icalSt[cid]=initialCalAnchor();
+  const anchor=icalSt[cid];
   const h=getH(),dm={};h.forEach(s=>{if(!dm[s.date])dm[s.date]=[];dm[s.date].push(s);});
-  const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  const fd=(new Date(y,m,1).getDay()+6)%7,dim=new Date(y,m+1,0).getDate();
-  let html=`<div class="cal-nav-row">
+  el.innerHTML=`<div class="cal-nav-row">
     <button onclick="icalNav('cal-body-${wk}','${wk}',-1)">‹</button>
-    <span>${months[m]} ${y}</span>
+    <span>${windowLabel(anchor)}</span>
     <button onclick="icalNav('cal-body-${wk}','${wk}',1)">›</button>
-  </div><div class="cal-grid">`;
-  ['Lu','Ma','Mi','Ju','Vi','Sa','Do'].forEach(d=>{html+='<div class="cal-dow">'+d+'</div>';});
-  for(let i=0;i<fd;i++)html+='<div class="cal-day"></div>';
-  for(let d=1;d<=dim;d++){
-    const key=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    html+=calDayCell(key,d,dm[key]);
-  }
-  html+='</div>';
-  el.innerHTML=html;
+  </div><div class="cal-grid" id="grid-${cid}">${buildCalGrid(anchor,dm)}</div>`;
+  attachSwipe(document.getElementById('grid-'+cid),()=>icalNav(cid,wk,-1),()=>icalNav(cid,wk,1));
 }
 
 function icalNav(cid,wk,d){
-  if(!icalSt[cid]){const n=new Date();icalSt[cid]={y:n.getFullYear(),m:n.getMonth()};}
-  icalSt[cid].m+=parseInt(d);
-  if(icalSt[cid].m>11){icalSt[cid].m=0;icalSt[cid].y++;}
-  if(icalSt[cid].m<0){icalSt[cid].m=11;icalSt[cid].y--;}
+  if(!icalSt[cid]) icalSt[cid]=initialCalAnchor();
+  icalSt[cid]=addDaysStr(icalSt[cid],d*35);
   renderCalInline(wk);
 }
 
@@ -864,15 +898,14 @@ function showDetail(dateKey){
   let html='';
   ss.forEach(s=>{
     if(s.workout==='cardio'){
-      const em=s.tipo==='bicicleta'?'🚴':'🚶';
-      html+=`<div class="popup-ex"><div class="popup-ex-name">${em} Cardio — ${s.tipo||''}</div><div class="popup-sets">${s.minutos||'?'} min</div></div>`;
+      html+=`<div class="popup-ex" onclick="closePopup();openEditCardioDay('${dateKey}')"><div class="popup-ex-name">${CARDIO_LABELS[s.tipo]||s.tipo||'Cardio'} <span style="font-size:10px;color:#ccc">›</span></div><div class="popup-sets">${s.minutos||'?'} min${s.fc?' · '+s.fc+' bpm':''}</div></div>`;
     } else {
       html+=`<div class="popup-wlabel">${s.workout.toUpperCase()}</div>`;
       (WK[s.workout]||[]).forEach(ex=>{
         const d=getEx(ex.id),sess=d.find(e=>e.date===dateKey);if(!sess)return;
         const sstr=sess.sets.filter(st=>st.kg||st.r).map(st=>(st.kg||'?')+'×'+(st.r||'?')).join(' / ');
         if(!sstr)return;
-        html+=`<div class="popup-ex"><div class="popup-ex-name">${ex.es}</div><div class="popup-sets">${sstr}</div></div>`;
+        html+=`<div class="popup-ex" onclick="closePopup();openEditEntry('${s.workout}','${ex.id}','${dateKey}')"><div class="popup-ex-name">${ex.es} <span style="font-size:10px;color:#ccc">›</span></div><div class="popup-sets">${sstr}</div></div>`;
       });
     }
   });
@@ -1082,8 +1115,7 @@ function saveEditEntry(){
   if(sets.some(s=>s.kg>0||s.r>0)) h.push({date,workout:wk});
   setH(h);
   closeEditPopup();
-  renderProgTable(wk);
-  renderCalInline(wk);
+  refreshAfterDayEdit();
 }
 function closeEditPopup(e){
   if(!e||e.target===document.getElementById('popup-edit'))
@@ -1094,22 +1126,26 @@ function deleteWeek(wk,date){
   if(!confirm('¿Borrar la sesión del '+fmtD(date)+'?'))return;
   let h=getH().filter(s=>!(s.date===date&&s.workout===wk));setH(h);
   WK[wk].forEach(ex=>{let d=getEx(ex.id).filter(s=>s.date!==date);setEx(ex.id,d);});
-  renderProgTable(wk);renderCalInline(wk);
+  refreshAfterDayEdit();
 }
 
 // ── EDIT CARDIO ENTRIES ───────────────────────────────────
 let editCardioState={};
 const CARDIO_LABELS={bicicleta:'Bicicleta',caminar:'Caminar',natacion:'Natación',remadora:'Remadora'};
-function cardioWkKey(dateStr){
-  const d=new Date(dateStr+'T00:00:00'),day=d.getDay()||7,mon=new Date(d);
-  mon.setDate(d.getDate()-(day-1));return mon.toISOString().split('T')[0];
-}
 function openEditCardio(wkStart,tipo){
-  editMode='cardio';
-  const sessions=getH().filter(s=>s.workout==='cardio'&&s.tipo===tipo&&cardioWkKey(s.date)===wkStart).sort((a,b)=>a.date.localeCompare(b.date));
+  const sessions=getH().filter(s=>s.workout==='cardio'&&s.tipo===tipo&&weekStartStr(s.date)===wkStart).sort((a,b)=>a.date.localeCompare(b.date));
   if(!sessions.length) return;
-  editCardioState={tipo,origDates:sessions.map(s=>s.date),sessions:JSON.parse(JSON.stringify(sessions))};
-  document.getElementById('edit-title').textContent=CARDIO_LABELS[tipo]+' — semana';
+  startEditCardio(sessions,CARDIO_LABELS[tipo]+' — semana');
+}
+function openEditCardioDay(dateKey){
+  const sessions=getH().filter(s=>s.workout==='cardio'&&s.date===dateKey);
+  if(!sessions.length) return;
+  startEditCardio(sessions,'Cardio — '+fmtD(dateKey));
+}
+function startEditCardio(sessions,title){
+  editMode='cardio';
+  editCardioState={origKeys:sessions.map(s=>s.date+'|'+s.tipo),sessions:JSON.parse(JSON.stringify(sessions))};
+  document.getElementById('edit-title').textContent=title;
   renderCardioEditBody();
   document.getElementById('popup-edit').classList.add('open');
 }
@@ -1118,10 +1154,10 @@ function renderCardioEditBody(){
   let html='<div style="display:flex;flex-direction:column;gap:10px">';
   sessions.forEach((s,i)=>{
     html+=`<div style="display:flex;align-items:center;gap:6px">
-      <span style="font-size:11px;color:#999;width:36px;flex-shrink:0">${fmtD(s.date)}</span>
-      <input type="number" inputmode="numeric" id="ec-min-${i}" value="${s.minutos||''}" placeholder="min" style="width:56px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
+      <span style="font-size:10px;color:#999;width:80px;flex-shrink:0">${fmtD(s.date)}${CARDIO_LABELS[s.tipo]?' · '+CARDIO_LABELS[s.tipo]:''}</span>
+      <input type="number" inputmode="numeric" id="ec-min-${i}" value="${s.minutos||''}" placeholder="min" style="width:52px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
       <span style="font-size:10px;color:#ccc">min</span>
-      <input type="number" inputmode="numeric" id="ec-fc-${i}" value="${s.fc||''}" placeholder="FC" style="width:56px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
+      <input type="number" inputmode="numeric" id="ec-fc-${i}" value="${s.fc||''}" placeholder="FC" style="width:52px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
       <span style="font-size:10px;color:#ccc">fc</span>
       <span onclick="deleteCardioEntry(${i})" style="color:#ccc;cursor:pointer;font-size:16px;padding:0 4px;margin-left:auto">✕</span>
     </div>`;
@@ -1134,22 +1170,30 @@ function deleteCardioEntry(i){
   renderCardioEditBody();
 }
 function saveEditCardioEntries(){
-  const {sessions,origDates,tipo}=editCardioState;
+  const {sessions,origKeys}=editCardioState;
   const updated=sessions.map((s,i)=>({
     ...s,
     minutos:parseInt(document.getElementById('ec-min-'+i).value)||0,
     fc:parseInt(document.getElementById('ec-fc-'+i).value)||null
   })).filter(s=>s.minutos>0);
-  let h=getH().filter(s=>!(s.workout==='cardio'&&s.tipo===tipo&&origDates.includes(s.date)));
+  let h=getH().filter(s=>!(s.workout==='cardio'&&origKeys.includes(s.date+'|'+s.tipo)));
   h=h.concat(updated);
   setH(h);
   closeEditPopup();
-  refreshCardioViews();
+  refreshAfterDayEdit();
 }
-function refreshCardioViews(){
+function refreshAfterDayEdit(){
   if(document.getElementById('sec-home').classList.contains('active')) renderHome();
-  const progEl=document.getElementById('sec-prog-cardio');
-  if(progEl&&progEl.classList.contains('active')){renderProgCardio();renderCalInline('cardio');}
+  ['push','pull','upper','legs','cardio'].forEach(wk=>{
+    const sec=document.getElementById('sec-prog-'+wk);
+    if(sec&&sec.classList.contains('active')){
+      if(wk==='cardio') renderProgCardio(); else renderProgTable(wk);
+    }
+    const body=document.getElementById('cal-body-'+wk);
+    if(body&&body.style.display==='block') renderCalInline(wk);
+  });
+  const modal=document.getElementById('modal-cal');
+  if(modal&&modal.classList.contains('open')) renderCalModal();
 }
 
 // ── PROG CARDIO ──────────────────────────────────────────
@@ -1157,16 +1201,12 @@ function renderProgCardio(targetId){
   const el=document.getElementById(targetId||'tbl-prog-cardio');if(!el)return;
   const h=getH().filter(s=>s.workout==='cardio').sort((a,b)=>a.date>b.date?1:-1);
   if(!h.length){el.innerHTML='<div class="prog-empty">Aún no hay sesiones de cardio.</div>';return;}
-  function getWkKey(dateStr){
-    const d=new Date(dateStr+'T00:00:00'),day=d.getDay()||7,mon=new Date(d);
-    mon.setDate(d.getDate()-(day-1));return mon.toISOString().split('T')[0];
-  }
   const weeks={};
-  h.forEach(s=>{const wk=getWkKey(s.date);if(!weeks[wk])weeks[wk]={sessions:[],totalMin:0};weeks[wk].sessions.push(s);weeks[wk].totalMin+=(s.minutos||0);});
+  h.forEach(s=>{const wk=weekStartStr(s.date);if(!weeks[wk])weeks[wk]={sessions:[],totalMin:0};weeks[wk].sessions.push(s);weeks[wk].totalMin+=(s.minutos||0);});
   const wkKeys=Object.keys(weeks).sort();
     const wkLabels=wkKeys.map((wk,i)=>{
-    const d=new Date(wk+'T00:00:00');
-    return `<span style="cursor:pointer" onclick="deleteCardioWeek('${wk}')" title="Click para borrar">Sem ${i+1}<br><small style="color:#bbb;font-weight:400">${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}</small></span>`;
+    const {d,m}=ymd(wk);
+    return `<span style="cursor:pointer" onclick="deleteCardioWeek('${wk}')" title="Click para borrar">Sem ${i+1}<br><small style="color:#bbb;font-weight:400">${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}</small></span>`;
   });
   let html='<table class="prog-tbl"><thead><tr><th>Cardio</th>'+wkLabels.map(l=>'<th>'+l+'</th>').join('')+'</tr></thead><tbody>';
   const cardioRows=[{tipo:'bicicleta',label:'Bici'},{tipo:'caminar',label:'Caminar'},{tipo:'natacion',label:'Natación'},{tipo:'remadora',label:'Remadora'}];
@@ -1191,25 +1231,20 @@ function renderProgCardio(targetId){
 
 function deleteCardioWeek(wkStart){
   if(!confirm('¿Borrar todas las sesiones de cardio de esta semana?'))return;
-  function getWkKey(dateStr){const d=new Date(dateStr+'T00:00:00'),day=d.getDay()||7,mon=new Date(d);mon.setDate(d.getDate()-(day-1));return mon.toISOString().split('T')[0];}
-  let h=getH().filter(s=>!(s.workout==='cardio'&&getWkKey(s.date)===wkStart));setH(h);
-  renderProgCardio();renderCalInline('cardio');
+  let h=getH().filter(s=>!(s.workout==='cardio'&&weekStartStr(s.date)===wkStart));setH(h);
+  refreshAfterDayEdit();
 }
 
 function fmtD(d){if(!d)return'';const p=d.split('-');return p[2]+'/'+p[1];}
 
 // ── HOME ─────────────────────────────────────────────────
-let homeCalY, homeCalM;
+let homeCalAnchor;
 function homeCalNav(dir){
-  homeCalM+=dir;
-  if(homeCalM>11){homeCalM=0;homeCalY++;}
-  if(homeCalM<0){homeCalM=11;homeCalY--;}
+  homeCalAnchor=addDaysStr(homeCalAnchor,dir*35);
   renderHomeCal();
 }
 
 function renderHome(){
-  const now=new Date();
-  if(homeCalY===undefined){homeCalY=now.getFullYear();homeCalM=now.getMonth();}
   renderHomeCal();
   renderHomeStats();
   renderHomeExTable();
@@ -1217,37 +1252,26 @@ function renderHome(){
 }
 
 function renderHomeCal(){
+  if(!homeCalAnchor) homeCalAnchor=initialCalAnchor();
   const h=getH(),dm={};
   h.forEach(s=>{if(!dm[s.date])dm[s.date]=[];dm[s.date].push(s);});
-  const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   const titleEl=document.getElementById('home-cal-title');
-  if(titleEl) titleEl.textContent=months[homeCalM]+' '+homeCalY;
-  const fd=(new Date(homeCalY,homeCalM,1).getDay()+6)%7;
-  const dim=new Date(homeCalY,homeCalM+1,0).getDate();
-  const dows=['Lu','Ma','Mi','Ju','Vi','Sa','Do'];
-  let html=dows.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
-  for(let i=0;i<fd;i++) html+='<div class="cal-day"></div>';
-  for(let d=1;d<=dim;d++){
-    const key=homeCalY+'-'+String(homeCalM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    html+=calDayCell(key,d,dm[key]);
-  }
+  if(titleEl) titleEl.textContent=windowLabel(homeCalAnchor);
   const grid=document.getElementById('home-cal-grid');
-  if(grid) grid.innerHTML=html;
+  if(grid){
+    grid.innerHTML=buildCalGrid(homeCalAnchor,dm);
+    attachSwipe(grid,()=>homeCalNav(-1),()=>homeCalNav(1));
+  }
 }
 
 function renderHomeStats(){
-  const now=new Date();
-  const y=now.getFullYear(),m=now.getMonth();
-  const monthStart=y+'-'+String(m+1).padStart(2,'0');
+  const todayStr=todaySantiago();
+  const {y,m}=ymd(todayStr);
+  const monthStart=y+'-'+String(m).padStart(2,'0');
   const h=getH();
   const monthSessions=h.filter(s=>s.date.startsWith(monthStart)&&s.workout!=='cardio');
-  const day=now.getDay()||7;
-  const mon=new Date(now);mon.setDate(now.getDate()-(day-1));mon.setHours(0,0,0,0);
-  const weekCardio=h.filter(s=>{
-    if(s.workout!=='cardio') return false;
-    const sd=new Date(s.date+'T00:00:00');
-    return sd>=mon&&sd<=now;
-  });
+  const weekStart=weekStartStr(todayStr);
+  const weekCardio=h.filter(s=>s.workout==='cardio'&&s.date>=weekStart&&s.date<=todayStr);
   const cardioMin=weekCardio.reduce((a,s)=>a+(s.minutos||0),0);
   const sesEl=document.getElementById('home-sessions');
   const cardioSesEl=document.getElementById('home-cardio-ses');
@@ -1269,7 +1293,7 @@ function renderHomeExTable(){
   const tbl=document.getElementById('home-ex-tbl');
   if(!tbl) return;
   const ROW_COLORS={push:{bg:'#fde8e8',fg:'#a33'},pull:{bg:'#e8eefe',fg:'#2255a3'},upper:{bg:'#e8f7ed',fg:'#2a6e3f'},legs:{bg:'#fef8e0',fg:'#856404'}};
-  const cutoff=new Date();cutoff.setDate(cutoff.getDate()-30);
+  const cutoff=addDaysStr(todaySantiago(),-30);
   let html='<thead><tr><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:left">Ejercicio</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">\u00daltimo</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">Prom. mes</th></tr></thead>';
   KEY_EXERCISES.forEach(ex=>{
     const data=[...getEx(ex.id)].sort((a,b)=>a.date.localeCompare(b.date));
@@ -1278,7 +1302,7 @@ function renderHomeExTable(){
       const lastValid=(data[data.length-1].sets||[]).filter(s=>s.kg>0);
       if(lastValid.length) lastKg=lastValid[lastValid.length-1].kg;
       const recent=[];
-      data.forEach(d=>{if(new Date(d.date+'T00:00:00')>=cutoff)(d.sets||[]).forEach(s=>{if(s.kg>0)recent.push(s.kg);});});
+      data.forEach(d=>{if(d.date>=cutoff)(d.sets||[]).forEach(s=>{if(s.kg>0)recent.push(s.kg);});});
       if(recent.length) avgKg=Math.round((recent.reduce((a,b)=>a+b,0)/recent.length)*10)/10;
     }
     const tab=KEY_TO_TAB[ex.id];
@@ -1328,11 +1352,6 @@ function showOk(msg){const el=document.getElementById('backup-ok');el.textConten
 
 // ── INIT ─────────────────────────────────────────────────
 initFirebase();
-function todaySantiago(){
-  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Santiago',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
-  const g=t=>parts.find(x=>x.type===t).value;
-  return g('year')+'-'+g('month')+'-'+g('day');
-}
 const today=todaySantiago();
 ['push','pull','upper','legs','cardio'].forEach(t=>{const el=document.getElementById('date-'+t);if(el)el.value=today;});
 buildRows();
