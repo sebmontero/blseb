@@ -8,9 +8,6 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;background:#e0dcd4;color:#1a1a1a;padding:10px;min-height:100vh}
-@media (min-width:640px){
-  body{max-width:480px;margin:0 auto;box-shadow:0 0 24px rgba(0,0,0,0.08)}
-}
 
 /* HEADER */
 .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;background:#fff;border-radius:10px;padding:7px 10px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
@@ -240,18 +237,24 @@ tr.ex-done .ex-name{text-decoration:line-through}
 <!-- HOME -->
 <div id="sec-home" class="section active">
   <div class="card">
-    <div class="home-cal-nav">
-      <button onclick="homeCalNav(-1)">&#8249;</button>
-      <span id="home-cal-title"></span>
-      <button onclick="homeCalNav(1)">&#8250;</button>
+    <div class="cal-toggle-row" onclick="toggleHomeCal()">
+      <span class="cal-toggle-lbl">Calendario</span>
+      <span class="cal-toggle-arr" id="home-cal-arr">▾</span>
     </div>
-    <div class="cal-grid" id="home-cal-grid"></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-      <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fde8e8"></div>Push</div>
-      <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8eefe"></div>Pull</div>
-      <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8f7ed"></div>Upper</div>
-      <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fef8e0"></div>Legs</div>
-      <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #3a3a3a"></div>Cardio: — bici · - - caminar · ··· natación · ═ remo (grosor = min)</div>
+    <div id="home-cal-body">
+      <div class="home-cal-nav">
+        <button onclick="homeCalNav(-1)">&#8249;</button>
+        <span id="home-cal-title"></span>
+        <button onclick="homeCalNav(1)">&#8250;</button>
+      </div>
+      <div class="cal-grid" id="home-cal-grid"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fde8e8"></div>Push</div>
+        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8eefe"></div>Pull</div>
+        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8f7ed"></div>Upper</div>
+        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fef8e0"></div>Legs</div>
+        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #3a3a3a"></div>Cardio: — bici · - - caminar · ··· natación · ═ remo (grosor = min)</div>
+      </div>
     </div>
   </div>
   <div class="card">
@@ -1260,6 +1263,14 @@ function renderHome(){
   renderProgCardio('home-cardio-tbl');
 }
 
+function toggleHomeCal(){
+  const body=document.getElementById('home-cal-body');
+  const arr=document.getElementById('home-cal-arr');
+  const isOpen=body.style.display!=='none';
+  body.style.display=isOpen?'none':'block';
+  if(arr) arr.textContent=isOpen?'▸':'▾';
+}
+
 function renderHomeCal(){
   if(!homeCalAnchor) homeCalAnchor=initialCalAnchor();
   const h=getH(),dm={};
@@ -1365,6 +1376,10 @@ const today=todaySantiago();
 ['push','pull','upper','legs','cardio'].forEach(t=>{const el=document.getElementById('date-'+t);if(el)el.value=today;});
 buildRows();
 document.querySelector('.tab-home').classList.add('active');
+if(window.innerWidth>=640){
+  document.getElementById('home-cal-body').style.display='none';
+  document.getElementById('home-cal-arr').textContent='▸';
+}
 
 loadFromFirestore().then(()=>{
   renderHome();
