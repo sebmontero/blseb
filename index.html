@@ -130,10 +130,12 @@ tr.ex-done .ex-name{text-decoration:line-through}
 .bb-cardio{background:#efefef;color:#555;   border-color:#ccc}
 
 /* CARDIO */
-.cardio-opts{display:flex;gap:10px;margin-bottom:12px}
-.cardio-opt{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #e0ddd8;border-radius:12px;padding:12px 6px;cursor:pointer;background:#fafaf8;transition:all 0.15s}
+.cardio-group-label{font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.04em;margin:10px 0 6px}
+.cardio-group-label:first-child{margin-top:0}
+.cardio-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
+.cardio-opt{display:flex;flex-direction:column;align-items:center;gap:4px;border:2px solid #e0ddd8;border-radius:12px;padding:10px 4px;cursor:pointer;background:#fafaf8;transition:all 0.15s}
 .cardio-opt.selected{border-color:#888;background:#f0ede8}
-.cardio-opt span.lbl{font-size:13px;color:#555;font-weight:600}
+.cardio-opt span.lbl{font-size:11px;color:#555;font-weight:600;text-align:center}
 .inp-mins{width:100%;border:1.5px solid #e0ddd8;border-radius:8px;padding:10px 12px;font-size:15px;background:#fafaf8;color:#1a1a1a;outline:none}
 .inp-mins:focus{border-color:#888;background:#fff}
 
@@ -151,6 +153,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
 .prog-tbl thead th:first-child{position:sticky;left:0;background:#f0ede8;z-index:3;box-shadow:3px 0 6px -2px rgba(0,0,0,0.10)}
 .prog-tbl .td-ex{font-size:11px;font-weight:600;color:#1a1a1a;min-width:80px;max-width:90px;white-space:normal;line-height:1.3}
 .prog-tbl .td-ex small{display:block;font-size:10px;color:#bbb;font-weight:400}
+.prog-tbl .td-group{background:#f7f5f0;color:#999;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:5px 10px;white-space:nowrap}
 .prog-cell{font-size:11px;color:#555;line-height:1.7;min-width:68px}
 .prog-cell .sl{display:block}
 .prog-cell .sl.bold{font-weight:700;color:#1a1a1a}
@@ -253,7 +256,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8eefe"></div>Pull</div>
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8f7ed"></div>Upper</div>
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fef8e0"></div>Legs</div>
-        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #3a3a3a"></div>Cardio: — bici · - - caminar · ··· natación · ═ remo (grosor = min)</div>
+        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #3a3a3a"></div>Cardio (gris) / Deportes (azul): línea = tipo, grosor = min</div>
       </div>
     </div>
   </div>
@@ -266,20 +269,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
   </div>
   <div class="card">
     <div class="sec-label" style="margin-bottom:8px">Cardio</div>
-    <div class="cardio-opts">
-      <div class="cardio-opt" id="opt-bici" onclick="selectCardio('bicicleta')">
-        <span style="font-size:26px">🚴</span><span class="lbl">Bicicleta</span>
-      </div>
-      <div class="cardio-opt" id="opt-cam" onclick="selectCardio('caminar')">
-        <span style="font-size:26px">🚶</span><span class="lbl">Caminar</span>
-      </div>
-      <div class="cardio-opt" id="opt-nat" onclick="selectCardio('natacion')">
-        <span style="font-size:26px">🏊</span><span class="lbl">Natación</span>
-      </div>
-      <div class="cardio-opt" id="opt-rem" onclick="selectCardio('remadora')">
-        <span style="font-size:26px">🚣</span><span class="lbl">Remadora</span>
-      </div>
-    </div>
+    <div id="cardio-opts-group"></div>
     <div style="margin-bottom:4px;font-size:12px;color:#999;font-weight:600">Minutos</div>
     <input type="number" id="inp-mins" class="inp-mins" placeholder="ej. 30" min="1" step="1">
     <div style="margin:8px 0 4px;font-size:12px;color:#999;font-weight:600">FC promedio <span style="font-weight:400;color:#ccc">(opcional)</span></div>
@@ -420,7 +410,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
     <span class="cal-icon-prog" onclick="toggleCalInline('cardio')">📅</span>
   </div>
   <div class="card" id="cal-body-cardio" style="display:none"></div>
-  <div class="card"><div id="tbl-prog-cardio"></div></div>
+  <div class="prog-scroll"><div id="tbl-prog-cardio"></div></div>
 </div>
 
 <!-- EDIT ENTRY POPUP -->
@@ -512,8 +502,22 @@ const TABS=['home','push','pull','upper','legs'];
 const WKMAP={'push':'cp','pull':'cl','upper':'cu','legs':'cg','cardio':'cc'};
 
 // ── CALENDAR DAY CELL (shared by modal/inline/home calendars) ───
+const CARDIO_TYPES=[
+  {tipo:'caminar',   label:'Caminar',     icon:'🚶', group:'cardio',   style:'dashed'},
+  {tipo:'bicicleta', label:'Bicicleta',   icon:'🚴', group:'cardio',   style:'solid'},
+  {tipo:'remadora',  label:'Remadora',    icon:'🚣', group:'cardio',   style:'double'},
+  {tipo:'caminadora',label:'Caminadora',  icon:'🏃', group:'cardio',   style:'dotted'},
+  {tipo:'estatica',  label:'Estática',    icon:'🚲', group:'cardio',   style:'groove'},
+  {tipo:'eliptica',  label:'Elíptica',    icon:'🌀', group:'cardio',   style:'ridge'},
+  {tipo:'natacion',  label:'Natación',    icon:'🏊', group:'deportes',style:'solid'},
+  {tipo:'futbolito', label:'Fútbolito',   icon:'⚽', group:'deportes',style:'dashed'},
+  {tipo:'clasefutbol',label:'Clase fútbol',icon:'🥅',group:'deportes',style:'dotted'},
+];
+const CARDIO_GROUPS=[{key:'cardio',label:'Cardio'},{key:'deportes',label:'Deportes'}];
+const CARDIO_GROUP_COLOR={cardio:'#3a3a3a',deportes:'#4a6fa5'};
+const CARDIO_LABELS={},CARDIO_LINESTYLE={},CARDIO_GROUP={};
+CARDIO_TYPES.forEach(c=>{CARDIO_LABELS[c.tipo]=c.label;CARDIO_LINESTYLE[c.tipo]=c.style;CARDIO_GROUP[c.tipo]=c.group;});
 const CARDIO_RING_COLOR='#3a3a3a';
-const CARDIO_LINESTYLE={bicicleta:'solid',caminar:'dashed',natacion:'dotted',remadora:'double'};
 function cardioRings(ss){
   const cs=(ss||[]).filter(s=>s.workout==='cardio');
   if(!cs.length) return {html:'',title:''};
@@ -525,7 +529,8 @@ function cardioRings(ss){
     const mins=byType[tipo];
     const thick=Math.min(4,Math.max(1.5,mins/18));
     const style=CARDIO_LINESTYLE[tipo]||'solid';
-    html+=`<div style="position:absolute;inset:${inset}px;border-radius:50%;border:${thick}px ${style} ${CARDIO_RING_COLOR};pointer-events:none"></div>`;
+    const color=CARDIO_GROUP_COLOR[CARDIO_GROUP[tipo]]||CARDIO_RING_COLOR;
+    html+=`<div style="position:absolute;inset:${inset}px;border-radius:50%;border:${thick}px ${style} ${color};pointer-events:none"></div>`;
     inset-=(thick+2);
     titleParts.push(`${CARDIO_LABELS[tipo]||tipo}: ${mins} min`);
   });
@@ -838,17 +843,26 @@ function resetSection(wk){
 
 // ── CARDIO ───────────────────────────────────────────────
 let cardioTipo=null;
+function renderCardioOpts(){
+  const el=document.getElementById('cardio-opts-group');if(!el)return;
+  let html='';
+  CARDIO_GROUPS.forEach(g=>{
+    html+=`<div class="cardio-group-label">${g.label}</div><div class="cardio-opts">`;
+    CARDIO_TYPES.filter(c=>c.group===g.key).forEach(c=>{
+      html+=`<div class="cardio-opt" data-tipo="${c.tipo}" onclick="selectCardio('${c.tipo}')"><span style="font-size:22px">${c.icon}</span><span class="lbl">${c.label}</span></div>`;
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
 function selectCardio(t){
   cardioTipo=t;
-  document.getElementById('opt-bici').classList.toggle('selected',t==='bicicleta');
-  document.getElementById('opt-cam').classList.toggle('selected',t==='caminar');
-  const nat=document.getElementById('opt-nat');if(nat)nat.classList.toggle('selected',t==='natacion');
-  const rem=document.getElementById('opt-rem');if(rem)rem.classList.toggle('selected',t==='remadora');
+  document.querySelectorAll('#cardio-opts-group .cardio-opt').forEach(el=>el.classList.toggle('selected',el.dataset.tipo===t));
 }
 function saveCardio(){
   const dv=document.getElementById('date-cardio').value;
   if(!dv){alert('Selecciona una fecha.');return;}
-  if(!cardioTipo){alert('Selecciona bicicleta, caminar, natación o remadora.');return;}
+  if(!cardioTipo){alert('Selecciona un tipo de actividad.');return;}
   const mins=parseInt(document.getElementById('inp-mins').value);
   if(!mins||mins<1){alert('Ingresa los minutos.');return;}
   const fcVal=parseInt(document.getElementById('inp-fc').value)||null;
@@ -856,7 +870,7 @@ function saveCardio(){
   document.getElementById('inp-mins').value='';
   document.getElementById('inp-fc').value='';
   cardioTipo=null;
-  ['opt-bici','opt-cam','opt-nat','opt-rem'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.remove('selected');});
+  document.querySelectorAll('#cardio-opts-group .cardio-opt').forEach(el=>el.classList.remove('selected'));
   goSection('prog-cardio');
 }
 
@@ -1143,7 +1157,6 @@ function deleteWeek(wk,date){
 
 // ── EDIT CARDIO ENTRIES ───────────────────────────────────
 let editCardioState={};
-const CARDIO_LABELS={bicicleta:'Bicicleta',caminar:'Caminar',natacion:'Natación',remadora:'Remadora'};
 function openEditCardio(wkStart,tipo){
   const sessions=getH().filter(s=>s.workout==='cardio'&&s.tipo===tipo&&weekStartStr(s.date)===wkStart).sort((a,b)=>a.date.localeCompare(b.date));
   if(!sessions.length) return;
@@ -1161,12 +1174,20 @@ function startEditCardio(sessions,title){
   renderCardioEditBody();
   document.getElementById('popup-edit').classList.add('open');
 }
+function cardioTipoOptions(selected){
+  return CARDIO_GROUPS.map(g=>
+    '<optgroup label="'+g.label+'">'+
+    CARDIO_TYPES.filter(c=>c.group===g.key).map(c=>'<option value="'+c.tipo+'"'+(c.tipo===selected?' selected':'')+'>'+c.label+'</option>').join('')+
+    '</optgroup>'
+  ).join('');
+}
 function renderCardioEditBody(){
   const {sessions}=editCardioState;
   let html='<div style="display:flex;flex-direction:column;gap:10px">';
   sessions.forEach((s,i)=>{
-    html+=`<div style="display:flex;align-items:center;gap:6px">
-      <span style="font-size:10px;color:#999;width:80px;flex-shrink:0">${fmtD(s.date)}${CARDIO_LABELS[s.tipo]?' · '+CARDIO_LABELS[s.tipo]:''}</span>
+    html+=`<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+      <span style="font-size:10px;color:#999;width:38px;flex-shrink:0">${fmtD(s.date)}</span>
+      <select id="ec-tipo-${i}" style="flex:1;min-width:112px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:12px;background:#fff;color:#1a1a1a;outline:none">${cardioTipoOptions(s.tipo)}</select>
       <input type="number" inputmode="numeric" id="ec-min-${i}" value="${s.minutos||''}" placeholder="min" style="width:52px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
       <span style="font-size:10px;color:#ccc">min</span>
       <input type="number" inputmode="numeric" id="ec-fc-${i}" value="${s.fc||''}" placeholder="FC" style="width:52px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
@@ -1185,6 +1206,7 @@ function saveEditCardioEntries(){
   const {sessions,origKeys}=editCardioState;
   const updated=sessions.map((s,i)=>({
     ...s,
+    tipo:document.getElementById('ec-tipo-'+i).value,
     minutos:parseInt(document.getElementById('ec-min-'+i).value)||0,
     fc:parseInt(document.getElementById('ec-fc-'+i).value)||null
   })).filter(s=>s.minutos>0);
@@ -1221,16 +1243,18 @@ function renderProgCardio(targetId){
     return `<span style="cursor:pointer" onclick="deleteCardioWeek('${wk}')" title="Click para borrar">Sem ${i+1}<br><small style="color:#bbb;font-weight:400">${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}</small></span>`;
   });
   let html='<table class="prog-tbl"><thead><tr><th>Cardio</th>'+wkLabels.map(l=>'<th>'+l+'</th>').join('')+'</tr></thead><tbody>';
-  const cardioRows=[{tipo:'bicicleta',label:'Bici'},{tipo:'caminar',label:'Caminar'},{tipo:'natacion',label:'Natación'},{tipo:'remadora',label:'Remadora'}];
-  cardioRows.forEach(row=>{
-    html+=`<tr><td class="td-ex">${row.label}</td>`;
-    wkKeys.forEach(wk=>{
-      const s=weeks[wk].sessions.filter(x=>x.tipo===row.tipo);
-      const mins=s.reduce((a,x)=>a+(x.minutos||0),0);
-      const clk=s.length?` onclick="openEditCardio('${wk}','${row.tipo}')" style="cursor:pointer"`:'';
-      html+=`<td class="prog-cell"${clk}>${s.length?mins+'/'+s.length:'—'}</td>`;
+  CARDIO_GROUPS.forEach(g=>{
+    html+=`<tr><td class="td-group" colspan="${wkKeys.length+1}">${g.label}</td></tr>`;
+    CARDIO_TYPES.filter(c=>c.group===g.key).forEach(row=>{
+      html+=`<tr><td class="td-ex">${row.label}</td>`;
+      wkKeys.forEach(wk=>{
+        const s=weeks[wk].sessions.filter(x=>x.tipo===row.tipo);
+        const mins=s.reduce((a,x)=>a+(x.minutos||0),0);
+        const clk=s.length?` onclick="openEditCardio('${wk}','${row.tipo}')" style="cursor:pointer"`:'';
+        html+=`<td class="prog-cell"${clk}>${s.length?mins+'/'+s.length:'—'}</td>`;
+      });
+      html+='</tr>';
     });
-    html+='</tr>';
   });
   // Total row
   html+='<tr><td class="td-ex" style="font-weight:700">Total</td>';
@@ -1239,6 +1263,8 @@ function renderProgCardio(targetId){
   html+='<div style="font-size:10px;color:#bbb;margin-top:4px;padding:0 4px">min / sesiones</div>';
 
   el.innerHTML=html;
+  const scrollWrap=el.closest('.prog-scroll');
+  if(scrollWrap)requestAnimationFrame(()=>{scrollWrap.scrollLeft=scrollWrap.scrollWidth;});
 }
 
 function deleteCardioWeek(wkStart){
@@ -1375,6 +1401,7 @@ initFirebase();
 const today=todaySantiago();
 ['push','pull','upper','legs','cardio'].forEach(t=>{const el=document.getElementById('date-'+t);if(el)el.value=today;});
 buildRows();
+renderCardioOpts();
 document.querySelector('.tab-home').classList.add('active');
 if(window.innerWidth>=640){
   document.getElementById('home-cal-body').style.display='none';
