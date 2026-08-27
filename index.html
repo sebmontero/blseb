@@ -255,7 +255,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8eefe"></div>Pull</div>
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8f7ed"></div>Upper</div>
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fef8e0"></div>Legs</div>
-        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #3a3a3a"></div>Cardio (gris) / Deportes (azul): línea = tipo, grosor = min</div>
+        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #3a3a3a"></div>Cardio (gris) / Deportes (azul): grosor = minutos</div>
       </div>
     </div>
   </div>
@@ -435,7 +435,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
       <div class="cl-item"><div class="cl-dot" style="background:#e8eefe"></div>Pull</div>
       <div class="cl-item"><div class="cl-dot" style="background:#e8f7ed"></div>Upper</div>
       <div class="cl-item"><div class="cl-dot" style="background:#fef8e0"></div>Legs</div>
-      <div class="cl-item"><div class="cl-dot" style="background:#fff;border:2px solid #3a3a3a"></div>Cardio: línea = tipo, grosor = min</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#fff;border:2px solid #3a3a3a"></div>Cardio (gris) / Deportes (azul): grosor = minutos</div>
     </div>
     <div class="cal-grid" id="cal-grid"></div>
     <button class="btn-close" onclick="closeCal()">Cerrar</button>
@@ -502,37 +502,35 @@ const WKMAP={'push':'cp','pull':'cl','upper':'cu','legs':'cg','cardio':'cc'};
 
 // ── CALENDAR DAY CELL (shared by modal/inline/home calendars) ───
 const CARDIO_TYPES=[
-  {tipo:'caminar',   label:'Caminar',     icon:'🚶', group:'cardio',   style:'dashed'},
-  {tipo:'bicicleta', label:'Bicicleta',   icon:'🚴', group:'cardio',   style:'solid'},
-  {tipo:'remadora',  label:'Remadora',    icon:'🚣', group:'cardio',   style:'double'},
-  {tipo:'caminadora',label:'Caminadora',  icon:'🏃', group:'cardio',   style:'dotted'},
-  {tipo:'estatica',  label:'Estática',    icon:'🚲', group:'cardio',   style:'groove'},
-  {tipo:'eliptica',  label:'Elíptica',    icon:'🌀', group:'cardio',   style:'ridge'},
-  {tipo:'natacion',  label:'Natación',    icon:'🏊', group:'deportes',style:'solid'},
-  {tipo:'futbolito', label:'Fútbolito',   icon:'⚽', group:'deportes',style:'dashed'},
-  {tipo:'clasefutbol',label:'Clase fútbol',icon:'🥅',group:'deportes',style:'dotted'},
+  {tipo:'caminar',   label:'Caminar',     icon:'🚶', group:'cardio'},
+  {tipo:'bicicleta', label:'Bicicleta',   icon:'🚴', group:'cardio'},
+  {tipo:'remadora',  label:'Remadora',    icon:'🚣', group:'cardio'},
+  {tipo:'caminadora',label:'Caminadora',  icon:'🏃', group:'cardio'},
+  {tipo:'estatica',  label:'Estática',    icon:'🚲', group:'cardio'},
+  {tipo:'eliptica',  label:'Elíptica',    icon:'🌀', group:'cardio'},
+  {tipo:'natacion',  label:'Natación',    icon:'🏊', group:'deportes'},
+  {tipo:'futbolito', label:'Fútbolito',   icon:'⚽', group:'deportes'},
+  {tipo:'clasefutbol',label:'Clase fútbol',icon:'🥅',group:'deportes'},
 ];
 const CARDIO_GROUPS=[{key:'cardio',label:'Cardio'},{key:'deportes',label:'Deportes'}];
 const CARDIO_GROUP_COLOR={cardio:'#3a3a3a',deportes:'#4a6fa5'};
-const CARDIO_LABELS={},CARDIO_LINESTYLE={},CARDIO_GROUP={};
-CARDIO_TYPES.forEach(c=>{CARDIO_LABELS[c.tipo]=c.label;CARDIO_LINESTYLE[c.tipo]=c.style;CARDIO_GROUP[c.tipo]=c.group;});
+const CARDIO_LABELS={},CARDIO_GROUP={};
+CARDIO_TYPES.forEach(c=>{CARDIO_LABELS[c.tipo]=c.label;CARDIO_GROUP[c.tipo]=c.group;});
 const CARDIO_RING_COLOR='#3a3a3a';
 function cardioRings(ss){
   const cs=(ss||[]).filter(s=>s.workout==='cardio');
   if(!cs.length) return {html:'',title:''};
-  const byType={};
-  cs.forEach(s=>{byType[s.tipo]=(byType[s.tipo]||0)+(s.minutos||0);});
-  let inset=-3,html='';
-  const titleParts=[];
-  Object.keys(byType).forEach(tipo=>{
-    const mins=byType[tipo];
-    const thick=Math.min(4,Math.max(1.5,mins/18));
-    const style=CARDIO_LINESTYLE[tipo]||'solid';
-    const color=CARDIO_GROUP_COLOR[CARDIO_GROUP[tipo]]||CARDIO_RING_COLOR;
-    html+=`<div style="position:absolute;inset:${inset}px;border-radius:50%;border:${thick}px ${style} ${color};pointer-events:none"></div>`;
-    inset-=(thick+2);
-    titleParts.push(`${CARDIO_LABELS[tipo]||tipo}: ${mins} min`);
+  const byType={},groupMins={cardio:0,deportes:0};
+  cs.forEach(s=>{
+    byType[s.tipo]=(byType[s.tipo]||0)+(s.minutos||0);
+    const grp=CARDIO_GROUP[s.tipo]||'cardio';
+    groupMins[grp]=(groupMins[grp]||0)+(s.minutos||0);
   });
+  const totalMins=groupMins.cardio+groupMins.deportes;
+  const thick=Math.min(4,Math.max(1.5,totalMins/18));
+  const color=CARDIO_GROUP_COLOR[groupMins.deportes>groupMins.cardio?'deportes':'cardio']||CARDIO_RING_COLOR;
+  const html=`<div style="position:absolute;inset:-3px;border-radius:50%;border:${thick}px solid ${color};pointer-events:none"></div>`;
+  const titleParts=Object.keys(byType).map(tipo=>`${CARDIO_LABELS[tipo]||tipo}: ${byType[tipo]} min`);
   return {html,title:titleParts.join(' · ')};
 }
 function calDayCell(key,d,ss){
