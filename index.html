@@ -1159,8 +1159,8 @@ function deleteWeek(wk,date){
 let editCardioState={};
 function openEditCardio(wkStart,tipo){
   const sessions=getH().filter(s=>s.workout==='cardio'&&s.tipo===tipo&&weekStartStr(s.date)===wkStart).sort((a,b)=>a.date.localeCompare(b.date));
-  if(!sessions.length) return;
-  startEditCardio(sessions,CARDIO_LABELS[tipo]+' — semana');
+  const list=sessions.length?sessions:[{date:wkStart,workout:'cardio',tipo,minutos:0,fc:null}];
+  startEditCardio(list,CARDIO_LABELS[tipo]+' — semana');
 }
 function openEditCardioDay(dateKey){
   const sessions=getH().filter(s=>s.workout==='cardio'&&s.date===dateKey);
@@ -1186,8 +1186,8 @@ function renderCardioEditBody(){
   let html='<div style="display:flex;flex-direction:column;gap:10px">';
   sessions.forEach((s,i)=>{
     html+=`<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-      <span style="font-size:10px;color:#999;width:38px;flex-shrink:0">${fmtD(s.date)}</span>
-      <select id="ec-tipo-${i}" style="flex:1;min-width:112px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:12px;background:#fff;color:#1a1a1a;outline:none">${cardioTipoOptions(s.tipo)}</select>
+      <input type="date" id="ec-date-${i}" value="${s.date||''}" style="width:118px;flex-shrink:0;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:12px;color:#1a1a1a;outline:none">
+      <select id="ec-tipo-${i}" style="flex:1;min-width:100px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:12px;background:#fff;color:#1a1a1a;outline:none">${cardioTipoOptions(s.tipo)}</select>
       <input type="number" inputmode="numeric" id="ec-min-${i}" value="${s.minutos||''}" placeholder="min" style="width:52px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
       <span style="font-size:10px;color:#ccc">min</span>
       <input type="number" inputmode="numeric" id="ec-fc-${i}" value="${s.fc||''}" placeholder="FC" style="width:52px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
@@ -1206,6 +1206,7 @@ function saveEditCardioEntries(){
   const {sessions,origKeys}=editCardioState;
   const updated=sessions.map((s,i)=>({
     ...s,
+    date:document.getElementById('ec-date-'+i).value||s.date,
     tipo:document.getElementById('ec-tipo-'+i).value,
     minutos:parseInt(document.getElementById('ec-min-'+i).value)||0,
     fc:parseInt(document.getElementById('ec-fc-'+i).value)||null
@@ -1243,15 +1244,14 @@ function renderProgCardio(targetId){
     return `<span style="cursor:pointer" onclick="deleteCardioWeek('${wk}')" title="Click para borrar">Sem ${i+1}<br><small style="color:#bbb;font-weight:400">${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}</small></span>`;
   });
   let html='<table class="prog-tbl"><thead><tr><th>Cardio</th>'+wkLabels.map(l=>'<th>'+l+'</th>').join('')+'</tr></thead><tbody>';
-  CARDIO_GROUPS.forEach(g=>{
-    html+=`<tr><td class="td-group" colspan="${wkKeys.length+1}">${g.label}</td></tr>`;
+  CARDIO_GROUPS.forEach((g,gi)=>{
+    if(gi>0) html+=`<tr><td class="td-group" colspan="${wkKeys.length+1}">${g.label}</td></tr>`;
     CARDIO_TYPES.filter(c=>c.group===g.key).forEach(row=>{
       html+=`<tr><td class="td-ex">${row.label}</td>`;
       wkKeys.forEach(wk=>{
         const s=weeks[wk].sessions.filter(x=>x.tipo===row.tipo);
         const mins=s.reduce((a,x)=>a+(x.minutos||0),0);
-        const clk=s.length?` onclick="openEditCardio('${wk}','${row.tipo}')" style="cursor:pointer"`:'';
-        html+=`<td class="prog-cell"${clk}>${s.length?mins+'/'+s.length:'—'}</td>`;
+        html+=`<td class="prog-cell" style="cursor:pointer" onclick="openEditCardio('${wk}','${row.tipo}')">${s.length?mins+'/'+s.length:'—'}</td>`;
       });
       html+='</tr>';
     });
