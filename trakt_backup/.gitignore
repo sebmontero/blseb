@@ -1,0 +1,6 @@
+.env
+.trakt_token.json
+trakt_backup_*/
+trakt_backup_*.zip
+__pycache__/
+*.pyc
