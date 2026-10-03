@@ -211,11 +211,8 @@ tr.ex-done .ex-name{text-decoration:line-through}
 .backup-ok{font-size:12px;color:#2a6e3f;text-align:center;margin-bottom:8px;display:none;font-weight:600}
 
 /* CICLO 3 */
-.ex-hint{display:inline-block;font-size:10px;font-weight:700;color:#2a6e3f;background:#e8f7ed;border-radius:99px;padding:1px 6px;margin-left:4px;vertical-align:middle}
-.ex-hint:empty{display:none}
 .inp-band{width:64px;border:1.5px solid #e0ddd8;border-radius:6px;padding:5px 2px;font-size:12px;background:#fafaf8;color:#1a1a1a;outline:none}
 .band-chip{display:inline-block;font-size:9px;font-weight:700;color:#fff;border-radius:99px;padding:0 6px;line-height:15px;margin-bottom:2px}
-.hint-mark{position:absolute;top:2px;right:3px;font-size:11px;font-weight:700;color:#2a6e3f;pointer-events:none}
 .prog-tbl td.note-cell{white-space:normal;min-width:90px;max-width:120px;font-size:10px;color:#777;line-height:1.35;cursor:pointer}
 .c3-start{border-left:2px solid #1a1a1a!important}
 .note-inp{width:100%;min-height:44px;border:1.5px solid #e0ddd8;border-radius:8px;padding:8px;font-size:13px;font-family:inherit;resize:vertical;outline:none;background:#fafaf8;color:#1a1a1a}
@@ -256,7 +253,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
   <div class="tab tab-home"         onclick="goTab('home')">Home</div>
   <div class="tab tab-pecho"        onclick="goTab('pecho')">Pecho</div>
   <div class="tab tab-piernas"      onclick="goTab('piernas')">Piernas</div>
-  <div class="tab tab-tsup"         onclick="goTab('tsup')">Tren sup.</div>
+  <div class="tab tab-tsup"         onclick="goTab('tsup')">Superior</div>
 </div>
 
 <!-- HOME -->
@@ -276,7 +273,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fde8e8"></div>Pecho / Push</div>
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fef8e0"></div>Piernas / Legs</div>
-        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8f7ed"></div>Tren sup. / Upper</div>
+        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8f7ed"></div>Superior / Upper</div>
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8eefe"></div>Pull</div>
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #3a3a3a"></div>Cardio (gris) / Deportes (azul): grosor = minutos</div>
       </div>
@@ -352,7 +349,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
 <!-- TSUP -->
 <div id="sec-tsup" class="section">
   <div class="card">
-    <div class="sec-label">TREN SUPERIOR — Espalda · Hombros · Pecho</div>
+    <div class="sec-label">SUPERIOR — Espalda · Hombros · Pecho</div>
     <table class="ex-table">
       <thead><tr><th>Ejercicio</th><th class="th-pxr">Series</th><th class="th-fill">P×R rápido</th><th class="th-chk"></th></tr></thead>
       <tbody id="rows-tsup"></tbody>
@@ -361,7 +358,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
   <div class="card"><div class="sec-label" style="margin-bottom:6px">Nota de la sesión</div><textarea id="note-tsup" class="note-inp" placeholder="ej. hombro bien, lumbar ok"></textarea></div>
   <div class="date-row"><label>Fecha</label><input type="date" id="date-tsup"><span class="cal-btn" onclick="openCal()">📅</span></div>
   <button class="btn-save bp-tsup" onclick="saveSession('tsup')">Guardar sesión</button>
-  <button class="btn-prog bp-tsup" onclick="goSection('prog-tsup')">Ver progresión Tren superior →</button>
+  <button class="btn-prog bp-tsup" onclick="goSection('prog-tsup')">Ver progresión Superior →</button>
   <div class="spacer"></div>
   <button class="btn-reset" onclick="resetSection('tsup')">Reiniciar sesión</button>
 </div>
@@ -377,6 +374,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
   <button class="btn-prog bp-pecho" onclick="goSection('pecho')" style="margin-bottom:10px">Registrar sesión Pecho →</button>
   <div class="card" id="cal-body-pecho" style="display:none"></div>
   <div class="prog-scroll"><div id="tbl-prog-pecho"></div></div>
+  <div id="old-prog-pecho"></div>
 </div>
 
 <!-- PROG-PIERNAS -->
@@ -389,18 +387,20 @@ tr.ex-done .ex-name{text-decoration:line-through}
   <button class="btn-prog bp-piernas" onclick="goSection('piernas')" style="margin-bottom:10px">Registrar sesión Piernas →</button>
   <div class="card" id="cal-body-piernas" style="display:none"></div>
   <div class="prog-scroll"><div id="tbl-prog-piernas"></div></div>
+  <div id="old-prog-piernas"></div>
 </div>
 
 <!-- PROG-TSUP -->
 <div id="sec-prog-tsup" class="section">
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
     <button class="btn-back bb-tsup" onclick="goTab('home')" style="margin-bottom:0">← Home</button>
-    <span class="sec-label" style="margin:0;flex:1">Progresión — Tren superior</span>
+    <span class="sec-label" style="margin:0;flex:1">Progresión — Superior</span>
     <span class="cal-icon-prog" onclick="toggleCalInline('tsup')">📅</span>
   </div>
-  <button class="btn-prog bp-tsup" onclick="goSection('tsup')" style="margin-bottom:10px">Registrar sesión Tren superior →</button>
+  <button class="btn-prog bp-tsup" onclick="goSection('tsup')" style="margin-bottom:10px">Registrar sesión Superior →</button>
   <div class="card" id="cal-body-tsup" style="display:none"></div>
   <div class="prog-scroll"><div id="tbl-prog-tsup"></div></div>
+  <div id="old-prog-tsup"></div>
 </div>
 
 <!-- PROG-CARDIO -->
@@ -435,7 +435,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
     <div class="cal-legend">
       <div class="cl-item"><div class="cl-dot" style="background:#fde8e8"></div>Pecho / Push</div>
       <div class="cl-item"><div class="cl-dot" style="background:#fef8e0"></div>Piernas / Legs</div>
-      <div class="cl-item"><div class="cl-dot" style="background:#e8f7ed"></div>Tren sup. / Upper</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#e8f7ed"></div>Superior / Upper</div>
       <div class="cl-item"><div class="cl-dot" style="background:#e8eefe"></div>Pull</div>
       <div class="cl-item"><div class="cl-dot" style="background:#fff;border:2px solid #3a3a3a"></div>Cardio (gris) / Deportes (azul): grosor = minutos</div>
     </div>
@@ -472,7 +472,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
 
 <script>
 // ── DATA ────────────────────────────────────────────────
-// Ciclo 3: Pecho (lun) · Piernas (mié) · Tren superior (vie). kind: kg (por defecto) | reps | band | secs
+// Ciclo 3: Pecho (lun) · Piernas (mié) · Superior (vie). kind: kg (por defecto) | reps | band | secs
 const CYCLE_START='2026-09-28';
 const WK = {
   pecho:[
@@ -497,12 +497,15 @@ const WK = {
 };
 // Ciclos 1 y 2 (push/pull/upper/legs): para mostrar y editar el historial antiguo
 const OLD_WK={
-  push:[['p1','Press banca barra'],['p2b','Press inclinado mancuernas'],['p2','Press banca inclinado'],['p3','Press mancuernas'],['p4','Extensión tríceps polea']],
-  pull:[['l1','Peso muerto barra'],['l2b','Remo mancuernas banca'],['l2','Remo unilateral mancuerna'],['l3','Jalón polea alta'],['l4b','Curl mancuernas banca'],['l4','Curl alternado mancuernas']],
+  push:[['p1','Press banca barra'],['p2b','Press inclinado mancuernas','p2'],['p3','Press mancuernas'],['p4','Extensión tríceps polea']],
+  pull:[['l1','Peso muerto barra'],['l2b','Remo mancuernas banca','l2'],['l3','Jalón polea alta'],['l4b','Curl mancuernas banca','l4']],
   upper:[['u1','Press militar mancuernas'],['u2','Remo polea agarre cerrado'],['u3','Press banca agarre cerrado'],['u4','Elevación posterior mancuernas']],
-  legs:[['g1','Sentadilla barra'],['g2','Flexión de piernas'],['g3b','Extensión de piernas'],['g3','Prensa de pierna'],['g4','Zancada estática mancuernas']]
+  legs:[['g1','Sentadilla barra'],['g2','Flexión de piernas'],['g3b','Extensión de piernas','g3'],['g4','Zancada estática mancuernas']]
 };
-const WK_LABEL={pecho:'Pecho',piernas:'Piernas',tsup:'Tren superior',push:'Push',pull:'Pull',upper:'Upper',legs:'Legs'};
+const OLD_PREV_NAME={p2:'Press banca inclinado',l2:'Remo unilateral mancuerna',l4:'Curl alternado mancuernas',g3:'Prensa de pierna'};
+// Ventanas de progresión antiguas bajo cada rutina nueva
+const OLD_VIEWS={pecho:['push'],piernas:['legs','pull'],tsup:['upper']};
+const WK_LABEL={pecho:'Pecho',piernas:'Piernas',tsup:'Superior',push:'Push',pull:'Pull',upper:'Upper',legs:'Legs'};
 const DAY_OFFSET={pecho:0,piernas:2,tsup:4};
 const BANDS=[{k:'verde',label:'Verde',col:'#2a8a4a'},{k:'morada',label:'Morada',col:'#7a3fa8'},{k:'sin',label:'Sin banda',col:'#1a1a1a'}];
 const SECTIONS=['home','pecho','piernas','tsup','prog-pecho','prog-piernas','prog-tsup','prog-cardio'];
@@ -528,19 +531,41 @@ function rangeLabel(ex){
   if(k==='band') return ex.range[0]+'–'+ex.range[1]+' limpias';
   return ex.range[0]+'–'+ex.range[1]+' reps';
 }
-// Aviso según la regla del rango: 6/6/6 o 12/12/12 → subir; dominadas 3×8 → banda más delgada
-function nextHint(ex,sess){
-  if(!sess||!ex.range) return null;
-  const vs=(sess.sets||[]).filter(hasVal);
-  if(vs.length<nSets(ex)) return null;
-  const k=exKind(ex);
-  if(k==='kg'&&vs.every(st=>st.r>=ex.range[1])) return {txt:'↑ subir peso',short:'↑'};
-  if(k==='band'&&sess.band!=='sin'&&vs.every(st=>st.r>=ex.range[1])){
-    const i=BANDS.findIndex(b=>b.k===(sess.band||'verde'));
-    return {txt:'↓ '+BANDS[i+1].label.toLowerCase(),short:'↓'};
-  }
-  return null;
+// Peaks locales: sesión cuyo valor (kg con reps dentro del rango, o reps/segundos) supera a la anterior
+// y no es superada por la siguiente. Devuelve las celdas a marcar en negrita: {'fecha-serie':true}
+function sessValue(ex,sess){
+  const k=exKind(ex),vs=(sess.sets||[]).filter(hasVal);
+  if(!vs.length) return null;
+  if(k==='kg'){const minR=((sess.range||ex.range||[1])[0])||1;const ok=vs.filter(st=>st.kg>0&&st.r>=minR);return ok.length?Math.max(...ok.map(st=>st.kg)):null;}
+  if(k==='band') return null;
+  return Math.max(...vs.map(st=>st.r||0));
 }
+function localPeaks(ex,sessions){
+  const out={},pts=sessions.map(se=>({se,v:sessValue(ex,se)})).filter(x=>x.v!=null);
+  pts.forEach((x,i)=>{
+    const prev=pts[i-1],next=pts[i+1];
+    if(!prev||x.v<=prev.v||(next&&next.v>x.v)) return;
+    const k=exKind(ex),minR=((x.se.range||ex.range||[1])[0])||1;
+    x.se.sets.forEach((st,idx)=>{
+      if(k==='kg'?(st.kg===x.v&&st.r>=minR):(st.r===x.v)) out[x.se.date+'-'+idx]=true;
+    });
+  });
+  return out;
+}
+// Ciclos: C1 desde la primera sesión, C2 desde la primera semana tras ≥2 semanas sin fuerza (deload), C3 desde CYCLE_START
+function cycleStarts(){
+  const ws=[...new Set(getH().filter(s=>s.workout!=='cardio'&&s.date<CYCLE_START).map(s=>weekStartStr(s.date)))].sort();
+  const res=[];
+  if(ws.length){
+    res.push({n:1,start:ws[0]});
+    for(let i=1;i<ws.length;i++){
+      if((dateStrToUTCms(ws[i])-dateStrToUTCms(ws[i-1]))/(7*86400000)>=3){res.push({n:2,start:ws[i]});break;}
+    }
+  }
+  res.push({n:3,start:weekStartStr(CYCLE_START)});
+  return res;
+}
+function cycleOf(w,starts){let c=null;starts.forEach(x=>{if(w>=x.start)c=x;});return c;}
 function lastSess(id){const d=[...getEx(id)].sort((a,b)=>a.date.localeCompare(b.date));return d[d.length-1]||null;}
 
 // ── CALENDAR DAY CELL (shared by modal/inline/home calendars) ───
@@ -761,7 +786,7 @@ function buildRows(){
             <span class="fill-lbl">${k==='secs'?'seg':'reps'}</span>`;
       tr.innerHTML=`
         <td class="td-name" onclick="toggleDetail('${ex.id}')">
-          <div class="ex-name" style="${nameStyle}">${i+1}. ${ex.es}<span class="ex-hint" id="hint-${ex.id}"></span></div>
+          <div class="ex-name" style="${nameStyle}">${i+1}. ${ex.es}</div>
           <div class="ex-detail" id="det-${ex.id}">
             <span class="ex-name-en">${ex.en}</span>
             <span class="ex-tipo">${ex.tipo} · ${rangeLabel(ex)}</span>
@@ -852,8 +877,6 @@ function saveSession(wk){
 function prefillSection(wk){
   WK[wk].forEach(ex=>{
     const last=lastSess(ex.id);
-    const hintEl=document.getElementById('hint-'+ex.id);
-    if(hintEl){const h=nextHint(ex,last);hintEl.textContent=h?h.txt:'';}
     if(!last) return;
     const valid=(last.sets||[]).filter(hasVal);
     if(!valid.length) return;
@@ -1016,7 +1039,9 @@ const UNIT_MAP={"ap1": "kg", "ht1": "kg", "p1": "kg", "p2b": "kg", "p3": "kg", "
 const MAIN_IDS=['p1','l1','u1','g1'];
 function exListOf(wk){
   if(WK[wk]) return WK[wk];
-  return (OLD_WK[wk]||[]).map(([id,es])=>({id,es,range:null}));
+  const out=[];
+  (OLD_WK[wk]||[]).forEach(([id,es,prevId])=>{out.push({id,es,range:null});if(prevId)out.push({id:prevId,es:OLD_PREV_NAME[prevId]||prevId,range:null});});
+  return out;
 }
 function findExById(wk,exId){
   const lists=[WK[wk]||[],...Object.values(WK)];
@@ -1024,14 +1049,25 @@ function findExById(wk,exId){
     const ex=l.find(e=>e.id===exId);if(ex)return ex;
     for(const e of l){ if(e.predecessor&&e.predecessor.id===exId) return {id:exId,es:e.predecessor.es,range:e.range,tipo:e.tipo}; }
   }
-  for(const l of Object.values(OLD_WK)){ const o=l.find(x=>x[0]===exId); if(o) return {id:exId,es:o[1],range:null}; }
+  for(const l of Object.values(OLD_WK)){
+    const o=l.find(x=>x[0]===exId); if(o) return {id:exId,es:o[1],range:null};
+    if(l.some(x=>x[2]===exId)) return {id:exId,es:OLD_PREV_NAME[exId]||exId,range:null};
+  }
   return null;
 }
-function weekLabel(w){
+function weekLabel(w,starts){
   const {d,m}=ymd(w);const dd=String(d).padStart(2,'0')+'/'+String(m).padStart(2,'0');
-  const c3=weekStartStr(CYCLE_START);
-  if(w>=c3){const n=Math.round((dateStrToUTCms(w)-dateStrToUTCms(c3))/(7*86400000))+1;return `Sem ${n}<br><small style="color:#bbb;font-weight:400">${dd}</small>`;}
-  return `<span style="color:#c5bfb4">C1–2</span><br><small style="color:#bbb;font-weight:400">${dd}</small>`;
+  const c=cycleOf(w,starts||cycleStarts());
+  if(!c) return `<small style="color:#bbb;font-weight:400">${dd}</small>`;
+  const n=Math.round((dateStrToUTCms(w)-dateStrToUTCms(c.start))/(7*86400000))+1;
+  const col=c.n===3?'':'color:#b5ad9f';
+  return `<span style="${col}">C${c.n} · S${n}</span><br><small style="color:#bbb;font-weight:400">${dd}</small>`;
+}
+// Borde a la izquierda de la primera semana visible de cada ciclo (menos la primera columna)
+function cycleBorders(weeks,starts){
+  const out={};let prev=null;
+  weeks.forEach((w,i)=>{const c=cycleOf(w,starts);const n=c?c.n:0;if(i>0&&n!==prev)out[w]=true;prev=n;});
+  return out;
 }
 function defaultDateFor(wk,w){
   const h=getH().find(s=>s.workout===wk&&weekStartStr(s.date)===w);
@@ -1051,20 +1087,13 @@ function renderProgTable(wk){
   days.forEach(s=>wset.add(weekStartStr(s.date)));
   const weeks=[...wset].sort();
   if(!weeks.length){el.innerHTML='<div class="prog-empty">Aún no hay sesiones guardadas.</div>';return;}
-  const c3=weekStartStr(CYCLE_START);
-  const firstC3=weeks.find(w=>w>=c3);
-  const colCls=w=>w===firstC3?' c3-start':'';
+  const c3=weekStartStr(CYCLE_START),starts=cycleStarts(),borders=cycleBorders(weeks,starts);
+  const colCls=w=>borders[w]?' c3-start':'';
 
-  let html='<table class="prog-tbl"><thead><tr><th>Ejercicio</th>'+weeks.map(w=>`<th class="${colCls(w)}">${weekLabel(w)}</th>`).join('')+'</tr></thead><tbody>';
+  let html='<table class="prog-tbl"><thead><tr><th>Ejercicio</th>'+weeks.map(w=>`<th class="${colCls(w)}">${weekLabel(w,starts)}</th>`).join('')+'</tr></thead><tbody>';
   exList.forEach(ex=>{
     const all=dataOf[ex.id],k=exKind(ex);
-    let runningMax=0;const boldMap={};
-    if(k==='kg') all.forEach(sess=>{
-      sess.sets.forEach((st,idx)=>{
-        if(st.kg>0&&st.r>=(sess.range||ex.range)[0]&&st.kg>runningMax){boldMap[sess.date+'-'+idx]=true;runningMax=st.kg;}
-      });
-    });
-    const last=all[all.length-1],hint=nextHint(ex,last);
+    const boldMap=localPeaks(ex,all);
     const chartIcon=` <span class="ic-chart" onclick="openExChart('${wk}','${ex.id}');event.stopPropagation()" title="Ver evolución">📈</span>`;
     const isNew=!all.some(s=>s.date<CYCLE_START);
     const prevLabel=ex.predecessor?`<span class="ex-prev">antes: ${ex.predecessor.es}</span>`:'';
@@ -1084,8 +1113,7 @@ function renderProgTable(wk){
       const band=sess.band?`<span class="band-chip" style="background:${bandOf(sess.band).col}">${bandOf(sess.band).label}</span>`:'';
       const cells=vs.map((st,idx)=>`<span class="sl${boldMap[sess.date+'-'+idx]?' bold':''}">${fmtSet(ex,st)}</span>`).join('');
       const noteMark=sess.note?'<span class="note-ast" title="'+esc(sess.note)+'">*</span>':'';
-      const hintMark=(sess===last&&hint)?`<span class="hint-mark" title="${hint.txt}">${hint.short}</span>`:'';
-      html+=`<td class="prog-cell${colCls(w)}" style="cursor:pointer;position:relative;${oldBg}" onclick="openEditEntry('${wk}','${sess._id}','${sess.date}')">${noteMark}${hintMark}${band}${cells||'—'}</td>`;
+      html+=`<td class="prog-cell${colCls(w)}" style="cursor:pointer;position:relative;${oldBg}" onclick="openEditEntry('${wk}','${sess._id}','${sess.date}')">${noteMark}${band}${cells||'—'}</td>`;
     });
     html+='</tr>';
   });
@@ -1102,6 +1130,47 @@ function renderProgTable(wk){
   el.innerHTML=html;
   const scrollWrap=el.closest('.prog-scroll');
   if(scrollWrap)requestAnimationFrame(()=>{scrollWrap.scrollLeft=scrollWrap.scrollWidth;});
+  renderOldToggles(wk);
+}
+
+// ── VENTANAS ANTIGUAS (ciclos 1 y 2, solo lectura) ──────
+const oldOpen={};
+function renderOldToggles(wk){
+  const el=document.getElementById('old-prog-'+wk);if(!el)return;
+  el.innerHTML=(OLD_VIEWS[wk]||[]).map(o=>{
+    const id=wk+'-'+o,open=!!oldOpen[id];
+    return `<div class="cal-toggle-row" onclick="toggleOld('${wk}','${o}')"><span class="cal-toggle-lbl">Ciclos 1 y 2 · ${WK_LABEL[o]}</span><span class="cal-toggle-arr">${open?'▾':'▸'}</span></div>
+      <div class="prog-scroll" style="display:${open?'block':'none'}"><div id="old-tbl-${id}"></div></div>`;
+  }).join('');
+  (OLD_VIEWS[wk]||[]).forEach(o=>{if(oldOpen[wk+'-'+o])renderOldTable(o,'old-tbl-'+wk+'-'+o);});
+}
+function toggleOld(wk,o){oldOpen[wk+'-'+o]=!oldOpen[wk+'-'+o];renderOldToggles(wk);}
+function renderOldTable(o,targetId){
+  const el=document.getElementById(targetId);if(!el)return;
+  const starts=cycleStarts(),rows=[],wset=new Set();
+  OLD_WK[o].forEach(([id,es,prevId])=>{
+    const ex={id,es,range:null};
+    const data=[...(prevId?getEx(prevId):[]),...getEx(id)].filter(s=>s.date<CYCLE_START).sort((a,b)=>a.date.localeCompare(b.date));
+    data.forEach(s=>wset.add(weekStartStr(s.date)));
+    rows.push({ex,data,prevId});
+  });
+  const weeks=[...wset].sort();
+  if(!weeks.length){el.innerHTML='<div class="prog-empty">Sin registros.</div>';return;}
+  const borders=cycleBorders(weeks,starts),colCls=w=>borders[w]?' c3-start':'';
+  let html='<table class="prog-tbl"><thead><tr><th>Ejercicio</th>'+weeks.map(w=>`<th class="${colCls(w)}">${weekLabel(w,starts)}</th>`).join('')+'</tr></thead><tbody>';
+  rows.forEach(({ex,data,prevId})=>{
+    const peaks=localPeaks(ex,data),unit=UNIT_MAP[ex.id];
+    html+=`<tr><td class="td-ex">${ex.es}${unit?` <span class="ex-unit">(${unit})</span>`:''}${prevId?`<span class="ex-prev">antes: ${OLD_PREV_NAME[prevId]||prevId}</span>`:''}</td>`;
+    weeks.forEach(w=>{
+      const sess=data.filter(s=>weekStartStr(s.date)===w).pop();
+      if(!sess){html+=`<td class="prog-cell${colCls(w)}"></td>`;return;}
+      const cells=sess.sets.filter(hasVal).map((st,idx)=>`<span class="sl${peaks[sess.date+'-'+idx]?' bold':''}">${st.kg||'?'}×${st.r||'?'}</span>`).join('');
+      const noteMark=sess.note?'<span class="note-ast" title="'+esc(sess.note)+'">*</span>':'';
+      html+=`<td class="prog-cell${colCls(w)}" style="position:relative">${noteMark}${cells||'—'}</td>`;
+    });
+    html+='</tr>';
+  });
+  el.innerHTML=html+'</tbody></table>';
 }
 
 // ── GRÁFICO DE EVOLUCIÓN ─────────────────────────────────
@@ -1130,12 +1199,18 @@ function openExChart(wk,exId){
   const col=colors[exId]||'#666';
   const xs=pts.map(p=>p.x);
   const pad=5*24*60*60*1000;
-  const chartStart=new Date(2026,4,15).getTime();
-  const monthTicks=[chartStart];
-  let cur=new Date(2026,5,1);
-  const last=new Date(xs[xs.length-1]);
-  const endM=new Date(last.getFullYear(),last.getMonth()+1,1);
-  while(cur.getTime()<=endM.getTime()){monthTicks.push(cur.getTime());cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);}
+  const DAYMS=24*60*60*1000;
+  const chartStart=xs[0]-pad,chartEnd=xs[xs.length-1]+pad;
+  // Ticks mensuales; si el rango es corto, semanales
+  const monthTicks=[];
+  if(chartEnd-chartStart<50*DAYMS){
+    let t=dateStrToUTCms(weekStartStr(utcMsToDateStr(chartStart+DAYMS)));
+    for(;t<=chartEnd;t+=7*DAYMS) if(t>=chartStart) monthTicks.push(t);
+  } else {
+    const f=new Date(chartStart);let cur=new Date(f.getFullYear(),f.getMonth()+1,1);
+    while(cur.getTime()<=chartEnd){monthTicks.push(cur.getTime());cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);}
+  }
+  const shortRange=chartEnd-chartStart<50*DAYMS;
   // Media móvil mensual (ventana móvil 30 días, hacia atrás)
   const DAY=24*60*60*1000;
   const maPts=pts.map(p=>{
@@ -1171,11 +1246,11 @@ function openExChart(wk,exId){
         title:it=>new Date(it[0].parsed.x).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'2-digit'}),
         label:c=>(c.dataset.label==='Media móvil mensual'?'Media móvil: ':'')+Math.round(c.parsed.y*10)/10+' '+yUnit}}},
       scales:{
-        x:{type:'linear',min:chartStart,max:xs[xs.length-1]+pad,
+        x:{type:'linear',min:chartStart,max:chartEnd,
           grid:{color:'#f2f0ea'},
-          afterBuildTicks:sc=>{sc.ticks=monthTicks.filter(v=>v<=xs[xs.length-1]+pad).map(v=>({value:v}));},
+          afterBuildTicks:sc=>{sc.ticks=monthTicks.map(v=>({value:v}));},
           ticks:{color:'#aaa',font:{size:9},maxRotation:0,autoSkip:false,
-            callback:v=>new Date(v).toLocaleDateString('es-CL',{month:'short'})}},
+            callback:v=>shortRange?fmtD(utcMsToDateStr(v)):new Date(v).toLocaleDateString('es-CL',{month:'short'})}},
         y:{min:0,beginAtZero:true,grid:{color:'#eeebe4'},
           ticks:{color:'#aaa',font:{size:10},callback:v=>Math.round(v)+' '+yUnit}}
       }}
@@ -1351,7 +1426,8 @@ function renderProgCardio(targetId){
   const weeks={};
   h.forEach(s=>{const wk=weekStartStr(s.date);if(!weeks[wk])weeks[wk]={sessions:[],totalMin:0};weeks[wk].sessions.push(s);weeks[wk].totalMin+=(s.minutos||0);});
   const wkKeys=Object.keys(weeks).sort();
-  const wkLabels=wkKeys.map(wk=>`<span style="cursor:pointer" onclick="deleteCardioWeek('${wk}')" title="Click para borrar">${weekLabel(wk)}</span>`);
+  const starts=cycleStarts();
+  const wkLabels=wkKeys.map(wk=>`<span style="cursor:pointer" onclick="deleteCardioWeek('${wk}')" title="Click para borrar">${weekLabel(wk,starts)}</span>`);
   let html='<table class="prog-tbl"><thead><tr><th>Cardio</th>'+wkLabels.map(l=>'<th>'+l+'</th>').join('')+'</tr></thead><tbody>';
   CARDIO_GROUPS.forEach((g,gi)=>{
     if(gi>0) html+=`<tr><td class="td-group" colspan="${wkKeys.length+1}">${g.label}</td></tr>`;
@@ -1454,7 +1530,7 @@ function renderHomeExTable(){
   ];
   const tbl=document.getElementById('home-ex-tbl');
   if(!tbl) return;
-  const ROW_COLORS={pecho:{bg:'#fde8e8',fg:'#a33'},tsup:{bg:'#e8f7ed',fg:'#2a6e3f'},piernas:{bg:'#fef8e0',fg:'#856404'}};
+  const ROW_COLORS={p1:{bg:'#fde8e8',fg:'#a33'},l1:{bg:'#e8eefe',fg:'#2255a3'},u1:{bg:'#e8f7ed',fg:'#2a6e3f'},g1:{bg:'#fef8e0',fg:'#856404'}};
   const cutoff=addDaysStr(todaySantiago(),-28);
   let html='<thead><tr><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:left">Ejercicio</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">\u00daltimo</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">M\u00e1x Men</th></tr></thead>';
   KEY_EXERCISES.forEach(ex=>{
@@ -1468,7 +1544,7 @@ function renderHomeExTable(){
       if(recent.length) avgKg=Math.max(...recent);
     }
     const tab=KEY_TO_TAB[ex.id];
-    const col=ROW_COLORS[tab]||{bg:'#f5f2ee',fg:'#1a1a1a'};
+    const col=ROW_COLORS[ex.id]||{bg:'#f5f2ee',fg:'#1a1a1a'};
     html+=`<tr style="background:${col.bg}">
       <td class="home-ex-name" style="cursor:pointer;color:${col.fg}" onclick="goTab('${tab}')">${ex.es} <span style="font-size:10px;color:${col.fg};opacity:0.6">\u203a</span></td>
       <td class="home-ex-kg" style="color:${col.fg}">${lastKg} kg</td>
@@ -1482,7 +1558,7 @@ function renderHomeExTable(){
 function openBackup(){document.getElementById('modal-backup').classList.add('open');}
 function closeBackup(e){if(!e||e.target===document.getElementById('modal-backup'))document.getElementById('modal-backup').classList.remove('open');}
 function exportData(){
-  const allIds=new Set([...Object.values(WK).flat().map(e=>e.id),...Object.values(OLD_WK).flat().map(x=>x[0]),...Object.keys((_cache&&_cache.exercises)||{})]);
+  const allIds=new Set([...Object.values(WK).flat().map(e=>e.id),...Object.values(OLD_WK).flat().flatMap(x=>x.slice(0,1).concat(x[2]?[x[2]]:[])),...Object.keys((_cache&&_cache.exercises)||{})]);
   const data={hist:getH(),exercises:{}};
   allIds.forEach(id=>{const d=getEx(id);if(d.length)data.exercises[id]=d;});
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
