@@ -493,6 +493,7 @@ const WK = {
     {id:'u1',es:'Press militar mancuernas',  en:'Seated Dumbbell Press',   tipo:'Compuesto', range:[4,6],  def:15,  mus:'<b>Principal:</b> Deltoides anterior y medio · <b>Sec:</b> Tríceps, trapecio'},
     {id:'l2b',es:'Remo mancuerna en banca',  en:'Bench-Supported DB Row',  tipo:'Compuesto', range:[8,12], def:20,  mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, deltoides posterior',predecessor:{id:'l2',es:'Remo unilateral mancuerna',switchDate:'2026-06-17'}},
     {id:'p3',es:'Press plano mancuernas',    en:'Dumbbell Bench Press',    tipo:'Compuesto', range:[8,12], def:15,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
+    {id:'u2',es:'Remo polea agarre cerrado', en:'Seated Cable Row Close Grip',tipo:'Compuesto',range:[8,12],def:50, mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, trapecio medio'},
   ]
 };
 // Ciclos 1 y 2 (push/pull/upper/legs): para mostrar y editar el historial antiguo
@@ -552,16 +553,13 @@ function localPeaks(ex,sessions){
   });
   return out;
 }
-// Ciclos: C1 desde la primera sesión, C2 desde la primera semana tras ≥2 semanas sin fuerza (deload), C3 desde CYCLE_START
+// Ciclos: C1 desde la primera sesión, C2 desde el 28/07 (tras el deload), C3 desde CYCLE_START
+const C2_START='2026-07-28';
 function cycleStarts(){
-  const ws=[...new Set(getH().filter(s=>s.workout!=='cardio'&&s.date<CYCLE_START).map(s=>weekStartStr(s.date)))].sort();
+  const first=getH().filter(s=>s.workout!=='cardio').map(s=>s.date).sort()[0];
   const res=[];
-  if(ws.length){
-    res.push({n:1,start:ws[0]});
-    for(let i=1;i<ws.length;i++){
-      if((dateStrToUTCms(ws[i])-dateStrToUTCms(ws[i-1]))/(7*86400000)>=3){res.push({n:2,start:ws[i]});break;}
-    }
-  }
+  if(first&&first<C2_START) res.push({n:1,start:weekStartStr(first)});
+  res.push({n:2,start:weekStartStr(C2_START)});
   res.push({n:3,start:weekStartStr(CYCLE_START)});
   return res;
 }
@@ -1061,6 +1059,7 @@ function weekLabel(w,starts){
   if(!c) return `<small style="color:#bbb;font-weight:400">${dd}</small>`;
   const n=Math.round((dateStrToUTCms(w)-dateStrToUTCms(c.start))/(7*86400000))+1;
   const col=c.n===3?'':'color:#b5ad9f';
+  if(c.n===1&&w>=addDaysStr(weekStartStr(C2_START),-14)) return `<span style="${col}">Deload</span><br><small style="color:#bbb;font-weight:400">${dd}</small>`;
   return `<span style="${col}">C${c.n} · S${n}</span><br><small style="color:#bbb;font-weight:400">${dd}</small>`;
 }
 // Borde a la izquierda de la primera semana visible de cada ciclo (menos la primera columna)
