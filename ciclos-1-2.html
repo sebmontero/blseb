@@ -4,7 +4,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231a1a1a'/%3E%3Cg fill='%23fff'%3E%3Crect x='8' y='24' width='7' height='16' rx='2'/%3E%3Crect x='16' y='20' width='7' height='24' rx='2'/%3E%3Crect x='23' y='29' width='18' height='6'/%3E%3Crect x='41' y='20' width='7' height='24' rx='2'/%3E%3Crect x='49' y='24' width='7' height='16' rx='2'/%3E%3C/g%3E%3C/svg%3E">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>BLS — Seb</title>
+<title>BLS — Seb · Ciclos 1 y 2</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;background:#e0dcd4;color:#1a1a1a;padding:10px;min-height:100vh}
@@ -20,10 +20,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .tabs{display:flex;gap:4px;margin-bottom:14px;overflow-x:hidden}
 .tab{flex:1;min-width:0;padding:8px 4px;border:2px solid transparent;border-radius:10px;cursor:pointer;font-size:11px;font-weight:700;text-align:center;line-height:1.2}
 .tab-home  {background:#f0ede8;color:#555;   border-color:#d8d4cc}
-.tab-push,.tab-pecho  {background:#fde8e8;color:#a33;   border-color:#f0b0b0}
+.tab-push  {background:#fde8e8;color:#a33;   border-color:#f0b0b0}
 .tab-pull  {background:#e8eefe;color:#2255a3;border-color:#b8ccf5}
-.tab-upper,.tab-tsup {background:#e8f7ed;color:#2a6e3f;border-color:#a8d8b8}
-.tab-legs,.tab-piernas  {background:#fef8e0;color:#856404;border-color:#e0cc80}
+.tab-upper {background:#e8f7ed;color:#2a6e3f;border-color:#a8d8b8}
+.tab-legs  {background:#fef8e0;color:#856404;border-color:#e0cc80}
 .tab-cardio{background:#efefef;color:#555;   border-color:#ccc}
 .tab-home{background:#f0ece4;color:#7a6a52; border-color:#d8cfc0}
 .tab.active{filter:brightness(0.88) saturate(1.3);box-shadow:0 2px 6px rgba(0,0,0,0.18)}
@@ -88,8 +88,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .inp-sep{font-size:11px;color:#ccc}
 .inp-r{width:30px;border:1.5px solid #e0ddd8;border-radius:6px;padding:5px 3px;font-size:13px;text-align:center;background:#fafaf8;color:#1a1a1a;outline:none}
 .inp-r:focus{border-color:#888;background:#fff}
-.inp-kg::-webkit-inner-spin-button,.inp-kg::-webkit-outer-spin-button,.inp-r::-webkit-inner-spin-button,.inp-r::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
-.inp-kg,.inp-r{-moz-appearance:textfield;appearance:textfield}
 
 /* FILL */
 .td-fill{width:78px;text-align:center;vertical-align:top;padding-top:4px}
@@ -107,27 +105,27 @@ tr.ex-done .ex-name{text-decoration:line-through}
 
 /* BUTTONS */
 .btn-save{width:100%;padding:11px;background:#1a1a1a;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;-webkit-tap-highlight-color:transparent}
-.btn-save.bp-push,.btn-save.bp-pecho {background:#c44;border-color:#c44;color:#fff}
+.btn-save.bp-push {background:#c44;border-color:#c44;color:#fff}
 .btn-save.bp-pull {background:#2255a3;border-color:#2255a3;color:#fff}
-.btn-save.bp-upper,.btn-save.bp-tsup{background:#2a6e3f;border-color:#2a6e3f;color:#fff}
-.btn-save.bp-legs,.btn-save.bp-piernas {background:#856404;border-color:#856404;color:#fff}
+.btn-save.bp-upper{background:#2a6e3f;border-color:#2a6e3f;color:#fff}
+.btn-save.bp-legs {background:#856404;border-color:#856404;color:#fff}
 .btn-save.bp-cardio{background:#555;border-color:#555;color:#fff}
 .btn-save:active{opacity:0.85}
 .btn-prog{width:100%;padding:10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:2px solid;margin-bottom:8px}
-.bp-push,.bp-pecho  {background:#fde8e8;color:#a33;   border-color:#f0b0b0}
+.bp-push  {background:#fde8e8;color:#a33;   border-color:#f0b0b0}
 .bp-pull  {background:#e8eefe;color:#2255a3;border-color:#b8ccf5}
-.bp-upper,.bp-tsup {background:#e8f7ed;color:#2a6e3f;border-color:#a8d8b8}
-.bp-legs,.bp-piernas  {background:#fef8e0;color:#856404;border-color:#e0cc80}
+.bp-upper {background:#e8f7ed;color:#2a6e3f;border-color:#a8d8b8}
+.bp-legs  {background:#fef8e0;color:#856404;border-color:#e0cc80}
 .bp-cardio{background:#efefef;color:#555;   border-color:#ccc}
 .spacer{height:8px}
 .btn-reset{width:100%;padding:11px;background:#fff;color:#aaa;border:1.5px solid #e0ddd8;border-radius:10px;font-size:13px;cursor:pointer}
 .btn-backup-sm{width:100%;padding:9px;background:#fff;color:#bbb;border:1px solid #e8e4dc;border-radius:9px;font-size:12px;cursor:pointer;margin-top:8px}
 .btn-backup-sm:active{background:#f5f2ee}
 .btn-back{padding:8px 14px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:2px solid;margin-bottom:12px;display:inline-block}
-.bb-push,.bb-pecho  {background:#fde8e8;color:#a33;   border-color:#f0b0b0}
+.bb-push  {background:#fde8e8;color:#a33;   border-color:#f0b0b0}
 .bb-pull  {background:#e8eefe;color:#2255a3;border-color:#b8ccf5}
-.bb-upper,.bb-tsup {background:#e8f7ed;color:#2a6e3f;border-color:#a8d8b8}
-.bb-legs,.bb-piernas  {background:#fef8e0;color:#856404;border-color:#e0cc80}
+.bb-upper {background:#e8f7ed;color:#2a6e3f;border-color:#a8d8b8}
+.bb-legs  {background:#fef8e0;color:#856404;border-color:#e0cc80}
 .bb-cardio{background:#efefef;color:#555;   border-color:#ccc}
 
 /* CARDIO */
@@ -210,25 +208,6 @@ tr.ex-done .ex-name{text-decoration:line-through}
 .btn-imp{width:100%;padding:12px;background:#fff;color:#1a1a1a;border:2px solid #ccc;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px}
 .backup-ok{font-size:12px;color:#2a6e3f;text-align:center;margin-bottom:8px;display:none;font-weight:600}
 
-/* CICLO 3 */
-.inp-band{width:64px;border:1.5px solid #e0ddd8;border-radius:6px;padding:5px 2px;font-size:12px;background:#fafaf8;color:#1a1a1a;outline:none}
-.band-chip{display:inline-block;font-size:9px;font-weight:700;color:#fff;border-radius:99px;padding:0 6px;line-height:15px;margin-bottom:2px}
-.prog-tbl td.note-cell{white-space:normal;min-width:90px;max-width:120px;font-size:10px;color:#777;line-height:1.35;cursor:pointer}
-.c3-start{border-left:2px solid #1a1a1a!important}
-.note-inp{width:100%;min-height:44px;border:1.5px solid #e0ddd8;border-radius:8px;padding:8px;font-size:13px;font-family:inherit;resize:vertical;outline:none;background:#fafaf8;color:#1a1a1a}
-.note-inp:focus{border-color:#888;background:#fff}
-.popup-note{font-size:12px;color:#777;font-style:italic;padding:2px 0 6px}
-.int-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.int-lbl{font-size:12px;color:#4a7c59;font-weight:700;margin-bottom:4px}
-.int-lbl.hi{color:#c44}
-.int-lbl span{font-weight:400;color:#bbb}
-.goal-wrap{display:flex;flex-direction:column;gap:9px;margin-top:12px}
-.goal-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:#777;font-weight:600;margin-bottom:4px}
-.goal-top b{font-size:15px;color:#1a1a1a}
-.goal-bar{height:9px;background:#f0ede8;border-radius:99px;overflow:hidden}
-.goal-fill{height:100%;border-radius:99px;transition:width .3s}
-.btn-old{display:block;text-align:center;text-decoration:none}
-
 /* CARDIO HIST */
 .ic-chart{font-size:11px;opacity:0.35;cursor:pointer;margin-left:3px;vertical-align:middle}
 .ic-chart:active{opacity:0.8}
@@ -243,17 +222,22 @@ tr.ex-done .ex-name{text-decoration:line-through}
 #chart-canvas-wrap{position:relative;height:260px}
 #chart-empty{display:none;font-size:12px;color:#aaa;text-align:center;padding:40px 0}
 .cardio-summary{font-size:12px;color:#777;margin-top:10px;padding:10px 12px;background:#f5f5f3;border-radius:10px;line-height:1.6}
+/* ARCHIVO: sin registrar ni editar */
+.btn-save,.btn-reset,.btn-imp,#cardio-form-card,.btn-prog.reg{display:none!important}
+.prog-cell,.popup-ex{pointer-events:none}
 </style>
 </head>
 <body>
 
-<div class="hdr"><h1>BLS — Seb 💪</h1><span id="sync-status" style="font-size:11px;color:#bbb;flex:1;text-align:right;padding-right:8px"></span><span class="home-btn" onclick="goTab('home')">🏠</span></div>
+<div class="hdr"><h1>BLS — Ciclos 1 y 2</h1><span id="sync-status" style="font-size:11px;color:#bbb;flex:1;text-align:right;padding-right:8px"></span><span class="home-btn" onclick="goTab('home')">🏠</span></div>
 
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:#1a1a1a;color:#fff;border-radius:10px;padding:8px 12px;margin-bottom:8px;font-size:12px"><span>Archivo · solo lectura · hasta el 27/09/2026</span><a href="./" style="color:#fff;font-weight:700;white-space:nowrap">Ciclo actual →</a></div>
 <div class="tabs">
   <div class="tab tab-home"         onclick="goTab('home')">Home</div>
-  <div class="tab tab-pecho"        onclick="goTab('pecho')">Pecho</div>
-  <div class="tab tab-piernas"      onclick="goTab('piernas')">Piernas</div>
-  <div class="tab tab-tsup"         onclick="goTab('tsup')">Superior</div>
+  <div class="tab tab-push"         onclick="goTab('push')">Push</div>
+  <div class="tab tab-pull"         onclick="goTab('pull')">Pull</div>
+  <div class="tab tab-upper"        onclick="goTab('upper')">Upper</div>
+  <div class="tab tab-legs"         onclick="goTab('legs')">Legs</div>
 </div>
 
 <!-- HOME -->
@@ -271,10 +255,10 @@ tr.ex-done .ex-name{text-decoration:line-through}
       </div>
       <div class="cal-grid" id="home-cal-grid"></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fde8e8"></div>Pecho / Push</div>
-        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fef8e0"></div>Piernas / Legs</div>
-        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8f7ed"></div>Superior / Upper</div>
+        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fde8e8"></div>Push</div>
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8eefe"></div>Pull</div>
+        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#e8f7ed"></div>Upper</div>
+        <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fef8e0"></div>Legs</div>
         <div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#666"><div style="width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #3a3a3a"></div>Cardio (gris) / Deportes (azul): grosor = minutos</div>
       </div>
     </div>
@@ -285,17 +269,14 @@ tr.ex-done .ex-name{text-decoration:line-through}
       <div class="home-stat home-stat-cardio"><span class="home-stat-val" id="home-cardio-ses">—</span><span class="home-stat-lbl">Sesiones cardio sem</span></div>
       <div class="home-stat home-stat-cardio"><span class="home-stat-val" id="home-cardio-min">—</span><span class="home-stat-lbl">Min cardio sem</span></div>
     </div>
-    <div class="goal-wrap" id="cardio-goal"></div>
   </div>
-  <div class="card">
+  <div class="card" id="cardio-form-card">
     <div class="sec-label" style="margin-bottom:8px">Cardio</div>
     <div id="cardio-opts-group"></div>
-    <div class="int-row">
-      <div><div class="int-lbl">Leve · Z2 <span>min</span></div><input type="number" inputmode="numeric" id="inp-z2" class="inp-mins" placeholder="ej. 45" min="0" step="1"></div>
-      <div><div class="int-lbl hi">Intenso · Z4–5 <span>min</span></div><input type="number" inputmode="numeric" id="inp-z45" class="inp-mins" placeholder="ej. 10" min="0" step="1"></div>
-    </div>
+    <div style="margin-bottom:4px;font-size:12px;color:#999;font-weight:600">Minutos</div>
+    <input type="number" id="inp-mins" class="inp-mins" placeholder="ej. 30" min="1" step="1">
     <div style="margin:8px 0 4px;font-size:12px;color:#999;font-weight:600">FC promedio <span style="font-weight:400;color:#ccc">(opcional)</span></div>
-    <input type="number" id="inp-fc" class="inp-mins" placeholder="ej. 120 (Z2: 113–129)" min="1" step="1">
+    <input type="number" id="inp-fc" class="inp-mins" placeholder="ej. 120" min="1" step="1">
     <div class="date-row" style="margin-top:10px"><label>Fecha</label><input type="date" id="date-cardio"><span class="cal-btn" onclick="openCal()">📅</span></div>
     <button class="btn-save bp-cardio" onclick="saveCardio()" style="margin-top:8px">Guardar cardio</button>
     <button class="btn-prog bp-cardio" onclick="goSection('prog-cardio')">Ver progresión Cardio →</button>
@@ -309,98 +290,119 @@ tr.ex-done .ex-name{text-decoration:line-through}
     <table class="home-ex-tbl" id="home-ex-tbl"></table>
   </div>
   <button class="btn-backup-sm" onclick="openBackup()">💾 Backup</button>
-  <a class="btn-backup-sm btn-old" href="ciclos-1-2.html">Ciclos 1 y 2 (versión anterior) →</a>
 </div>
 
-<!-- PECHO -->
-<div id="sec-pecho" class="section">
+<!-- PUSH -->
+<div id="sec-push" class="section">
   <div class="card">
-    <div class="sec-label">PECHO — Pectoral · Hombro anterior · Tríceps</div>
+    <div class="sec-label">W1. PUSH — Pecho · Hombros · Tríceps</div>
     <table class="ex-table">
       <thead><tr><th>Ejercicio</th><th class="th-pxr">Series</th><th class="th-fill">P×R rápido</th><th class="th-chk"></th></tr></thead>
-      <tbody id="rows-pecho"></tbody>
+      <tbody id="rows-push"></tbody>
     </table>
   </div>
-  <div class="card"><div class="sec-label" style="margin-bottom:6px">Nota de la sesión</div><textarea id="note-pecho" class="note-inp" placeholder="ej. hombro bien, lumbar ok"></textarea></div>
-  <div class="date-row"><label>Fecha</label><input type="date" id="date-pecho"><span class="cal-btn" onclick="openCal()">📅</span></div>
-  <button class="btn-save bp-pecho" onclick="saveSession('pecho')">Guardar sesión</button>
-  <button class="btn-prog bp-pecho" onclick="goSection('prog-pecho')">Ver progresión Pecho →</button>
+  <div class="date-row"><label>Fecha</label><input type="date" id="date-push"><span class="cal-btn" onclick="openCal()">📅</span></div>
+  <button class="btn-save bp-push" onclick="saveSession('push')">Guardar sesión</button>
+  <button class="btn-prog bp-push" onclick="goSection('prog-push')">Ver progresión Push →</button>
   <div class="spacer"></div>
-  <button class="btn-reset" onclick="resetSection('pecho')">Reiniciar sesión</button>
+  <button class="btn-reset" onclick="resetSection('push')">Reiniciar sesión</button>
 </div>
 
-<!-- PIERNAS -->
-<div id="sec-piernas" class="section">
+<!-- PULL -->
+<div id="sec-pull" class="section">
   <div class="card">
-    <div class="sec-label">PIERNAS — Cuádriceps · Glúteo · Isquios</div>
+    <div class="sec-label">W2. PULL — Espalda · Bíceps</div>
     <table class="ex-table">
       <thead><tr><th>Ejercicio</th><th class="th-pxr">Series</th><th class="th-fill">P×R rápido</th><th class="th-chk"></th></tr></thead>
-      <tbody id="rows-piernas"></tbody>
+      <tbody id="rows-pull"></tbody>
     </table>
   </div>
-  <div class="card"><div class="sec-label" style="margin-bottom:6px">Nota de la sesión</div><textarea id="note-piernas" class="note-inp" placeholder="ej. hombro bien, lumbar ok"></textarea></div>
-  <div class="date-row"><label>Fecha</label><input type="date" id="date-piernas"><span class="cal-btn" onclick="openCal()">📅</span></div>
-  <button class="btn-save bp-piernas" onclick="saveSession('piernas')">Guardar sesión</button>
-  <button class="btn-prog bp-piernas" onclick="goSection('prog-piernas')">Ver progresión Piernas →</button>
+  <div class="date-row"><label>Fecha</label><input type="date" id="date-pull"><span class="cal-btn" onclick="openCal()">📅</span></div>
+  <button class="btn-save bp-pull" onclick="saveSession('pull')">Guardar sesión</button>
+  <button class="btn-prog bp-pull" onclick="goSection('prog-pull')">Ver progresión Pull →</button>
   <div class="spacer"></div>
-  <button class="btn-reset" onclick="resetSection('piernas')">Reiniciar sesión</button>
+  <button class="btn-reset" onclick="resetSection('pull')">Reiniciar sesión</button>
 </div>
 
-<!-- TSUP -->
-<div id="sec-tsup" class="section">
+<!-- UPPER -->
+<div id="sec-upper" class="section">
   <div class="card">
-    <div class="sec-label">SUPERIOR — Espalda · Hombros · Pecho</div>
+    <div class="sec-label">W3. UPPER — Pecho · Hombros · Espalda</div>
     <table class="ex-table">
       <thead><tr><th>Ejercicio</th><th class="th-pxr">Series</th><th class="th-fill">P×R rápido</th><th class="th-chk"></th></tr></thead>
-      <tbody id="rows-tsup"></tbody>
+      <tbody id="rows-upper"></tbody>
     </table>
   </div>
-  <div class="card"><div class="sec-label" style="margin-bottom:6px">Nota de la sesión</div><textarea id="note-tsup" class="note-inp" placeholder="ej. hombro bien, lumbar ok"></textarea></div>
-  <div class="date-row"><label>Fecha</label><input type="date" id="date-tsup"><span class="cal-btn" onclick="openCal()">📅</span></div>
-  <button class="btn-save bp-tsup" onclick="saveSession('tsup')">Guardar sesión</button>
-  <button class="btn-prog bp-tsup" onclick="goSection('prog-tsup')">Ver progresión Superior →</button>
+  <div class="date-row"><label>Fecha</label><input type="date" id="date-upper"><span class="cal-btn" onclick="openCal()">📅</span></div>
+  <button class="btn-save bp-upper" onclick="saveSession('upper')">Guardar sesión</button>
+  <button class="btn-prog bp-upper" onclick="goSection('prog-upper')">Ver progresión Upper →</button>
   <div class="spacer"></div>
-  <button class="btn-reset" onclick="resetSection('tsup')">Reiniciar sesión</button>
+  <button class="btn-reset" onclick="resetSection('upper')">Reiniciar sesión</button>
+</div>
+
+<!-- LEGS -->
+<div id="sec-legs" class="section">
+  <div class="card">
+    <div class="sec-label">W4. LOWER — Cuádriceps · Isquios · Glúteos</div>
+    <table class="ex-table">
+      <thead><tr><th>Ejercicio</th><th class="th-pxr">Series</th><th class="th-fill">P×R rápido</th><th class="th-chk"></th></tr></thead>
+      <tbody id="rows-legs"></tbody>
+    </table>
+  </div>
+  <div class="date-row"><label>Fecha</label><input type="date" id="date-legs"><span class="cal-btn" onclick="openCal()">📅</span></div>
+  <button class="btn-save bp-legs" onclick="saveSession('legs')">Guardar sesión</button>
+  <button class="btn-prog bp-legs" onclick="goSection('prog-legs')">Ver progresión Legs →</button>
+  <div class="spacer"></div>
+  <button class="btn-reset" onclick="resetSection('legs')">Reiniciar sesión</button>
 </div>
 
 
-<!-- PROG-PECHO -->
-<div id="sec-prog-pecho" class="section">
+<!-- PROG-PUSH -->
+<div id="sec-prog-push" class="section">
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-    <button class="btn-back bb-pecho" onclick="goTab('home')" style="margin-bottom:0">← Home</button>
-    <span class="sec-label" style="margin:0;flex:1">Progresión — Pecho</span>
-    <span class="cal-icon-prog" onclick="toggleCalInline('pecho')">📅</span>
+    <button class="btn-back bb-push" onclick="goTab('home')" style="margin-bottom:0">← Home</button>
+    <span class="sec-label" style="margin:0;flex:1">Progresión — Push</span>
+    <span class="cal-icon-prog" onclick="toggleCalInline('push')">📅</span>
   </div>
-  <button class="btn-prog bp-pecho" onclick="goSection('pecho')" style="margin-bottom:10px">Registrar sesión Pecho →</button>
-  <div class="card" id="cal-body-pecho" style="display:none"></div>
-  <div class="prog-scroll"><div id="tbl-prog-pecho"></div></div>
-  <div id="old-prog-pecho"></div>
+  <button class="btn-prog reg bp-push" onclick="goSection(\'push\')" style="margin-bottom:10px">Registrar sesión Push →</button>
+  <div class="card" id="cal-body-push" style="display:none"></div>
+  <div class="prog-scroll"><div id="tbl-prog-push"></div></div>
 </div>
 
-<!-- PROG-PIERNAS -->
-<div id="sec-prog-piernas" class="section">
+<!-- PROG-PULL -->
+<div id="sec-prog-pull" class="section">
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-    <button class="btn-back bb-piernas" onclick="goTab('home')" style="margin-bottom:0">← Home</button>
-    <span class="sec-label" style="margin:0;flex:1">Progresión — Piernas</span>
-    <span class="cal-icon-prog" onclick="toggleCalInline('piernas')">📅</span>
+    <button class="btn-back bb-pull" onclick="goTab('home')" style="margin-bottom:0">← Home</button>
+    <span class="sec-label" style="margin:0;flex:1">Progresión — Pull</span>
+    <span class="cal-icon-prog" onclick="toggleCalInline('pull')">📅</span>
   </div>
-  <button class="btn-prog bp-piernas" onclick="goSection('piernas')" style="margin-bottom:10px">Registrar sesión Piernas →</button>
-  <div class="card" id="cal-body-piernas" style="display:none"></div>
-  <div class="prog-scroll"><div id="tbl-prog-piernas"></div></div>
-  <div id="old-prog-piernas"></div>
+  <button class="btn-prog reg bp-pull" onclick="goSection(\'pull\')" style="margin-bottom:10px">Registrar sesión Pull →</button>
+  <div class="card" id="cal-body-pull" style="display:none"></div>
+  <div class="prog-scroll"><div id="tbl-prog-pull"></div></div>
 </div>
 
-<!-- PROG-TSUP -->
-<div id="sec-prog-tsup" class="section">
+<!-- PROG-UPPER -->
+<div id="sec-prog-upper" class="section">
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-    <button class="btn-back bb-tsup" onclick="goTab('home')" style="margin-bottom:0">← Home</button>
-    <span class="sec-label" style="margin:0;flex:1">Progresión — Superior</span>
-    <span class="cal-icon-prog" onclick="toggleCalInline('tsup')">📅</span>
+    <button class="btn-back bb-upper" onclick="goTab('home')" style="margin-bottom:0">← Home</button>
+    <span class="sec-label" style="margin:0;flex:1">Progresión — Upper</span>
+    <span class="cal-icon-prog" onclick="toggleCalInline('upper')">📅</span>
   </div>
-  <button class="btn-prog bp-tsup" onclick="goSection('tsup')" style="margin-bottom:10px">Registrar sesión Superior →</button>
-  <div class="card" id="cal-body-tsup" style="display:none"></div>
-  <div class="prog-scroll"><div id="tbl-prog-tsup"></div></div>
-  <div id="old-prog-tsup"></div>
+  <button class="btn-prog reg bp-upper" onclick="goSection(\'upper\')" style="margin-bottom:10px">Registrar sesión Upper →</button>
+  <div class="card" id="cal-body-upper" style="display:none"></div>
+  <div class="prog-scroll"><div id="tbl-prog-upper"></div></div>
+</div>
+
+<!-- PROG-LEGS -->
+<div id="sec-prog-legs" class="section">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+    <button class="btn-back bb-legs" onclick="goTab('home')" style="margin-bottom:0">← Home</button>
+    <span class="sec-label" style="margin:0;flex:1">Progresión — Legs</span>
+    <span class="cal-icon-prog" onclick="toggleCalInline('legs')">📅</span>
+  </div>
+  <button class="btn-prog reg bp-legs" onclick="goSection(\'legs\')" style="margin-bottom:10px">Registrar sesión Legs →</button>
+  <div class="card" id="cal-body-legs" style="display:none"></div>
+  <div class="prog-scroll"><div id="tbl-prog-legs"></div></div>
 </div>
 
 <!-- PROG-CARDIO -->
@@ -433,10 +435,10 @@ tr.ex-done .ex-name{text-decoration:line-through}
       <button onclick="calNav(1)">›</button>
     </div>
     <div class="cal-legend">
-      <div class="cl-item"><div class="cl-dot" style="background:#fde8e8"></div>Pecho / Push</div>
-      <div class="cl-item"><div class="cl-dot" style="background:#fef8e0"></div>Piernas / Legs</div>
-      <div class="cl-item"><div class="cl-dot" style="background:#e8f7ed"></div>Superior / Upper</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#fde8e8"></div>Push</div>
       <div class="cl-item"><div class="cl-dot" style="background:#e8eefe"></div>Pull</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#e8f7ed"></div>Upper</div>
+      <div class="cl-item"><div class="cl-dot" style="background:#fef8e0"></div>Legs</div>
       <div class="cl-item"><div class="cl-dot" style="background:#fff;border:2px solid #3a3a3a"></div>Cardio (gris) / Deportes (azul): grosor = minutos</div>
     </div>
     <div class="cal-grid" id="cal-grid"></div>
@@ -472,99 +474,35 @@ tr.ex-done .ex-name{text-decoration:line-through}
 
 <script>
 // ── DATA ────────────────────────────────────────────────
-// Ciclo 3: Pecho (lun) · Piernas (mié) · Superior (vie). kind: kg (por defecto) | reps | band | secs
-const CYCLE_START='2026-09-28';
 const WK = {
-  pecho:[
-    {id:'p1',es:'Press banca barra',         en:'Barbell Bench Press',     tipo:'Compuesto', range:[4,6],  def:50,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
-    {id:'p2b',es:'Press inclinado mancuernas',en:'Incline Dumbbell Press', tipo:'Compuesto', range:[8,12], def:15,  mus:'<b>Principal:</b> Pectoral mayor clavicular · <b>Sec:</b> Deltoides anterior, tríceps',predecessor:{id:'p2',es:'Press banca inclinado',switchDate:'2026-07-27'}},
-    {id:'ap1',es:'Aperturas en polea',       en:'Cable Chest Fly',         tipo:'Aislamiento',range:[8,12],def:10,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior'},
-    {id:'fx1',es:'Flexiones',                en:'Push-up',                 tipo:'Compuesto', kind:'reps', range:null, mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Tríceps, deltoides anterior, core'},
+  push:[
+    {id:'p1',es:'Press banca barra',      en:'Barbell Bench Press',        tipo:'Compuesto', range:[4,6],def:50,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
+    {id:'p2b',es:'Press inclinado mancuernas',en:'Incline Dumbbell Press',tipo:'Compuesto', range:[4,6],def:20,  mus:'<b>Principal:</b> Pectoral mayor clavicular · <b>Sec:</b> Deltoides anterior, tríceps',predecessor:{id:'p2',es:'Press banca inclinado',switchDate:'2026-07-27'}},
+    {id:'p3',es:'Press mancuernas',       en:'Dumbbell Bench Press',       tipo:'Compuesto', range:[6,8],def:null,mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
+    {id:'p4',es:'Extensión tríceps polea',en:'Triceps Pushdown',           tipo:'Aislamiento',range:[6,8],def:null,mus:'<b>Principal:</b> Tríceps braquial · <b>Sec:</b> Anconeo'},
   ],
-  piernas:[
-    {id:'pl1',es:'Plancha',                  en:'Plank',                   tipo:'Activación',kind:'secs', sets:2, range:[30,45], mus:'<b>Principal:</b> Core · <b>Sec:</b> Glúteos, hombros'},
-    {id:'g1',es:'Sentadilla barra',          en:'Barbell Squat',           tipo:'Compuesto', range:[4,6],  def:85,  mus:'<b>Principal:</b> Cuádriceps, glúteo mayor · <b>Sec:</b> Isquios, erector, aductores'},
-    {id:'l1',es:'Peso muerto barra',         en:'Barbell Deadlift',        tipo:'Compuesto', range:[4,6],  def:75,  mus:'<b>Principal:</b> Glúteo mayor, isquios, erector · <b>Sec:</b> Cuádriceps, dorsales'},
-    {id:'ht1',es:'Hip thrust barra',         en:'Barbell Hip Thrust',      tipo:'Compuesto', range:[10,12],def:40,  mus:'<b>Principal:</b> Glúteo mayor · <b>Sec:</b> Isquios, aductores'},
-    {id:'g2',es:'Flexión de piernas',        en:'Leg Curl',                tipo:'Aislamiento',range:[8,12],def:80,  mus:'<b>Principal:</b> Isquiotibiales · <b>Sec:</b> Gastrocnemio, poplíteo'},
+  pull:[
+    {id:'l1',es:'Peso muerto barra',          en:'Barbell Deadlift',         tipo:'Compuesto', range:[4,6],def:70,  mus:'<b>Principal:</b> Glúteo mayor, isquios, erector · <b>Sec:</b> Cuádriceps, dorsales'},
+    {id:'l2b',es:'Remo mancuernas banca',     en:'Bench-Supported DB Row',   tipo:'Compuesto', range:[4,6],def:null,mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, deltoides posterior',predecessor:{id:'l2',es:'Remo unilateral mancuerna',switchDate:'2026-06-17'}},
+    {id:'l3',es:'Jalón polea alta',           en:'Lat Pulldown',             tipo:'Compuesto', range:[6,8],def:85,  mus:'<b>Principal:</b> Dorsal ancho · <b>Sec:</b> Bíceps, romboides'},
+    {id:'l4b',es:'Curl mancuernas banca',     en:'Bench-Supported DB Curl',  tipo:'Aislamiento',range:[6,8],def:12.5,mus:'<b>Principal:</b> Bíceps braquial · <b>Sec:</b> Braquial, braquiorradial',predecessor:{id:'l4',es:'Curl alternado mancuernas',switchDate:'2026-07-21'}},
   ],
-  tsup:[
-    {id:'dm1',es:'Dominadas con banda',      en:'Band-Assisted Pull-up',   tipo:'Compuesto', kind:'band', range:[5,8], mus:'<b>Principal:</b> Dorsal ancho · <b>Sec:</b> Bíceps, romboides, trapecio'},
-    {id:'u1',es:'Press militar mancuernas',  en:'Seated Dumbbell Press',   tipo:'Compuesto', range:[4,6],  def:15,  mus:'<b>Principal:</b> Deltoides anterior y medio · <b>Sec:</b> Tríceps, trapecio'},
-    {id:'l2b',es:'Remo mancuerna en banca',  en:'Bench-Supported DB Row',  tipo:'Compuesto', range:[8,12], def:20,  mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, deltoides posterior',predecessor:{id:'l2',es:'Remo unilateral mancuerna',switchDate:'2026-06-17'}},
-    {id:'p3',es:'Press plano mancuernas',    en:'Dumbbell Bench Press',    tipo:'Compuesto', range:[8,12], def:15,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
-    {id:'u2',es:'Remo polea agarre cerrado', en:'Seated Cable Row Close Grip',tipo:'Compuesto',range:[8,12],def:50, mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, trapecio medio'},
+  upper:[
+    {id:'u1',es:'Press militar mancuernas',      en:'Seated Dumbbell Press',      tipo:'Compuesto', range:[4,6],def:7.5,mus:'<b>Principal:</b> Deltoides anterior y medio · <b>Sec:</b> Tríceps, trapecio'},
+    {id:'u2',es:'Remo polea agarre cerrado',     en:'Seated Cable Row Close Grip',tipo:'Compuesto', range:[6,8],def:50, mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, trapecio medio'},
+    {id:'u3',es:'Press banca agarre cerrado',    en:'Close-Grip Bench Press',     tipo:'Compuesto', range:[6,8],def:45, mus:'<b>Principal:</b> Tríceps braquial · <b>Sec:</b> Pectoral mayor, deltoides'},
+    {id:'u4',es:'Elevación posterior mancuernas',en:'Dumbbell Rear Lateral Raise',tipo:'Aislamiento',range:[6,8],def:null,mus:'<b>Principal:</b> Deltoides posterior · <b>Sec:</b> Romboides, trapecio medio'},
+  ],
+  legs:[
+    {id:'g1',es:'Sentadilla barra',           en:'Barbell Squat',          tipo:'Compuesto', range:[4,6],def:80, mus:'<b>Principal:</b> Cuádriceps, glúteo mayor · <b>Sec:</b> Isquios, erector, aductores'},
+    {id:'g2',es:'Flexión de piernas',         en:'Leg Curl',               tipo:'Aislamiento',range:[6,8],def:80,mus:'<b>Principal:</b> Isquiotibiales · <b>Sec:</b> Gastrocnemio, poplíteo'},
+    {id:'g3b',es:'Extensión de piernas',      en:'Leg Extension',          tipo:'Aislamiento',range:[8,10],def:80,mus:'<b>Principal:</b> Cuádriceps · <b>Sec:</b> Recto femoral',predecessor:{id:'g3',es:'Prensa de pierna',switchDate:'2026-07-21'}},
+    {id:'g4',es:'Zancada estática mancuernas',en:'Dumbbell Lunge In-Place',tipo:'Compuesto', range:[6,8],def:null,mus:'<b>Principal:</b> Cuádriceps, glúteo mayor · <b>Sec:</b> Isquios, core'},
   ]
 };
-// Ciclos 1 y 2 (push/pull/upper/legs): para mostrar y editar el historial antiguo
-const OLD_WK={
-  push:[['p1','Press banca barra'],['p2b','Press inclinado mancuernas','p2'],['p3','Press mancuernas'],['p4','Extensión tríceps polea']],
-  pull:[['l1','Peso muerto barra'],['l2b','Remo mancuernas banca','l2'],['l3','Jalón polea alta'],['l4b','Curl mancuernas banca','l4']],
-  upper:[['u1','Press militar mancuernas'],['u2','Remo polea agarre cerrado'],['u3','Press banca agarre cerrado'],['u4','Elevación posterior mancuernas']],
-  legs:[['g1','Sentadilla barra'],['g2','Flexión de piernas'],['g3b','Extensión de piernas','g3'],['g4','Zancada estática mancuernas']]
-};
-const OLD_PREV_NAME={p2:'Press banca inclinado',l2:'Remo unilateral mancuerna',l4:'Curl alternado mancuernas',g3:'Prensa de pierna'};
-// Ventanas de progresión antiguas bajo cada rutina nueva
-const OLD_VIEWS={pecho:['push'],piernas:['legs','pull'],tsup:['upper']};
-const WK_LABEL={pecho:'Pecho',piernas:'Piernas',tsup:'Superior',push:'Push',pull:'Pull',upper:'Upper',legs:'Legs'};
-const DAY_OFFSET={pecho:0,piernas:2,tsup:4};
-const BANDS=[{k:'verde',label:'Verde',col:'#2a8a4a'},{k:'morada',label:'Morada',col:'#7a3fa8'},{k:'sin',label:'Sin banda',col:'#1a1a1a'}];
-const SECTIONS=['home','pecho','piernas','tsup','prog-pecho','prog-piernas','prog-tsup','prog-cardio'];
-const TABS=['home','pecho','piernas','tsup'];
-const WKMAP={pecho:'cp',piernas:'cg',tsup:'cu',push:'cp',pull:'cl',upper:'cu',legs:'cg',cardio:'cc'};
-
-function exKind(ex){return ex.kind||'kg';}
-function nSets(ex){return ex.sets||3;}
-function hasVal(st){return !!st&&(st.kg>0||st.r>0);}
-function bandOf(k){return BANDS.find(b=>b.k===k)||BANDS[0];}
-function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function fmtSet(ex,st){
-  const k=exKind(ex);
-  if(k==='kg') return (st.kg||'?')+'×'+(st.r||'?');
-  if(k==='secs') return (st.r||'?')+'s';
-  return String(st.r||'?');
-}
-function rangeLabel(ex){
-  const k=exKind(ex);
-  if(k==='reps') return 'máx, 1–2 en reserva';
-  if(!ex.range) return '';
-  if(k==='secs') return ex.range[0]+'–'+ex.range[1]+' s';
-  if(k==='band') return ex.range[0]+'–'+ex.range[1]+' limpias';
-  return ex.range[0]+'–'+ex.range[1]+' reps';
-}
-// Peaks locales: sesión cuyo valor (kg con reps dentro del rango, o reps/segundos) supera a la anterior
-// y no es superada por la siguiente. Devuelve las celdas a marcar en negrita: {'fecha-serie':true}
-function sessValue(ex,sess){
-  const k=exKind(ex),vs=(sess.sets||[]).filter(hasVal);
-  if(!vs.length) return null;
-  if(k==='kg'){const minR=((sess.range||ex.range||[1])[0])||1;const ok=vs.filter(st=>st.kg>0&&st.r>=minR);return ok.length?Math.max(...ok.map(st=>st.kg)):null;}
-  if(k==='band') return null;
-  return Math.max(...vs.map(st=>st.r||0));
-}
-function localPeaks(ex,sessions){
-  const out={},pts=sessions.map(se=>({se,v:sessValue(ex,se)})).filter(x=>x.v!=null);
-  pts.forEach((x,i)=>{
-    const prev=pts[i-1],next=pts[i+1];
-    if(!prev||x.v<=prev.v||(next&&next.v>x.v)) return;
-    const k=exKind(ex),minR=((x.se.range||ex.range||[1])[0])||1;
-    x.se.sets.forEach((st,idx)=>{
-      if(k==='kg'?(st.kg===x.v&&st.r>=minR):(st.r===x.v)) out[x.se.date+'-'+idx]=true;
-    });
-  });
-  return out;
-}
-// Ciclos: C1 desde la primera sesión, C2 desde el 28/07 (tras el deload), C3 desde CYCLE_START
-const C2_START='2026-07-28';
-function cycleStarts(){
-  const first=getH().filter(s=>s.workout!=='cardio').map(s=>s.date).sort()[0];
-  const res=[];
-  if(first&&first<C2_START) res.push({n:1,start:weekStartStr(first)});
-  res.push({n:2,start:weekStartStr(C2_START)});
-  res.push({n:3,start:weekStartStr(CYCLE_START)});
-  return res;
-}
-function cycleOf(w,starts){let c=null;starts.forEach(x=>{if(w>=x.start)c=x;});return c;}
-function lastSess(id){const d=[...getEx(id)].sort((a,b)=>a.date.localeCompare(b.date));return d[d.length-1]||null;}
+const SECTIONS=['home','push','pull','upper','legs','prog-push','prog-pull','prog-upper','prog-legs','prog-cardio'];
+const TABS=['home','push','pull','upper','legs'];
+const WKMAP={'push':'cp','pull':'cl','upper':'cu','legs':'cg','cardio':'cc'};
 
 // ── CALENDAR DAY CELL (shared by modal/inline/home calendars) ───
 const CARDIO_TYPES=[
@@ -695,6 +633,7 @@ async function loadFromFirestore() {
 }
 
 async function saveToFirestore() {
+  return; // archivo: solo lectura
   if (!_cache || !_db) return;
   const status = document.getElementById('sync-status');
   if (status) status.textContent = '⏳ Guardando...';
@@ -709,22 +648,23 @@ async function saveToFirestore() {
 }
 
 // ── STORAGE ──────────────────────────────────────────────
+// Archivo de los ciclos 1 y 2: solo lectura y solo registros anteriores al ciclo 3.
+const ARCHIVE_END = '2026-09-28';
+const beforeC3 = s => s && s.date < ARCHIVE_END;
 function getH() {
-  if (_cache) return _cache.hist || [];
-  try { return JSON.parse(localStorage.getItem('bls4') || '[]'); } catch(e) { return []; }
+  let h;
+  if (_cache) h = _cache.hist || [];
+  else { try { h = JSON.parse(localStorage.getItem('bls4') || '[]'); } catch(e) { h = []; } }
+  return h.filter(beforeC3);
 }
-function setH(h) {
-  if (_cache) { _cache.hist = h; saveToFirestore(); }
-  try { localStorage.setItem('bls4', JSON.stringify(h)); } catch(e) {}
-}
+function setH(h) {}
 function getEx(id) {
-  if (_cache) return (_cache.exercises && _cache.exercises[id]) || [];
-  try { return JSON.parse(localStorage.getItem('ex4_' + id) || '[]'); } catch(e) { return []; }
+  let d;
+  if (_cache) d = (_cache.exercises && _cache.exercises[id]) || [];
+  else { try { d = JSON.parse(localStorage.getItem('ex4_' + id) || '[]'); } catch(e) { d = []; } }
+  return d.filter(beforeC3);
 }
-function setEx(id, d) {
-  if (_cache) { if (!_cache.exercises) _cache.exercises = {}; _cache.exercises[id] = d; saveToFirestore(); }
-  try { localStorage.setItem('ex4_' + id, JSON.stringify(d)); } catch(e) {}
-}
+function setEx(id, d) {}
 
 // ── NAV ──────────────────────────────────────────────────
 function goTab(t){
@@ -751,48 +691,48 @@ function buildRows(){
     const tbody=document.getElementById('rows-'+wk);
     tbody.innerHTML='';
     WK[wk].forEach((ex,i)=>{
-      const k=exKind(ex);
+      const badge='';
+      // Build muscle description based on type
       let musHtml='';
-      if(ex.tipo==='Aislamiento'){
+      if(ex.tipo==='Compuesto'){
+        musHtml=`<span class="ex-mus">${ex.mus}</span>`;
+      } else {
+        // Aislamiento - extract just principal
         const match=ex.mus.match(/<b>Principal:<\/b>\s*([^·<]+)/);
         const principal=match?match[1].trim():ex.mus;
         musHtml=`<span class="ex-mus"><b>Aislamiento — enfocado en:</b> ${principal}</span>`;
-      } else {
-        musHtml=`<span class="ex-mus">${ex.mus}</span>`;
       }
       const tr=document.createElement('tr');
       tr.id='row-'+ex.id;
-      const isPrimary=ex.range&&ex.range[0]===4&&ex.range[1]===6;
+      const isPrimary=ex.range[0]===4&&ex.range[1]===6;
       const nameStyle=isPrimary?'text-decoration:underline;text-underline-offset:3px':'';
-      const unit=UNIT_MAP[ex.id]||'kg';
-      const setRows=Array.from({length:nSets(ex)},(_,j)=>j+1).map(s=>`<div class="set-row">
-              <span class="set-lbl">S${s}</span>
-              ${k==='kg'?`<input class="inp-kg" type="number" inputmode="decimal" placeholder="${unit}" min="0" step="0.5" id="kg-${ex.id}-${s}">
-              <span class="inp-sep">×</span>`:''}
-              <input class="inp-r" type="number" inputmode="numeric" placeholder="${k==='secs'?'s':'r'}" min="0" step="1" id="r-${ex.id}-${s}">
-            </div>`).join('');
-      let fill;
-      if(k==='kg') fill=`<input class="inp-fill" type="number" inputmode="decimal" placeholder="${unit}" id="fkg-${ex.id}" oninput="fillKg('${ex.id}',this.value)">
-            <span class="fill-lbl">kg/lb</span>
-            <input class="inp-fill" type="number" inputmode="numeric" placeholder="r" id="fr-${ex.id}" oninput="fillR('${ex.id}',this.value)">
-            <span class="fill-lbl">reps</span>`;
-      else if(k==='band') fill=`<select class="inp-band" id="band-${ex.id}">${BANDS.map(b=>`<option value="${b.k}">${b.label}</option>`).join('')}</select>
-            <span class="fill-lbl">banda</span>
-            <input class="inp-fill" type="number" inputmode="numeric" placeholder="r" id="fr-${ex.id}" oninput="fillR('${ex.id}',this.value)">
-            <span class="fill-lbl">reps</span>`;
-      else fill=`<input class="inp-fill" type="number" inputmode="numeric" placeholder="${k==='secs'?'s':'r'}" id="fr-${ex.id}" oninput="fillR('${ex.id}',this.value)">
-            <span class="fill-lbl">${k==='secs'?'seg':'reps'}</span>`;
       tr.innerHTML=`
         <td class="td-name" onclick="toggleDetail('${ex.id}')">
-          <div class="ex-name" style="${nameStyle}">${i+1}. ${ex.es}</div>
+          <div class="ex-name" style="${nameStyle}">${i+1}. ${ex.es}${badge}</div>
           <div class="ex-detail" id="det-${ex.id}">
             <span class="ex-name-en">${ex.en}</span>
-            <span class="ex-tipo">${ex.tipo} · ${rangeLabel(ex)}</span>
+            <span class="ex-tipo">${ex.tipo} · ${ex.range[0]}–${ex.range[1]} reps</span>
             ${musHtml}
           </div>
         </td>
-        <td class="td-pxr"><div class="sets-wrap">${setRows}</div></td>
-        <td class="td-fill"><div class="fill-wrap">${fill}</div></td>
+        <td class="td-pxr">
+          <div class="sets-wrap">
+            ${[1,2,3].map(s=>`<div class="set-row">
+              <span class="set-lbl">S${s}</span>
+              <input class="inp-kg" type="number" inputmode="decimal" placeholder="kg" min="0" step="0.5" id="kg-${ex.id}-${s}">
+              <span class="inp-sep">×</span>
+              <input class="inp-r" type="number" inputmode="numeric" placeholder="r" min="0" step="1" id="r-${ex.id}-${s}">
+            </div>`).join('')}
+          </div>
+        </td>
+        <td class="td-fill">
+          <div class="fill-wrap">
+            <input class="inp-fill" type="number" inputmode="decimal" placeholder="kg" id="fkg-${ex.id}" oninput="fillKg('${ex.id}',this.value)">
+            <span class="fill-lbl">kg/lb</span>
+            <input class="inp-fill" type="number" inputmode="numeric" placeholder="r" id="fr-${ex.id}" oninput="fillR('${ex.id}',this.value)">
+            <span class="fill-lbl">reps</span>
+          </div>
+        </td>
         <td class="td-chk">
           <button class="chk-btn" id="chk-${ex.id}" onclick="toggleChk('${ex.id}')"></button>
         </td>`;
@@ -804,32 +744,8 @@ function buildRows(){
 function toggleDetail(id){
   document.getElementById('det-'+id).classList.toggle('open');
 }
-function exById(id){for(const wk of Object.keys(WK)){const ex=WK[wk].find(e=>e.id===id);if(ex)return ex;}return null;}
-function setIdx(id){return Array.from({length:nSets(exById(id))},(_,j)=>j+1);}
-function fillKg(id,v){setIdx(id).forEach(s=>{const el=document.getElementById('kg-'+id+'-'+s);if(el)el.value=v;})}
-function fillR(id,v) {setIdx(id).forEach(s=>{document.getElementById('r-'+id+'-'+s).value=v;})}
-function readSets(ex){
-  return Array.from({length:nSets(ex)},(_,j)=>j+1).map(s=>{
-    const kgEl=document.getElementById('kg-'+ex.id+'-'+s);
-    return {kg:kgEl?(parseFloat(kgEl.value)||0):0,r:parseInt(document.getElementById('r-'+ex.id+'-'+s).value)||0};
-  });
-}
-function makeEntry(ex,dv,sets){
-  const e={date:dv,sets,range:ex.range};
-  if(exKind(ex)==='band'){const b=document.getElementById('band-'+ex.id);e.band=b?b.value:'verde';}
-  return e;
-}
-// Registro del día en hist; conserva la nota existente salvo que se entregue una nueva
-function upsertHist(date,wk,note){
-  let h=getH();
-  const prev=h.find(s=>s.date===date&&s.workout===wk);
-  h=h.filter(s=>!(s.date===date&&s.workout===wk));
-  const e={date,workout:wk};
-  const n=note!==undefined?note:(prev&&prev.note);
-  if(n) e.note=n;
-  h.push(e);
-  setH(h);
-}
+function fillKg(id,v){[1,2,3].forEach(s=>{document.getElementById('kg-'+id+'-'+s).value=v;})}
+function fillR(id,v) {[1,2,3].forEach(s=>{document.getElementById('r-'+id+'-'+s).value=v;})}
 function wkOfEx(id){
   for(const wk of Object.keys(WK)){ if(WK[wk].some(e=>e.id===id)) return wk; }
   return null;
@@ -848,38 +764,45 @@ function saveOneEx(id){
   const ex=WK[wk].find(e=>e.id===id); if(!ex) return;
   const dv=document.getElementById('date-'+wk).value;
   if(!dv){alert('Selecciona una fecha antes de guardar.');return;}
-  const sets=readSets(ex);
-  if(!sets.some(hasVal)) return;
+  const sets=[1,2,3].map(s=>({
+    kg:parseFloat(document.getElementById('kg-'+id+'-'+s).value)||0,
+    r:parseInt(document.getElementById('r-'+id+'-'+s).value)||0
+  }));
+  if(!sets.some(st=>st.kg>0||st.r>0)) return;
   let d=getEx(id).filter(s=>s.date!==dv);
-  d.push(makeEntry(ex,dv,sets));
+  d.push({date:dv,sets,range:ex.range});
   setEx(id,d);
-  upsertHist(dv,wk);
+  let h=getH().filter(s=>!(s.date===dv&&s.workout===wk));
+  h.push({date:dv,workout:wk});
+  setH(h);
 }
 
 // ── SAVE ─────────────────────────────────────────────────
 function saveSession(wk){
   const dv=document.getElementById('date-'+wk).value;
   if(!dv){alert('Selecciona una fecha.');return;}
-  const exData=WK[wk].map(ex=>({ex,sets:readSets(ex)}));
-  if(!exData.some(x=>x.sets.some(hasVal))){alert('Ingresa al menos un peso o reps.');return;}
-  const note=document.getElementById('note-'+wk).value.trim();
-  upsertHist(dv,wk,note);
-  exData.forEach(({ex,sets})=>{
-    if(!sets.some(hasVal)) return;
-    let d=getEx(ex.id).filter(s=>s.date!==dv);
-    d.push(makeEntry(ex,dv,sets));
-    setEx(ex.id,d);
+  const exList=WK[wk]; let hasData=false;
+  const exData=exList.map(ex=>{
+    const sets=[1,2,3].map(s=>({kg:parseFloat(document.getElementById('kg-'+ex.id+'-'+s).value)||0,r:parseInt(document.getElementById('r-'+ex.id+'-'+s).value)||0}));
+    if(sets.some(st=>st.kg>0||st.r>0)) hasData=true;
+    return{id:ex.id,name:ex.es,range:ex.range,sets};
   });
+  if(!hasData){alert('Ingresa al menos un peso o reps.');return;}
+  let h=getH().filter(s=>!(s.date===dv&&s.workout===wk));
+  h.push({date:dv,workout:wk});
+  setH(h);
+  exData.forEach(ex=>{let d=getEx(ex.id).filter(s=>s.date!==dv);d.push({date:dv,sets:ex.sets,range:ex.range});setEx(ex.id,d);});
   goSection('prog-'+wk);
 }
 function prefillSection(wk){
   WK[wk].forEach(ex=>{
-    const last=lastSess(ex.id);
-    if(!last) return;
-    const valid=(last.sets||[]).filter(hasVal);
+    const hist=getEx(ex.id);
+    if(!hist.length) return;
+    const last=[...hist].sort((a,b)=>a.date.localeCompare(b.date))[hist.length-1];
+    const valid=(last.sets||[]).filter(s=>s.kg>0||s.r>0);
     if(!valid.length) return;
     const ref=valid[valid.length-1];
-    setIdx(ex.id).forEach(s=>{
+    [1,2,3].forEach(s=>{
       const kgEl=document.getElementById('kg-'+ex.id+'-'+s);
       const rEl=document.getElementById('r-'+ex.id+'-'+s);
       if(kgEl&&!kgEl.value) kgEl.value=ref.kg||'';
@@ -887,27 +810,38 @@ function prefillSection(wk){
     });
     const fkgEl=document.getElementById('fkg-'+ex.id);
     const frEl=document.getElementById('fr-'+ex.id);
-    const bEl=document.getElementById('band-'+ex.id);
     if(fkgEl&&!fkgEl.value) fkgEl.value=ref.kg||'';
     if(frEl&&!frEl.value) frEl.value=ref.r||'';
-    if(bEl&&last.band) bEl.value=last.band;
   });
 }
 function resetSection(wk){
   WK[wk].forEach(ex=>{
-    setIdx(ex.id).forEach(s=>{
+    // Get last saved session for prefill
+    const hist=getEx(ex.id);
+    const last=hist.length?hist[hist.length-1]:null;
+    const lastS3=last&&last.sets&&last.sets[2]?last.sets[2]:null;
+    [1,2,3].forEach(s=>{
       const kgEl=document.getElementById('kg-'+ex.id+'-'+s);
-      if(kgEl) kgEl.value='';
-      document.getElementById('r-'+ex.id+'-'+s).value='';
+      const rEl=document.getElementById('r-'+ex.id+'-'+s);
+      // Prefill with last S3 values if available
+      if(lastS3){
+        kgEl.value=lastS3.kg||'';
+        rEl.value=lastS3.r||'';
+      } else {
+        kgEl.value=''; rEl.value='';
+      }
     });
-    ['fkg-','fr-'].forEach(p=>{const el=document.getElementById(p+ex.id);if(el)el.value='';});
+    const fkgEl=document.getElementById('fkg-'+ex.id);
+    const frEl=document.getElementById('fr-'+ex.id);
+    if(lastS3&&fkgEl) fkgEl.value=lastS3.kg||'';
+    else if(fkgEl) fkgEl.value='';
+    if(lastS3&&frEl) frEl.value=lastS3.r||'';
+    else if(frEl) frEl.value='';
     const btn=document.getElementById('chk-'+ex.id);
     btn.classList.remove('done');btn.textContent='';
     document.getElementById('row-'+ex.id).classList.remove('ex-done');
     document.getElementById('det-'+ex.id).classList.remove('open');
   });
-  document.getElementById('note-'+wk).value='';
-  prefillSection(wk);
 }
 
 // ── CARDIO ───────────────────────────────────────────────
@@ -925,24 +859,6 @@ function renderCardioOpts(){
   });
   el.innerHTML=html;
 }
-// Minutos leves (Z2) e intensos (Z4–5). Registros antiguos sin separar cuentan como leves.
-const CARDIO_GOAL={lv:120,hi:20};
-function cardioSplit(s){
-  if(s.z2!=null||s.z45!=null) return {lv:s.z2||0,hi:s.z45||0};
-  return {lv:s.minutos||0,hi:0};
-}
-function renderCardioGoal(){
-  const el=document.getElementById('cardio-goal');if(!el)return;
-  const todayStr=todaySantiago(),ws=weekStartStr(todayStr);
-  let lv=0,hi=0;
-  getH().filter(s=>s.workout==='cardio'&&s.date>=ws&&s.date<=todayStr).forEach(s=>{const c=cardioSplit(s);lv+=c.lv;hi+=c.hi;});
-  const row=(lbl,v,goal,col)=>{
-    const pct=Math.min(100,Math.round(v/goal*100));
-    return `<div><div class="goal-top"><span>${lbl}${v>=goal?' ✓':''}</span><span><b>${v}</b> / ${goal} min</span></div><div class="goal-bar"><div class="goal-fill" style="width:${pct}%;background:${col}"></div></div></div>`;
-  };
-  const hm=CARDIO_GOAL.lv>=60?(CARDIO_GOAL.lv/60)+' h':CARDIO_GOAL.lv+' min';
-  el.innerHTML=row('Leve · Z2 · meta '+hm,lv,CARDIO_GOAL.lv,'#4a7c59')+row('Intenso · Z4–5 · meta '+CARDIO_GOAL.hi+' min',hi,CARDIO_GOAL.hi,'#c44');
-}
 function selectCardio(t){
   cardioTipo=t;
   document.querySelectorAll('#cardio-opts-group .cardio-opt').forEach(el=>el.classList.toggle('selected',el.dataset.tipo===t));
@@ -951,14 +867,11 @@ function saveCardio(){
   const dv=document.getElementById('date-cardio').value;
   if(!dv){alert('Selecciona una fecha.');return;}
   if(!cardioTipo){alert('Selecciona un tipo de actividad.');return;}
-  const z2=parseInt(document.getElementById('inp-z2').value)||0;
-  const z45=parseInt(document.getElementById('inp-z45').value)||0;
-  const mins=z2+z45;
-  if(mins<1){alert('Ingresa los minutos (leve, intenso o ambos).');return;}
+  const mins=parseInt(document.getElementById('inp-mins').value);
+  if(!mins||mins<1){alert('Ingresa los minutos.');return;}
   const fcVal=parseInt(document.getElementById('inp-fc').value)||null;
-  let h=getH();h.push({date:dv,workout:'cardio',tipo:cardioTipo,minutos:mins,z2,z45,fc:fcVal});setH(h);
-  document.getElementById('inp-z2').value='';
-  document.getElementById('inp-z45').value='';
+  let h=getH();h.push({date:dv,workout:'cardio',tipo:cardioTipo,minutos:mins,fc:fcVal});setH(h);
+  document.getElementById('inp-mins').value='';
   document.getElementById('inp-fc').value='';
   cardioTipo=null;
   document.querySelectorAll('#cardio-opts-group .cardio-opt').forEach(el=>el.classList.remove('selected'));
@@ -1016,14 +929,12 @@ function showDetail(dateKey){
     if(s.workout==='cardio'){
       html+=`<div class="popup-ex" onclick="closePopup();openEditCardioDay('${dateKey}')"><div class="popup-ex-name">${CARDIO_LABELS[s.tipo]||s.tipo||'Cardio'} <span style="font-size:10px;color:#ccc">›</span></div><div class="popup-sets">${s.minutos||'?'} min${s.fc?' · '+s.fc+' bpm':''}</div></div>`;
     } else {
-      html+=`<div class="popup-wlabel">${WK_LABEL[s.workout]||s.workout}</div>`;
-      if(s.note) html+=`<div class="popup-note" onclick="closePopup();openEditNote('${s.workout}','${dateKey}')" style="cursor:pointer">${esc(s.note)}</div>`;
-      exListOf(s.workout).forEach(ex=>{
-        const sess=getEx(ex.id).find(e=>e.date===dateKey);if(!sess)return;
-        const sstr=sess.sets.filter(hasVal).map(st=>fmtSet(ex,st)).join(' / ');
+      html+=`<div class="popup-wlabel">${s.workout.toUpperCase()}</div>`;
+      (WK[s.workout]||[]).forEach(ex=>{
+        const d=getEx(ex.id),sess=d.find(e=>e.date===dateKey);if(!sess)return;
+        const sstr=sess.sets.filter(st=>st.kg||st.r).map(st=>(st.kg||'?')+'×'+(st.r||'?')).join(' / ');
         if(!sstr)return;
-        const band=sess.band?bandOf(sess.band).label+' · ':'';
-        html+=`<div class="popup-ex" onclick="closePopup();openEditEntry('${s.workout}','${ex.id}','${dateKey}')"><div class="popup-ex-name">${ex.es} <span style="font-size:10px;color:#ccc">›</span></div><div class="popup-sets">${band}${sstr}</div></div>`;
+        html+=`<div class="popup-ex" onclick="closePopup();openEditEntry('${s.workout}','${ex.id}','${dateKey}')"><div class="popup-ex-name">${ex.es} <span style="font-size:10px;color:#ccc">›</span></div><div class="popup-sets">${sstr}</div></div>`;
       });
     }
   });
@@ -1033,160 +944,89 @@ function showDetail(dateKey){
 function closePopup(e){if(!e||e.target===document.getElementById('popup'))document.getElementById('popup').classList.remove('open');}
 
 // ── PROG TABLE ───────────────────────────────────────────
-const UNIT_MAP={"ap1": "kg", "ht1": "kg", "p1": "kg", "p2b": "kg", "p3": "kg", "p4": null, "l1": "kg", "l2b": "kg", "l3": "lb", "l4b": "kg", "u1": "kg", "u2": null, "u3": "kg", "u4": "kg", "g1": "kg", "g2": "lb", "g3b": "lb", "g4": "kg"};
+const UNIT_MAP={"p1": "kg", "p2b": "kg", "p3": "kg", "p4": null, "l1": "kg", "l2b": "kg", "l3": "lb", "l4b": "kg", "u1": "kg", "u2": null, "u3": "kg", "u4": "kg", "g1": "kg", "g2": "lb", "g3b": "lb", "g4": "kg"};
 const MAIN_IDS=['p1','l1','u1','g1'];
-function exListOf(wk){
-  if(WK[wk]) return WK[wk];
-  const out=[];
-  (OLD_WK[wk]||[]).forEach(([id,es,prevId])=>{out.push({id,es,range:null});if(prevId)out.push({id:prevId,es:OLD_PREV_NAME[prevId]||prevId,range:null});});
-  return out;
-}
 function findExById(wk,exId){
-  const lists=[WK[wk]||[],...Object.values(WK)];
-  for(const l of lists){
-    const ex=l.find(e=>e.id===exId);if(ex)return ex;
-    for(const e of l){ if(e.predecessor&&e.predecessor.id===exId) return {id:exId,es:e.predecessor.es,range:e.range,tipo:e.tipo}; }
-  }
-  for(const l of Object.values(OLD_WK)){
-    const o=l.find(x=>x[0]===exId); if(o) return {id:exId,es:o[1],range:null};
-    if(l.some(x=>x[2]===exId)) return {id:exId,es:OLD_PREV_NAME[exId]||exId,range:null};
+  let ex=WK[wk].find(e=>e.id===exId);
+  if(ex)return ex;
+  for(const e of WK[wk]){
+    if(e.predecessor&&e.predecessor.id===exId){
+      return{id:exId,es:e.predecessor.es,range:e.range,tipo:e.tipo};
+    }
   }
   return null;
 }
-function weekLabel(w,starts){
-  const {d,m}=ymd(w);const dd=String(d).padStart(2,'0')+'/'+String(m).padStart(2,'0');
-  const c=cycleOf(w,starts||cycleStarts());
-  if(!c) return `<small style="color:#bbb;font-weight:400">${dd}</small>`;
-  const n=Math.round((dateStrToUTCms(w)-dateStrToUTCms(c.start))/(7*86400000))+1;
-  const col=c.n===3?'':'color:#b5ad9f';
-  if(c.n===1&&w>=addDaysStr(weekStartStr(C2_START),-14)) return `<span style="${col}">Deload</span><br><small style="color:#bbb;font-weight:400">${dd}</small>`;
-  return `<span style="${col}">C${c.n} · S${n}</span><br><small style="color:#bbb;font-weight:400">${dd}</small>`;
-}
-// Borde a la izquierda de la primera semana visible de cada ciclo (menos la primera columna)
-function cycleBorders(weeks,starts){
-  const out={};let prev=null;
-  weeks.forEach((w,i)=>{const c=cycleOf(w,starts);const n=c?c.n:0;if(i>0&&n!==prev)out[w]=true;prev=n;});
-  return out;
-}
-function defaultDateFor(wk,w){
-  const h=getH().find(s=>s.workout===wk&&weekStartStr(s.date)===w);
-  if(h) return h.date;
-  return addDaysStr(w,DAY_OFFSET[wk]||0);
-}
 function renderProgTable(wk){
   const el=document.getElementById('tbl-prog-'+wk);if(!el)return;
-  const exList=WK[wk],dataOf={},wset=new Set();
+  const exList=WK[wk],allDates=[];
   exList.forEach(ex=>{
-    const cur=getEx(ex.id).map(s=>({...s,_id:ex.id}));
-    const prev=ex.predecessor?getEx(ex.predecessor.id).map(s=>({...s,_id:ex.predecessor.id})):[];
-    dataOf[ex.id]=[...prev,...cur].sort((a,b)=>a.date.localeCompare(b.date));
-    dataOf[ex.id].forEach(s=>wset.add(weekStartStr(s.date)));
+    getEx(ex.id).forEach(s=>{if(!allDates.includes(s.date))allDates.push(s.date);});
+    if(ex.predecessor)getEx(ex.predecessor.id).forEach(s=>{if(!allDates.includes(s.date))allDates.push(s.date);});
   });
-  const days=getH().filter(s=>s.workout===wk);
-  days.forEach(s=>wset.add(weekStartStr(s.date)));
-  const weeks=[...wset].sort();
-  if(!weeks.length){el.innerHTML='<div class="prog-empty">Aún no hay sesiones guardadas.</div>';return;}
-  const c3=weekStartStr(CYCLE_START),starts=cycleStarts(),borders=cycleBorders(weeks,starts);
-  const colCls=w=>borders[w]?' c3-start':'';
+  allDates.sort();
+  if(!allDates.length){el.innerHTML='<div class="prog-empty">Aún no hay sesiones guardadas.</div>';return;}
 
-  let html='<table class="prog-tbl"><thead><tr><th>Ejercicio</th>'+weeks.map(w=>`<th class="${colCls(w)}">${weekLabel(w,starts)}</th>`).join('')+'</tr></thead><tbody>';
+  const wkLabels=allDates.map((d,i)=>{
+    return `<span style="cursor:pointer" onclick="deleteWeek('${wk}','${d}')" title="Click para borrar">Sem ${i+1}<br><small style="color:#bbb;font-weight:400">${fmtD(d)}</small></span>`;
+  });
+
+  let html='<table class="prog-tbl"><thead><tr><th>Ejercicio</th>'+wkLabels.map(l=>'<th>'+l+'</th>').join('')+'</tr></thead><tbody>';
   exList.forEach(ex=>{
-    const all=dataOf[ex.id],k=exKind(ex);
-    const boldMap=localPeaks(ex,all);
+    const currData=getEx(ex.id);
+    const prevData=ex.predecessor?getEx(ex.predecessor.id):[];
+    const merged=[...prevData,...currData].sort((a,b)=>a.date.localeCompare(b.date));
+    let runningMax=0;const boldMap={};
+    merged.forEach(sess=>{
+      sess.sets.forEach((st,idx)=>{
+        if(st.kg>0&&st.r>=ex.range[0]&&st.kg>runningMax){boldMap[sess.date+'-'+idx]=true;runningMax=st.kg;}
+      });
+    });
+    const swDate=ex.predecessor?ex.predecessor.switchDate:null;
+    const firstCurrDate=currData.length?[...currData].sort((a,b)=>a.date.localeCompare(b.date))[0].date:null;
+    const transDate=firstCurrDate||swDate;
     const chartIcon=` <span class="ic-chart" onclick="openExChart('${wk}','${ex.id}');event.stopPropagation()" title="Ver evolución">📈</span>`;
-    const isNew=!all.some(s=>s.date<CYCLE_START);
     const prevLabel=ex.predecessor?`<span class="ex-prev">antes: ${ex.predecessor.es}</span>`:'';
-    const unit=k==='kg'?UNIT_MAP[ex.id]:null;
+    const unit=UNIT_MAP[ex.id];
     const unitLabel=unit?` <span class="ex-unit">(${unit})</span>`:'';
-    html+=`<tr><td class="td-ex">${ex.es}${unitLabel}${chartIcon}${isNew?'<span class="badge-new">nuevo</span>':''}${prevLabel}<small>${rangeLabel(ex)}</small></td>`;
-    weeks.forEach(w=>{
-      const inW=all.filter(s=>weekStartStr(s.date)===w);
-      const sess=inW[inW.length-1];
-      const oldBg=w<c3?'background:#f7f5f0;':'';
-      if(!sess&&w<c3){ html+=`<td class="prog-cell" style="${oldBg}"></td>`; return; }
+    html+=`<tr><td class="td-ex">${ex.es}${unitLabel}${chartIcon}${prevLabel}<small>${ex.range[0]}–${ex.range[1]} reps</small></td>`;
+    allDates.forEach(date=>{
+      const curr=currData.find(s=>s.date===date);
+      const prev=prevData.find(s=>s.date===date);
+      const sess=curr||prev;
+      const activeId=curr?ex.id:(prev?ex.predecessor.id:ex.id);
+      const isPrev=!curr&&!!prev&&(!swDate||date<swDate);
+      const transBorder=(date===transDate&&ex.predecessor)?'border-left:2px solid #c07000;':'';
       if(!sess){
-        html+=`<td class="prog-cell${colCls(w)}" style="color:#ddd;cursor:pointer;${oldBg}" onclick="openEditEntry('${wk}','${ex.id}','${defaultDateFor(wk,w)}')">+</td>`;
+        html+=`<td class="prog-cell" style="color:#ddd;cursor:pointer;${transBorder}" onclick="openEditEntry('${wk}','${ex.id}','${date}')">+</td>`;
         return;
       }
-      const vs=sess.sets.filter(hasVal);
-      const band=sess.band?`<span class="band-chip" style="background:${bandOf(sess.band).col}">${bandOf(sess.band).label}</span>`:'';
-      const cells=vs.map((st,idx)=>`<span class="sl${boldMap[sess.date+'-'+idx]?' bold':''}">${fmtSet(ex,st)}</span>`).join('');
-      const noteMark=sess.note?'<span class="note-ast" title="'+esc(sess.note)+'">*</span>':'';
-      html+=`<td class="prog-cell${colCls(w)}" style="cursor:pointer;position:relative;${oldBg}" onclick="openEditEntry('${wk}','${sess._id}','${sess.date}')">${noteMark}${band}${cells||'—'}</td>`;
+      const vs=sess.sets.filter(s=>s.kg>0||s.r>0);
+      const cells=vs.map((s,idx)=>`<span class="sl${boldMap[date+'-'+idx]?' bold':''}">${s.kg||'?'}×${s.r||'?'}</span>`).join('');
+      const prevBg=isPrev?'background:#f7f5f0;':'';
+      const noteMark=sess.note?'<span class="note-ast" title="'+sess.note.replace(/"/g,'&quot;')+'">*</span>':'';
+      html+=`<td class="prog-cell" style="cursor:pointer;position:relative;${prevBg}${transBorder}" onclick="openEditEntry('${wk}','${activeId}','${date}')">${noteMark}${cells||'—'}</td>`;
     });
     html+='</tr>';
   });
-  // Notas de sesión (estado del hombro, etc.)
-  html+='<tr><td class="td-ex">Notas</td>';
-  weeks.forEach(w=>{
-    const d=days.filter(s=>weekStartStr(s.date)===w).pop();
-    const oldBg=w<c3?'background:#f7f5f0;':'';
-    if(d&&d.note) html+=`<td class="prog-cell note-cell${colCls(w)}" style="${oldBg}" onclick="openEditNote('${wk}','${d.date}')">${esc(d.note)}</td>`;
-    else if(d) html+=`<td class="prog-cell${colCls(w)}" style="color:#ddd;cursor:pointer;${oldBg}" onclick="openEditNote('${wk}','${d.date}')">+</td>`;
-    else html+=`<td class="prog-cell${colCls(w)}" style="${oldBg}"></td>`;
-  });
-  html+='</tr></tbody></table>';
+  html+='</tbody></table>';
   el.innerHTML=html;
   const scrollWrap=el.closest('.prog-scroll');
   if(scrollWrap)requestAnimationFrame(()=>{scrollWrap.scrollLeft=scrollWrap.scrollWidth;});
-  renderOldToggles(wk);
-}
-
-// ── VENTANAS ANTIGUAS (ciclos 1 y 2, solo lectura) ──────
-const oldOpen={};
-function renderOldToggles(wk){
-  const el=document.getElementById('old-prog-'+wk);if(!el)return;
-  el.innerHTML=(OLD_VIEWS[wk]||[]).map(o=>{
-    const id=wk+'-'+o,open=!!oldOpen[id];
-    return `<div class="cal-toggle-row" onclick="toggleOld('${wk}','${o}')"><span class="cal-toggle-lbl">Ciclos 1 y 2 · ${WK_LABEL[o]}</span><span class="cal-toggle-arr">${open?'▾':'▸'}</span></div>
-      <div class="prog-scroll" style="display:${open?'block':'none'}"><div id="old-tbl-${id}"></div></div>`;
-  }).join('');
-  (OLD_VIEWS[wk]||[]).forEach(o=>{if(oldOpen[wk+'-'+o])renderOldTable(o,'old-tbl-'+wk+'-'+o);});
-}
-function toggleOld(wk,o){oldOpen[wk+'-'+o]=!oldOpen[wk+'-'+o];renderOldToggles(wk);}
-function renderOldTable(o,targetId){
-  const el=document.getElementById(targetId);if(!el)return;
-  const starts=cycleStarts(),rows=[],wset=new Set();
-  OLD_WK[o].forEach(([id,es,prevId])=>{
-    const ex={id,es,range:null};
-    const data=[...(prevId?getEx(prevId):[]),...getEx(id)].filter(s=>s.date<CYCLE_START).sort((a,b)=>a.date.localeCompare(b.date));
-    data.forEach(s=>wset.add(weekStartStr(s.date)));
-    rows.push({ex,data,prevId});
-  });
-  const weeks=[...wset].sort();
-  if(!weeks.length){el.innerHTML='<div class="prog-empty">Sin registros.</div>';return;}
-  const borders=cycleBorders(weeks,starts),colCls=w=>borders[w]?' c3-start':'';
-  let html='<table class="prog-tbl"><thead><tr><th>Ejercicio</th>'+weeks.map(w=>`<th class="${colCls(w)}">${weekLabel(w,starts)}</th>`).join('')+'</tr></thead><tbody>';
-  rows.forEach(({ex,data,prevId})=>{
-    const peaks=localPeaks(ex,data),unit=UNIT_MAP[ex.id];
-    html+=`<tr><td class="td-ex">${ex.es}${unit?` <span class="ex-unit">(${unit})</span>`:''}${prevId?`<span class="ex-prev">antes: ${OLD_PREV_NAME[prevId]||prevId}</span>`:''}</td>`;
-    weeks.forEach(w=>{
-      const sess=data.filter(s=>weekStartStr(s.date)===w).pop();
-      if(!sess){html+=`<td class="prog-cell${colCls(w)}"></td>`;return;}
-      const cells=sess.sets.filter(hasVal).map((st,idx)=>`<span class="sl${peaks[sess.date+'-'+idx]?' bold':''}">${st.kg||'?'}×${st.r||'?'}</span>`).join('');
-      const noteMark=sess.note?'<span class="note-ast" title="'+esc(sess.note)+'">*</span>':'';
-      html+=`<td class="prog-cell${colCls(w)}" style="position:relative">${noteMark}${cells||'—'}</td>`;
-    });
-    html+='</tr>';
-  });
-  el.innerHTML=html+'</tbody></table>';
 }
 
 // ── GRÁFICO DE EVOLUCIÓN ─────────────────────────────────
 let _exChart=null;
 function openExChart(wk,exId){
   const ex=WK[wk].find(e=>e.id===exId);if(!ex)return;
-  const kind=exKind(ex);
-  const yUnit=kind==='kg'?(UNIT_MAP[ex.id]||'kg'):(kind==='secs'?'s':'reps');
   const currData=getEx(ex.id);
   const swDate=ex.predecessor?ex.predecessor.switchDate:null;
   // Con predecessor: solo sesiones del ejercicio NUEVO (desde switchDate)
   const prevData=ex.predecessor?getEx(ex.predecessor.id).filter(s=>swDate&&s.date>=swDate):[];
   const merged=[...prevData,...currData].sort((a,b)=>a.date.localeCompare(b.date));
   const pts=merged.map(s=>{
-    const vs=s.sets.filter(x=>x.r>0&&(kind!=='kg'||x.kg>0));
+    const vs=s.sets.filter(x=>x.r>0&&x.kg>0);
     if(!vs.length)return null;
-    const avgKg=vs.reduce((a,x)=>a+(kind==='kg'?x.kg:x.r),0)/vs.length;
+    const avgKg=vs.reduce((a,x)=>a+x.kg,0)/vs.length;
     return{x:new Date(s.date+'T12:00:00').getTime(),y:Math.round(avgKg*10)/10};
   }).filter(Boolean);
   document.getElementById('chart-title').textContent=ex.es;
@@ -1198,18 +1038,12 @@ function openExChart(wk,exId){
   const col=colors[exId]||'#666';
   const xs=pts.map(p=>p.x);
   const pad=5*24*60*60*1000;
-  const DAYMS=24*60*60*1000;
-  const chartStart=xs[0]-pad,chartEnd=xs[xs.length-1]+pad;
-  // Ticks mensuales; si el rango es corto, semanales
-  const monthTicks=[];
-  if(chartEnd-chartStart<50*DAYMS){
-    let t=dateStrToUTCms(weekStartStr(utcMsToDateStr(chartStart+DAYMS)));
-    for(;t<=chartEnd;t+=7*DAYMS) if(t>=chartStart) monthTicks.push(t);
-  } else {
-    const f=new Date(chartStart);let cur=new Date(f.getFullYear(),f.getMonth()+1,1);
-    while(cur.getTime()<=chartEnd){monthTicks.push(cur.getTime());cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);}
-  }
-  const shortRange=chartEnd-chartStart<50*DAYMS;
+  const chartStart=new Date(2026,4,15).getTime();
+  const monthTicks=[chartStart];
+  let cur=new Date(2026,5,1);
+  const last=new Date(xs[xs.length-1]);
+  const endM=new Date(last.getFullYear(),last.getMonth()+1,1);
+  while(cur.getTime()<=endM.getTime()){monthTicks.push(cur.getTime());cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);}
   // Media móvil mensual (ventana móvil 30 días, hacia atrás)
   const DAY=24*60*60*1000;
   const maPts=pts.map(p=>{
@@ -1243,15 +1077,15 @@ function openExChart(wk,exId){
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{
         title:it=>new Date(it[0].parsed.x).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'2-digit'}),
-        label:c=>(c.dataset.label==='Media móvil mensual'?'Media móvil: ':'')+Math.round(c.parsed.y*10)/10+' '+yUnit}}},
+        label:c=>(c.dataset.label==='Media móvil mensual'?'Media móvil: ':'')+Math.round(c.parsed.y*10)/10+' kg'}}},
       scales:{
-        x:{type:'linear',min:chartStart,max:chartEnd,
+        x:{type:'linear',min:chartStart,max:xs[xs.length-1]+pad,
           grid:{color:'#f2f0ea'},
-          afterBuildTicks:sc=>{sc.ticks=monthTicks.map(v=>({value:v}));},
+          afterBuildTicks:sc=>{sc.ticks=monthTicks.filter(v=>v<=xs[xs.length-1]+pad).map(v=>({value:v}));},
           ticks:{color:'#aaa',font:{size:9},maxRotation:0,autoSkip:false,
-            callback:v=>shortRange?fmtD(utcMsToDateStr(v)):new Date(v).toLocaleDateString('es-CL',{month:'short'})}},
+            callback:v=>new Date(v).toLocaleDateString('es-CL',{month:'short'})}},
         y:{min:0,beginAtZero:true,grid:{color:'#eeebe4'},
-          ticks:{color:'#aaa',font:{size:10},callback:v=>Math.round(v)+' '+yUnit}}
+          ticks:{color:'#aaa',font:{size:10},callback:v=>Math.round(v)+' kg'}}
       }}
   });
 }
@@ -1266,67 +1100,50 @@ let editMode='exercise';
 function openEditEntry(wk, exId, date){
   editMode='exercise';
   const ex=findExById(wk,exId);if(!ex)return;
-  const k=exKind(ex);
   const hist=getEx(exId);
-  const n=Math.max(nSets(ex),((hist.find(s=>s.date===date)||{}).sets||[]).length);
-  const sess=hist.find(s=>s.date===date)||{date,sets:[],range:ex.range};
-  editState={wk,exId,date,hist,n,range:sess.range||ex.range};
+  const sess=hist.find(s=>s.date===date)||{date,sets:[{kg:0,r:0},{kg:0,r:0},{kg:0,r:0}],range:ex.range};
+  editState={wk,exId,date,hist};
   document.getElementById('edit-title').textContent=ex.es+' — '+fmtD(date);
-  const inp='border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none';
   let html='<div style="display:flex;flex-direction:column;gap:8px">';
-  if(k==='band') html+=`<select id="edit-band" style="${inp};text-align:left">${BANDS.map(b=>`<option value="${b.k}"${(sess.band||'verde')===b.k?' selected':''}>Banda ${b.label.toLowerCase()}</option>`).join('')}</select>`;
-  for(let i=0;i<n;i++){
+  [0,1,2].forEach(i=>{
     const s=sess.sets[i]||{kg:0,r:0};
     html+=`<div style="display:flex;align-items:center;gap:8px">
       <span style="font-size:12px;color:#aaa;font-weight:700;width:24px">S${i+1}</span>
-      ${k==='kg'?`<input type="number" inputmode="decimal" id="edit-kg-${i}" value="${s.kg||''}" placeholder="${UNIT_MAP[exId]||'kg'}" style="width:60px;${inp}">
-      <span style="color:#ccc">×</span>`:''}
-      <input type="number" inputmode="numeric" id="edit-r-${i}" value="${s.r||''}" placeholder="${k==='secs'?'seg':'reps'}" style="width:60px;${inp}">
+      <input type="number" inputmode="decimal" id="edit-kg-${i}" value="${s.kg||''}" placeholder="kg" style="width:60px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
+      <span style="color:#ccc">×</span>
+      <input type="number" inputmode="numeric" id="edit-r-${i}" value="${s.r||''}" placeholder="reps" style="width:60px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
     </div>`;
-  }
+  });
+  const noteVal=sess.note||'';
   html+='</div>';
   html+=`<div style="margin-top:10px">
-    <div style="font-size:11px;color:#999;font-weight:600;margin-bottom:4px">Nota del ejercicio (opcional)</div>
-    <textarea id="edit-note" placeholder="ej. dolor leve en hombro, buena sensación..." style="width:100%;min-height:52px;border:1.5px solid #e0ddd8;border-radius:8px;padding:8px;font-size:13px;font-family:inherit;resize:vertical;outline:none;box-sizing:border-box">${esc(sess.note||'')}</textarea>
+    <div style="font-size:11px;color:#999;font-weight:600;margin-bottom:4px">Nota (opcional)</div>
+    <textarea id="edit-note" placeholder="ej. dolor leve en hombro, buena sensación..." style="width:100%;min-height:52px;border:1.5px solid #e0ddd8;border-radius:8px;padding:8px;font-size:13px;font-family:inherit;resize:vertical;outline:none;box-sizing:border-box">${noteVal}</textarea>
   </div>`;
   document.getElementById('edit-body').innerHTML=html;
   document.getElementById('popup-edit').classList.add('open');
 }
-function openEditNote(wk,date){
-  editMode='note';
-  editState={wk,date};
-  const d=getH().find(s=>s.date===date&&s.workout===wk)||{};
-  document.getElementById('edit-title').textContent='Nota — '+(WK_LABEL[wk]||wk)+' '+fmtD(date);
-  document.getElementById('edit-body').innerHTML=`<textarea id="edit-session-note" class="note-inp" style="min-height:80px" placeholder="ej. hombro bien, lumbar ok">${esc(d.note||'')}</textarea>`;
-  document.getElementById('popup-edit').classList.add('open');
-}
 function saveEditEntry(){
   if(editMode==='cardio'){ saveEditCardioEntries(); return; }
-  if(editMode==='note'){
-    const {wk,date}=editState;
-    upsertHist(date,wk,document.getElementById('edit-session-note').value.trim());
-    closeEditPopup();refreshAfterDayEdit();return;
-  }
-  const {wk,exId,date,n,range}=editState;
-  const sets=Array.from({length:n},(_,i)=>{
-    const kgEl=document.getElementById('edit-kg-'+i);
-    return {kg:kgEl?(parseFloat(kgEl.value)||0):0,r:parseInt(document.getElementById('edit-r-'+i).value)||0};
-  });
+  const {wk,exId,date,hist}=editState;
+  const sets=[0,1,2].map(i=>({
+    kg:parseFloat(document.getElementById('edit-kg-'+i).value)||0,
+    r:parseInt(document.getElementById('edit-r-'+i).value)||0
+  }));
   const noteEl=document.getElementById('edit-note');
   const note=noteEl?noteEl.value.trim():'';
+  const ex=findExById(wk,exId);
   let d=getEx(exId).filter(s=>s.date!==date);
-  if(sets.some(hasVal)){
-    const entry={date,sets,range};
-    const bEl=document.getElementById('edit-band');
-    if(bEl) entry.band=bEl.value;
+  if(sets.some(s=>s.kg>0||s.r>0)){
+    const entry={date,sets,range:ex.range};
     if(note) entry.note=note;
     d.push(entry);
   }
   setEx(exId,d);
-  // El día queda en el historial mientras algún ejercicio de esa rutina tenga datos
-  const ids=exListOf(wk).map(e=>e.id).concat(exListOf(wk).filter(e=>e.predecessor).map(e=>e.predecessor.id));
-  if(ids.some(id=>getEx(id).some(s=>s.date===date))) upsertHist(date,wk);
-  else setH(getH().filter(s=>!(s.date===date&&s.workout===wk)));
+  // Ensure history entry exists
+  let h=getH().filter(s=>!(s.date===date&&s.workout===wk));
+  if(sets.some(s=>s.kg>0||s.r>0)) h.push({date,workout:wk});
+  setH(h);
   closeEditPopup();
   refreshAfterDayEdit();
 }
@@ -1335,11 +1152,18 @@ function closeEditPopup(e){
     document.getElementById('popup-edit').classList.remove('open');
 }
 
+function deleteWeek(wk,date){
+  if(!confirm('¿Borrar la sesión del '+fmtD(date)+'?'))return;
+  let h=getH().filter(s=>!(s.date===date&&s.workout===wk));setH(h);
+  WK[wk].forEach(ex=>{let d=getEx(ex.id).filter(s=>s.date!==date);setEx(ex.id,d);});
+  refreshAfterDayEdit();
+}
+
 // ── EDIT CARDIO ENTRIES ───────────────────────────────────
 let editCardioState={};
 function openEditCardio(wkStart,tipo){
   const sessions=getH().filter(s=>s.workout==='cardio'&&s.tipo===tipo&&weekStartStr(s.date)===wkStart).sort((a,b)=>a.date.localeCompare(b.date));
-  const list=sessions.length?sessions:[{date:wkStart,workout:'cardio',tipo,minutos:0,z2:0,z45:0,fc:null}];
+  const list=sessions.length?sessions:[{date:wkStart,workout:'cardio',tipo,minutos:0,fc:null}];
   startEditCardio(list,CARDIO_LABELS[tipo]+' — semana');
 }
 function openEditCardioDay(dateKey){
@@ -1368,10 +1192,8 @@ function renderCardioEditBody(){
     html+=`<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
       <input type="date" id="ec-date-${i}" value="${s.date||''}" style="width:118px;flex-shrink:0;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:12px;color:#1a1a1a;outline:none">
       <select id="ec-tipo-${i}" style="flex:1;min-width:100px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:12px;background:#fff;color:#1a1a1a;outline:none">${cardioTipoOptions(s.tipo)}</select>
-      <input type="number" inputmode="numeric" id="ec-z2-${i}" value="${cardioSplit(s).lv||''}" placeholder="leve" style="width:52px;border:1.5px solid #b9d3c0;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
-      <span style="font-size:10px;color:#4a7c59">Z2</span>
-      <input type="number" inputmode="numeric" id="ec-z45-${i}" value="${cardioSplit(s).hi||''}" placeholder="int." style="width:52px;border:1.5px solid #f0b0b0;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
-      <span style="font-size:10px;color:#c44">Z4–5</span>
+      <input type="number" inputmode="numeric" id="ec-min-${i}" value="${s.minutos||''}" placeholder="min" style="width:52px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
+      <span style="font-size:10px;color:#ccc">min</span>
       <input type="number" inputmode="numeric" id="ec-fc-${i}" value="${s.fc||''}" placeholder="FC" style="width:52px;border:1.5px solid #e0ddd8;border-radius:8px;padding:6px;font-size:14px;text-align:center;outline:none">
       <span style="font-size:10px;color:#ccc">fc</span>
       <span onclick="deleteCardioEntry(${i})" style="color:#ccc;cursor:pointer;font-size:16px;padding:0 4px;margin-left:auto">✕</span>
@@ -1386,17 +1208,13 @@ function deleteCardioEntry(i){
 }
 function saveEditCardioEntries(){
   const {sessions,origKeys}=editCardioState;
-  const updated=sessions.map((s,i)=>{
-    const z2=parseInt(document.getElementById('ec-z2-'+i).value)||0;
-    const z45=parseInt(document.getElementById('ec-z45-'+i).value)||0;
-    return {
-      ...s,
-      date:document.getElementById('ec-date-'+i).value||s.date,
-      tipo:document.getElementById('ec-tipo-'+i).value,
-      minutos:z2+z45,z2,z45,
-      fc:parseInt(document.getElementById('ec-fc-'+i).value)||null
-    };
-  }).filter(s=>s.minutos>0);
+  const updated=sessions.map((s,i)=>({
+    ...s,
+    date:document.getElementById('ec-date-'+i).value||s.date,
+    tipo:document.getElementById('ec-tipo-'+i).value,
+    minutos:parseInt(document.getElementById('ec-min-'+i).value)||0,
+    fc:parseInt(document.getElementById('ec-fc-'+i).value)||null
+  })).filter(s=>s.minutos>0);
   let h=getH().filter(s=>!(s.workout==='cardio'&&origKeys.includes(s.date+'|'+s.tipo)));
   h=h.concat(updated);
   setH(h);
@@ -1405,7 +1223,7 @@ function saveEditCardioEntries(){
 }
 function refreshAfterDayEdit(){
   if(document.getElementById('sec-home').classList.contains('active')) renderHome();
-  [...Object.keys(WK),'cardio'].forEach(wk=>{
+  ['push','pull','upper','legs','cardio'].forEach(wk=>{
     const sec=document.getElementById('sec-prog-'+wk);
     if(sec&&sec.classList.contains('active')){
       if(wk==='cardio') renderProgCardio(); else renderProgTable(wk);
@@ -1425,8 +1243,10 @@ function renderProgCardio(targetId){
   const weeks={};
   h.forEach(s=>{const wk=weekStartStr(s.date);if(!weeks[wk])weeks[wk]={sessions:[],totalMin:0};weeks[wk].sessions.push(s);weeks[wk].totalMin+=(s.minutos||0);});
   const wkKeys=Object.keys(weeks).sort();
-  const starts=cycleStarts();
-  const wkLabels=wkKeys.map(wk=>`<span style="cursor:pointer" onclick="deleteCardioWeek('${wk}')" title="Click para borrar">${weekLabel(wk,starts)}</span>`);
+    const wkLabels=wkKeys.map((wk,i)=>{
+    const {d,m}=ymd(wk);
+    return `<span style="cursor:pointer" onclick="deleteCardioWeek('${wk}')" title="Click para borrar">Sem ${i+1}<br><small style="color:#bbb;font-weight:400">${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}</small></span>`;
+  });
   let html='<table class="prog-tbl"><thead><tr><th>Cardio</th>'+wkLabels.map(l=>'<th>'+l+'</th>').join('')+'</tr></thead><tbody>';
   CARDIO_GROUPS.forEach((g,gi)=>{
     if(gi>0) html+=`<tr><td class="td-group" colspan="${wkKeys.length+1}">${g.label}</td></tr>`;
@@ -1443,13 +1263,7 @@ function renderProgCardio(targetId){
   // Total row
   html+='<tr><td class="td-ex" style="font-weight:700">Total</td>';
   wkKeys.forEach(wk=>{const n=weeks[wk].sessions.length;html+='<td class="prog-cell" style="font-weight:700">'+weeks[wk].totalMin+'/'+n+'</td>';});
-  html+='</tr>';
-  [['lv','Leve Z2','#4a7c59'],['hi','Intenso Z4–5','#c44']].forEach(([k,lbl,col])=>{
-    html+=`<tr><td class="td-ex" style="color:${col}">${lbl}</td>`;
-    wkKeys.forEach(wk=>{const v=weeks[wk].sessions.reduce((a,s)=>a+cardioSplit(s)[k],0);html+=`<td class="prog-cell" style="color:${col};font-weight:600">${v||'—'}</td>`;});
-    html+='</tr>';
-  });
-  html+='</tbody></table>';
+  html+='</tr></tbody></table>';
   html+='<div style="font-size:10px;color:#bbb;margin-top:4px;padding:0 4px">min / sesiones</div>';
 
   el.innerHTML=html;
@@ -1515,11 +1329,10 @@ function renderHomeStats(){
   if(sesEl) sesEl.textContent=monthSessions.length||'0';
   if(cardioSesEl) cardioSesEl.textContent=weekCardio.length||'0';
   if(minEl) minEl.textContent=cardioMin||'0';
-  renderCardioGoal();
 }
 
 const GOALS={p1:{rm6:70,rm1:81},l1:{rm6:100,rm1:116},u1:{rm6:22.5,rm1:26},g1:{rm6:110,rm1:128}};
-const KEY_TO_TAB={p1:'pecho',l1:'piernas',u1:'tsup',g1:'piernas'};
+const KEY_TO_TAB={p1:'push',l1:'pull',u1:'upper',g1:'legs'};
 function renderHomeExTable(){
   const KEY_EXERCISES=[
     {id:'p1',es:'Press banca'},
@@ -1529,7 +1342,7 @@ function renderHomeExTable(){
   ];
   const tbl=document.getElementById('home-ex-tbl');
   if(!tbl) return;
-  const ROW_COLORS={p1:{bg:'#fde8e8',fg:'#a33'},l1:{bg:'#e8eefe',fg:'#2255a3'},u1:{bg:'#e8f7ed',fg:'#2a6e3f'},g1:{bg:'#fef8e0',fg:'#856404'}};
+  const ROW_COLORS={push:{bg:'#fde8e8',fg:'#a33'},pull:{bg:'#e8eefe',fg:'#2255a3'},upper:{bg:'#e8f7ed',fg:'#2a6e3f'},legs:{bg:'#fef8e0',fg:'#856404'}};
   const cutoff=addDaysStr(todaySantiago(),-28);
   let html='<thead><tr><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:left">Ejercicio</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">\u00daltimo</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">M\u00e1x Men</th></tr></thead>';
   KEY_EXERCISES.forEach(ex=>{
@@ -1543,7 +1356,7 @@ function renderHomeExTable(){
       if(recent.length) avgKg=Math.max(...recent);
     }
     const tab=KEY_TO_TAB[ex.id];
-    const col=ROW_COLORS[ex.id]||{bg:'#f5f2ee',fg:'#1a1a1a'};
+    const col=ROW_COLORS[tab]||{bg:'#f5f2ee',fg:'#1a1a1a'};
     html+=`<tr style="background:${col.bg}">
       <td class="home-ex-name" style="cursor:pointer;color:${col.fg}" onclick="goTab('${tab}')">${ex.es} <span style="font-size:10px;color:${col.fg};opacity:0.6">\u203a</span></td>
       <td class="home-ex-kg" style="color:${col.fg}">${lastKg} kg</td>
@@ -1557,12 +1370,13 @@ function renderHomeExTable(){
 function openBackup(){document.getElementById('modal-backup').classList.add('open');}
 function closeBackup(e){if(!e||e.target===document.getElementById('modal-backup'))document.getElementById('modal-backup').classList.remove('open');}
 function exportData(){
-  const allIds=new Set([...Object.values(WK).flat().map(e=>e.id),...Object.values(OLD_WK).flat().flatMap(x=>x.slice(0,1).concat(x[2]?[x[2]]:[])),...Object.keys((_cache&&_cache.exercises)||{})]);
+  const allIds=Object.values(WK).flat().map(e=>e.id);
   const data={hist:getH(),exercises:{}};
-  allIds.forEach(id=>{const d=getEx(id);if(d.length)data.exercises[id]=d;});
+  Object.values(WK).flat().forEach(e=>{if(e.predecessor)allIds.push(e.predecessor.id);});
+  allIds.forEach(id=>{data.exercises[id]=getEx(id);});
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob),a=document.createElement('a');
-  a.href=url;a.download='bls-backup-'+new Date().toISOString().split('T')[0]+'.json';
+  a.href=url;a.download='bls-ciclos-1-2-'+new Date().toISOString().split('T')[0]+'.json';
   a.click();URL.revokeObjectURL(url);
   showOk('Historial exportado ✓');
 }
@@ -1590,7 +1404,7 @@ function showOk(msg){const el=document.getElementById('backup-ok');el.textConten
 // ── INIT ─────────────────────────────────────────────────
 initFirebase();
 const today=todaySantiago();
-[...Object.keys(WK),'cardio'].forEach(t=>{const el=document.getElementById('date-'+t);if(el)el.value=today;});
+['push','pull','upper','legs','cardio'].forEach(t=>{const el=document.getElementById('date-'+t);if(el)el.value=today;});
 buildRows();
 renderCardioOpts();
 document.querySelector('.tab-home').classList.add('active');
@@ -1601,8 +1415,8 @@ if(window.innerWidth>=640){
 
 loadFromFirestore().then(()=>{
   renderHome();
-  Object.keys(WK).forEach(w=>prefillSection(w));
-  [...Object.keys(WK),'cardio'].forEach(wk=>{
+  ['push','pull','upper','legs'].forEach(w=>prefillSection(w));
+  ['push','pull','upper','legs','cardio'].forEach(wk=>{
     const progEl=document.getElementById('sec-prog-'+wk);
     if(progEl&&progEl.classList.contains('active')){
       renderCalInline(wk);
