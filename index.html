@@ -229,6 +229,21 @@ tr.ex-done .ex-name{text-decoration:line-through}
 .goal-fill{height:100%;border-radius:99px;transition:width .3s}
 .btn-old{display:block;text-align:center;text-decoration:none}
 
+/* CONVERTIDOR */
+.conv-btn{font-size:11px;font-weight:700;color:#777;background:#f5f2ee;border:1px solid #e0ddd8;border-radius:99px;padding:4px 9px;margin-right:8px;cursor:pointer;white-space:nowrap}
+.conv-btn:active{background:#ebe7e0}
+.conv-box{width:290px}
+.conv-row{display:flex;align-items:center;gap:8px;margin:6px 0 12px}
+.conv-field{flex:1;display:flex;align-items:baseline;gap:4px;border:1.5px solid #e0ddd8;border-radius:12px;padding:10px 12px;background:#fafaf8}
+.conv-field:focus-within{border-color:#888;background:#fff}
+.conv-field input{width:100%;min-width:0;border:none;background:transparent;font-size:24px;font-weight:700;color:#1a1a1a;outline:none;font-variant-numeric:tabular-nums}
+.conv-field span{font-size:13px;font-weight:700;color:#aaa}
+.conv-eq{font-size:18px;color:#bbb}
+.conv-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.conv-chip{font-size:12px;font-weight:600;color:#555;background:#f5f2ee;border:none;border-radius:8px;padding:7px 0;cursor:pointer;font-variant-numeric:tabular-nums}
+.conv-chip:active{background:#ebe7e0}
+.conv-note{font-size:10px;color:#bbb;text-align:center;margin-top:10px}
+
 /* CARDIO HIST */
 .ic-chart{font-size:11px;opacity:0.35;cursor:pointer;margin-left:3px;vertical-align:middle}
 .ic-chart:active{opacity:0.8}
@@ -247,7 +262,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
 </head>
 <body>
 
-<div class="hdr"><h1>BLS — Seb 💪</h1><span id="sync-status" style="font-size:11px;color:#bbb;flex:1;text-align:right;padding-right:8px"></span><span class="home-btn" onclick="goTab('home')">🏠</span></div>
+<div class="hdr"><h1>BLS — Seb 💪</h1><span id="sync-status" style="font-size:11px;color:#bbb;flex:1;text-align:right;padding-right:8px"></span><button class="conv-btn" onclick="openConv()" aria-label="Convertir kg y lb">kg ⇄ lb</button><span class="home-btn" onclick="goTab('home')">🏠</span></div>
 
 <div class="tabs">
   <div class="tab tab-home"         onclick="goTab('home')">Home</div>
@@ -453,6 +468,20 @@ tr.ex-done .ex-name{text-decoration:line-through}
   </div>
 </div>
 
+<!-- CONVERTIDOR KG ⇄ LB -->
+<div class="modal" id="modal-conv" onclick="closeConv(event)">
+  <div class="modal-box conv-box">
+    <div class="modal-hdr"><span></span><span>Convertidor</span><button onclick="closeConv()" aria-label="Cerrar">✕</button></div>
+    <div class="conv-row">
+      <label class="conv-field"><input type="number" inputmode="decimal" id="conv-kg" placeholder="0" oninput="convFrom('kg')"><span>kg</span></label>
+      <span class="conv-eq">⇄</span>
+      <label class="conv-field"><input type="number" inputmode="decimal" id="conv-lb" placeholder="0" oninput="convFrom('lb')"><span>lb</span></label>
+    </div>
+    <div class="conv-chips" id="conv-chips"></div>
+    <div class="conv-note">1 kg = 2,2046 lb</div>
+  </div>
+</div>
+
 <!-- BACKUP MODAL -->
 <div class="modal" id="modal-backup" onclick="closeBackup(event)">
   <div class="modal-box">
@@ -479,6 +508,7 @@ const WK = {
     {id:'p1',es:'Press banca barra',         en:'Barbell Bench Press',     tipo:'Compuesto', range:[4,6],  def:50,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
     {id:'p2b',es:'Press inclinado mancuernas',en:'Incline Dumbbell Press', tipo:'Compuesto', range:[8,12], def:15,  mus:'<b>Principal:</b> Pectoral mayor clavicular · <b>Sec:</b> Deltoides anterior, tríceps'},
     {id:'ap1',es:'Aperturas en polea',       en:'Cable Chest Fly',         tipo:'Aislamiento',range:[8,12],def:10,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior'},
+    {id:'aph1',es:'Aperturas polea arriba-abajo',en:'High-to-Low Cable Fly',tipo:'Aislamiento',range:[8,12],def:10,mus:'<b>Principal:</b> Pectoral mayor (porción esternal e inferior) · <b>Sec:</b> Deltoides anterior'},
     {id:'fx1',es:'Flexiones',                en:'Push-up',                 tipo:'Compuesto', kind:'reps', range:null, mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Tríceps, deltoides anterior, core'},
   ],
   piernas:[
@@ -490,7 +520,7 @@ const WK = {
   ],
   tsup:[
     {id:'dm1',es:'Dominadas con banda',      en:'Band-Assisted Pull-up',   tipo:'Compuesto', kind:'band', range:[5,8], mus:'<b>Principal:</b> Dorsal ancho · <b>Sec:</b> Bíceps, romboides, trapecio'},
-    {id:'u1',es:'Press militar mancuernas',  en:'Seated Dumbbell Press',   tipo:'Compuesto', range:[4,6],  def:15,  mus:'<b>Principal:</b> Deltoides anterior y medio · <b>Sec:</b> Tríceps, trapecio'},
+    {id:'u1',es:'Press militar mancuernas',  en:'Seated Dumbbell Press',   tipo:'Compuesto', range:[6,8],  def:15,  mus:'<b>Principal:</b> Deltoides anterior y medio · <b>Sec:</b> Tríceps, trapecio'},
     {id:'l2b',es:'Remo mancuerna en banca',  en:'Bench-Supported DB Row',  tipo:'Compuesto', range:[8,12], def:20,  mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, deltoides posterior'},
     {id:'u4',es:'Elevación posterior mancuernas',en:'Dumbbell Rear Lateral Raise',tipo:'Aislamiento',range:[8,12],def:7.5,mus:'<b>Principal:</b> Deltoides posterior · <b>Sec:</b> Romboides, trapecio medio'},
     {id:'p3',es:'Press plano mancuernas',    en:'Dumbbell Bench Press',    tipo:'Compuesto', range:[8,12], def:15,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
@@ -1036,7 +1066,7 @@ function showDetail(dateKey){
 function closePopup(e){if(!e||e.target===document.getElementById('popup'))document.getElementById('popup').classList.remove('open');}
 
 // ── PROG TABLE ───────────────────────────────────────────
-const UNIT_MAP={"ap1": "kg", "ht1": "kg", "p1": "kg", "p2b": "kg", "p3": "kg", "p4": null, "l1": "kg", "l2": "kg", "l2b": "kg", "l3": "lb", "l4": "kg", "l4b": "kg", "u1": "kg", "u2": "kg", "g3": "lb", "rdl1": "kg", "u3": "kg", "u4": "kg", "g1": "kg", "g2": "lb", "g3b": "lb", "g4": "kg"};
+const UNIT_MAP={"ap1": "kg", "aph1": "kg", "ht1": "kg", "p1": "kg", "p2b": "kg", "p3": "kg", "p4": null, "l1": "kg", "l2": "kg", "l2b": "kg", "l3": "lb", "l4": "kg", "l4b": "kg", "u1": "kg", "u2": "kg", "g3": "lb", "rdl1": "kg", "u3": "kg", "u4": "kg", "g1": "kg", "g2": "lb", "g3b": "lb", "g4": "kg"};
 const MAIN_IDS=['p1','l1','u1','g1'];
 function exListOf(wk){
   if(WK[wk]) return WK[wk];
@@ -1559,6 +1589,24 @@ function renderHomeExTable(){
   });
   tbl.innerHTML=html;
 }
+
+// ── CONVERTIDOR KG ⇄ LB ──────────────────────────────────
+const LB_PER_KG=2.20462;
+const CONV_CHIPS=[{v:5,u:'kg'},{v:10,u:'kg'},{v:20,u:'kg'},{v:25,u:'kg'},{v:25,u:'lb'},{v:45,u:'lb'},{v:90,u:'lb'},{v:100,u:'lb'}];
+function fmtConv(n){return String(Math.round(n*10)/10);}
+function openConv(){
+  document.getElementById('conv-chips').innerHTML=CONV_CHIPS.map(c=>`<button class="conv-chip" onclick="convSet(${c.v},'${c.u}')">${c.v} ${c.u}</button>`).join('');
+  document.getElementById('modal-conv').classList.add('open');
+  setTimeout(()=>document.getElementById('conv-kg').focus(),50);
+}
+function closeConv(e){if(!e||e.target===document.getElementById('modal-conv'))document.getElementById('modal-conv').classList.remove('open');}
+function convFrom(u){
+  const kgEl=document.getElementById('conv-kg'),lbEl=document.getElementById('conv-lb');
+  const v=parseFloat((u==='kg'?kgEl:lbEl).value);
+  if(isNaN(v)){(u==='kg'?lbEl:kgEl).value='';return;}
+  if(u==='kg') lbEl.value=fmtConv(v*LB_PER_KG); else kgEl.value=fmtConv(v/LB_PER_KG);
+}
+function convSet(v,u){document.getElementById('conv-'+u).value=v;convFrom(u);}
 
 // ── BACKUP ───────────────────────────────────────────────
 function openBackup(){document.getElementById('modal-backup').classList.add('open');}
