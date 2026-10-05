@@ -10,8 +10,15 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;background:#e0dcd4;color:#1a1a1a;padding:10px;min-height:100vh}
 
 /* HEADER */
-.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;background:#fff;border-radius:10px;padding:7px 10px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
-.hdr h1{font-size:15px;font-weight:700}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;background:#1a1a1a;border-radius:12px;padding:9px 12px;box-shadow:0 2px 6px rgba(0,0,0,0.18)}
+.hdr h1{font-size:16px;font-weight:800;letter-spacing:.06em;color:#fff;white-space:nowrap;margin-right:14px;display:flex;align-items:baseline;gap:7px}
+.hdr-sub{font-size:12px;font-weight:600;letter-spacing:.02em;color:#9a958c}
+.sync-status{font-size:11px;color:#8a857c;flex:1;text-align:right;padding-right:10px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.hdr-tools{display:flex;gap:6px}
+.hdr .home-btn{margin-left:10px;padding:0 0 0 12px;border:none;border-left:1px solid #3a3835;background:none;color:#e8e4dc;opacity:1;align-self:stretch;cursor:pointer}
+.hdr .home-btn:active{color:#fff}
+.hdr .conv-btn{color:#e8e4dc;background:#2a2826;border-color:#3a3835}
+.hdr .conv-btn:active{background:#34312e}
 .btn-hdr{font-size:12px;padding:7px 11px;border-radius:8px;border:1px solid #ccc;background:#fff;color:#555;cursor:pointer;font-weight:500}
 
 .home-btn{font-size:18px;cursor:pointer;line-height:1;display:flex;align-items:center;opacity:0.7}.home-btn:hover{opacity:1}
@@ -229,6 +236,46 @@ tr.ex-done .ex-name{text-decoration:line-through}
 .goal-fill{height:100%;border-radius:99px;transition:width .3s}
 .btn-old{display:block;text-align:center;text-decoration:none}
 
+/* CONVERTIDOR */
+.conv-btn{font-size:11px;font-weight:700;color:#777;background:#f5f2ee;border:1px solid #e0ddd8;border-radius:99px;padding:4px 9px;cursor:pointer;white-space:nowrap}
+.conv-btn:active{background:#ebe7e0}
+.conv-box{width:290px;max-height:88vh;overflow-y:auto}
+.conv-row{display:flex;align-items:center;gap:8px;margin:6px 0 12px}
+.conv-field{flex:1;display:flex;align-items:baseline;gap:4px;border:1.5px solid #e0ddd8;border-radius:12px;padding:10px 12px;background:#fafaf8}
+.conv-field:focus-within{border-color:#888;background:#fff}
+.conv-field input{width:100%;min-width:0;border:none;background:transparent;font-size:24px;font-weight:700;color:#1a1a1a;outline:none;font-variant-numeric:tabular-nums}
+.conv-field span{font-size:13px;font-weight:700;color:#aaa}
+.conv-field input::-webkit-inner-spin-button,.conv-field input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.conv-field input{-moz-appearance:textfield;appearance:textfield}
+.conv-eq{font-size:18px;color:#bbb}
+.conv-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.conv-chip{font-size:12px;font-weight:600;color:#555;background:#f5f2ee;border:none;border-radius:8px;padding:7px 0;cursor:pointer;font-variant-numeric:tabular-nums}
+.conv-chip:active{background:#ebe7e0}
+.conv-note{font-size:10px;color:#bbb;text-align:center;margin-top:10px}
+.rm-reps{flex:0 0 96px}
+.rm-result{display:flex;align-items:baseline;justify-content:space-between;background:#1a1a1a;color:#fff;border-radius:12px;padding:10px 14px;margin-bottom:10px}
+.rm-lbl{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#bbb}
+.rm-val{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.rm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.rm-cell{background:#f5f2ee;border-radius:8px;padding:5px 0;text-align:center;font-variant-numeric:tabular-nums}
+.rm-cell b{display:block;font-size:13px;color:#1a1a1a}
+.rm-cell small{font-size:9px;color:#999;font-weight:700}
+.rm-cell.ref{background:#e8eefe}
+.rm-cell.ref small{color:#2255a3}
+.bar-calc{margin-top:14px;padding-top:12px;border-top:1px solid #f0ede8}
+.bar-title{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.seg{display:flex;background:#f5f2ee;border-radius:10px;padding:3px;gap:3px}
+.seg button{flex:1;border:none;background:transparent;border-radius:8px;padding:7px 0;font-size:12px;font-weight:700;color:#999;cursor:pointer}
+.seg button.on{background:#fff;color:#1a1a1a;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.bar-row{display:flex;gap:8px;align-items:stretch;margin-top:8px}
+.bar-side input{font-size:20px}
+.bar-side span{font-size:11px;white-space:nowrap}
+.seg-unit{flex:0 0 92px;flex-direction:column}
+.bar-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;font-variant-numeric:tabular-nums}
+.bar-total span{font-size:12px;color:#999}
+.bar-total b{font-size:22px;color:#1a1a1a}
+.bar-lb{text-align:right;font-size:12px;color:#aaa;font-variant-numeric:tabular-nums}
+
 /* CARDIO HIST */
 .ic-chart{font-size:11px;opacity:0.35;cursor:pointer;margin-left:3px;vertical-align:middle}
 .ic-chart:active{opacity:0.8}
@@ -247,7 +294,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
 </head>
 <body>
 
-<div class="hdr"><h1>BLS — Seb 💪</h1><span id="sync-status" style="font-size:11px;color:#bbb;flex:1;text-align:right;padding-right:8px"></span><span class="home-btn" onclick="goTab('home')">🏠</span></div>
+<div class="hdr"><h1>BLS<span class="hdr-sub">Seb</span></h1><span id="sync-status" class="sync-status"></span><div class="hdr-tools"><button class="conv-btn" onclick="openRM()" aria-label="Calculadora de 1RM (Brzycki)">1RM</button><button class="conv-btn" onclick="openConv()" aria-label="Convertir kg y lb">kg ⇄ lb</button></div><button class="home-btn" onclick="goTab('home')" aria-label="Home"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/></svg></button></div>
 
 <div class="tabs">
   <div class="tab tab-home"         onclick="goTab('home')">Home</div>
@@ -453,6 +500,52 @@ tr.ex-done .ex-name{text-decoration:line-through}
   </div>
 </div>
 
+<!-- CONVERTIDOR KG ⇄ LB -->
+<div class="modal" id="modal-conv" onclick="closeConv(event)">
+  <div class="modal-box conv-box">
+    <div class="modal-hdr"><span></span><span>Convertidor</span><button onclick="closeConv()" aria-label="Cerrar">✕</button></div>
+    <div class="conv-row">
+      <label class="conv-field"><input type="number" inputmode="decimal" id="conv-kg" placeholder="0" oninput="convFrom('kg')"><span>kg</span></label>
+      <span class="conv-eq">⇄</span>
+      <label class="conv-field"><input type="number" inputmode="decimal" id="conv-lb" placeholder="0" oninput="convFrom('lb')"><span>lb</span></label>
+    </div>
+    <div class="conv-chips" id="conv-chips"></div>
+    <div class="conv-note">1 kg = 2,2046 lb</div>
+    <div class="bar-calc">
+      <div class="bar-title">Sumar barra + discos</div>
+      <div class="seg" id="bar-seg">
+        <button data-bar="20" class="on" onclick="setBar(20)">Barra 20</button>
+        <button data-bar="15" onclick="setBar(15)">Barra 15</button>
+        <button data-bar="0" onclick="setBar(0)">Sin barra</button>
+      </div>
+      <div class="bar-row">
+        <label class="conv-field bar-side"><input type="number" inputmode="decimal" id="bar-side" placeholder="0" oninput="calcBar()"><span>por lado</span></label>
+        <div class="seg seg-unit" id="bar-unit">
+          <button data-u="kg" class="on" onclick="setBarUnit('kg')">kg</button>
+          <button data-u="lb" onclick="setBarUnit('lb')">lb</button>
+        </div>
+      </div>
+      <div class="bar-total"><span id="bar-detail">20 + 2 × 0 kg</span><b id="bar-total">20 kg</b></div>
+      <div class="bar-lb" id="bar-lb">44.1 lb</div>
+    </div>
+  </div>
+</div>
+
+<!-- CALCULADORA 1RM (BRZYCKI) -->
+<div class="modal" id="modal-rm" onclick="closeRM(event)">
+  <div class="modal-box conv-box">
+    <div class="modal-hdr"><span></span><span>Calculadora 1RM</span><button onclick="closeRM()" aria-label="Cerrar">✕</button></div>
+    <div class="conv-row">
+      <label class="conv-field"><input type="number" inputmode="decimal" id="rm-kg" placeholder="0" oninput="calcRM()"><span>kg</span></label>
+      <span class="conv-eq">×</span>
+      <label class="conv-field rm-reps"><input type="number" inputmode="numeric" id="rm-r" placeholder="0" oninput="calcRM()"><span>reps</span></label>
+    </div>
+    <div class="rm-result"><span class="rm-lbl">1RM estimado</span><span class="rm-val" id="rm-val">—</span></div>
+    <div class="rm-grid" id="rm-grid"></div>
+    <div class="conv-note" id="rm-note">Brzycki: 1RM = kg × 36 / (37 − reps)</div>
+  </div>
+</div>
+
 <!-- BACKUP MODAL -->
 <div class="modal" id="modal-backup" onclick="closeBackup(event)">
   <div class="modal-box">
@@ -479,6 +572,7 @@ const WK = {
     {id:'p1',es:'Press banca barra',         en:'Barbell Bench Press',     tipo:'Compuesto', range:[4,6],  def:50,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
     {id:'p2b',es:'Press inclinado mancuernas',en:'Incline Dumbbell Press', tipo:'Compuesto', range:[8,12], def:15,  mus:'<b>Principal:</b> Pectoral mayor clavicular · <b>Sec:</b> Deltoides anterior, tríceps'},
     {id:'ap1',es:'Aperturas en polea',       en:'Cable Chest Fly',         tipo:'Aislamiento',range:[8,12],def:10,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior'},
+    {id:'aph1',es:'Aperturas polea arriba-abajo',en:'High-to-Low Cable Fly',tipo:'Aislamiento',range:[8,12],def:10,mus:'<b>Principal:</b> Pectoral mayor (porción esternal e inferior) · <b>Sec:</b> Deltoides anterior'},
     {id:'fx1',es:'Flexiones',                en:'Push-up',                 tipo:'Compuesto', kind:'reps', range:null, mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Tríceps, deltoides anterior, core'},
   ],
   piernas:[
@@ -490,7 +584,7 @@ const WK = {
   ],
   tsup:[
     {id:'dm1',es:'Dominadas con banda',      en:'Band-Assisted Pull-up',   tipo:'Compuesto', kind:'band', range:[5,8], mus:'<b>Principal:</b> Dorsal ancho · <b>Sec:</b> Bíceps, romboides, trapecio'},
-    {id:'u1',es:'Press militar mancuernas',  en:'Seated Dumbbell Press',   tipo:'Compuesto', range:[4,6],  def:15,  mus:'<b>Principal:</b> Deltoides anterior y medio · <b>Sec:</b> Tríceps, trapecio'},
+    {id:'u1',es:'Press militar mancuernas',  en:'Seated Dumbbell Press',   tipo:'Compuesto', range:[6,8],  def:15,  mus:'<b>Principal:</b> Deltoides anterior y medio · <b>Sec:</b> Tríceps, trapecio'},
     {id:'l2b',es:'Remo mancuerna en banca',  en:'Bench-Supported DB Row',  tipo:'Compuesto', range:[8,12], def:20,  mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, deltoides posterior'},
     {id:'u4',es:'Elevación posterior mancuernas',en:'Dumbbell Rear Lateral Raise',tipo:'Aislamiento',range:[8,12],def:7.5,mus:'<b>Principal:</b> Deltoides posterior · <b>Sec:</b> Romboides, trapecio medio'},
     {id:'p3',es:'Press plano mancuernas',    en:'Dumbbell Bench Press',    tipo:'Compuesto', range:[8,12], def:15,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
@@ -1036,7 +1130,7 @@ function showDetail(dateKey){
 function closePopup(e){if(!e||e.target===document.getElementById('popup'))document.getElementById('popup').classList.remove('open');}
 
 // ── PROG TABLE ───────────────────────────────────────────
-const UNIT_MAP={"ap1": "kg", "ht1": "kg", "p1": "kg", "p2b": "kg", "p3": "kg", "p4": null, "l1": "kg", "l2": "kg", "l2b": "kg", "l3": "lb", "l4": "kg", "l4b": "kg", "u1": "kg", "u2": "kg", "g3": "lb", "rdl1": "kg", "u3": "kg", "u4": "kg", "g1": "kg", "g2": "lb", "g3b": "lb", "g4": "kg"};
+const UNIT_MAP={"ap1": "kg", "aph1": "kg", "ht1": "kg", "p1": "kg", "p2b": "kg", "p3": "kg", "p4": null, "l1": "kg", "l2": "kg", "l2b": "kg", "l3": "lb", "l4": "kg", "l4b": "kg", "u1": "kg", "u2": "kg", "g3": "lb", "rdl1": "kg", "u3": "kg", "u4": "kg", "g1": "kg", "g2": "lb", "g3b": "lb", "g4": "kg"};
 const MAIN_IDS=['p1','l1','u1','g1'];
 function exListOf(wk){
   if(WK[wk]) return WK[wk];
@@ -1558,6 +1652,57 @@ function renderHomeExTable(){
     </tr>`;
   });
   tbl.innerHTML=html;
+}
+
+// ── CONVERTIDOR KG ⇄ LB ──────────────────────────────────
+const LB_PER_KG=2.20462;
+const CONV_CHIPS=[{v:5,u:'kg'},{v:10,u:'kg'},{v:20,u:'kg'},{v:25,u:'kg'},{v:25,u:'lb'},{v:45,u:'lb'},{v:90,u:'lb'},{v:100,u:'lb'}];
+function fmtConv(n){return String(Math.round(n*10)/10);}
+function openConv(){
+  document.getElementById('conv-chips').innerHTML=CONV_CHIPS.map(c=>`<button class="conv-chip" onclick="convSet(${c.v},'${c.u}')">${c.v} ${c.u}</button>`).join('');
+  document.getElementById('modal-conv').classList.add('open');
+  calcBar();
+  setTimeout(()=>document.getElementById('conv-kg').focus(),50);
+}
+function closeConv(e){if(!e||e.target===document.getElementById('modal-conv'))document.getElementById('modal-conv').classList.remove('open');}
+function convFrom(u){
+  const kgEl=document.getElementById('conv-kg'),lbEl=document.getElementById('conv-lb');
+  const v=parseFloat((u==='kg'?kgEl:lbEl).value);
+  if(isNaN(v)){(u==='kg'?lbEl:kgEl).value='';return;}
+  if(u==='kg') lbEl.value=fmtConv(v*LB_PER_KG); else kgEl.value=fmtConv(v/LB_PER_KG);
+}
+function convSet(v,u){document.getElementById('conv-'+u).value=v;convFrom(u);}
+
+// ── CALCULADORA 1RM (BRZYCKI) ────────────────────────────
+// 1RM = kg × 36 / (37 − reps). La tabla muestra el peso para 1–12 reps; 6 y 8 son las referencias de los gráficos.
+function openRM(){document.getElementById('modal-rm').classList.add('open');calcRM();setTimeout(()=>document.getElementById('rm-kg').focus(),50);}
+function closeRM(e){if(!e||e.target===document.getElementById('modal-rm'))document.getElementById('modal-rm').classList.remove('open');}
+// Barra + discos: total en kg = barra + 2 × discos por lado (convertidos si están en lb)
+let barKg=20,barUnit='kg';
+function setBar(v){barKg=v;document.querySelectorAll('#bar-seg button').forEach(b=>b.classList.toggle('on',+b.dataset.bar===v));calcBar();}
+function setBarUnit(u){barUnit=u;document.querySelectorAll('#bar-unit button').forEach(b=>b.classList.toggle('on',b.dataset.u===u));calcBar();}
+function barTotal(){
+  const side=parseFloat(document.getElementById('bar-side').value)||0;
+  const sideKg=barUnit==='lb'?side/LB_PER_KG:side;
+  return {side,total:barKg+2*sideKg};
+}
+function calcBar(){
+  const {side,total}=barTotal();
+  document.getElementById('bar-detail').textContent=(barKg?barKg+' + ':'')+'2 × '+fmtConv(side)+' '+barUnit;
+  document.getElementById('bar-total').textContent=fmtConv(total)+' kg';
+  document.getElementById('bar-lb').textContent='= '+fmtConv(total*LB_PER_KG)+' lb';
+}
+function calcRM(){
+  const kg=parseFloat(document.getElementById('rm-kg').value),r=parseInt(document.getElementById('rm-r').value);
+  const valEl=document.getElementById('rm-val'),grid=document.getElementById('rm-grid'),note=document.getElementById('rm-note');
+  const ok=kg>0&&r>=1&&r<=15;
+  const one=ok?kg*36/(37-r):null;
+  valEl.textContent=ok?fmtConv(one)+' kg':'—';
+  note.textContent=r>12?'Sobre 12 reps la estimación es menos precisa':'Brzycki: 1RM = kg × 36 / (37 − reps)';
+  grid.innerHTML=Array.from({length:12},(_,i)=>i+1).map(n=>{
+    const w=ok?Math.round(one*(37-n)/36*2)/2:null;   // redondeado a 0,5 kg
+    return `<div class="rm-cell${n===6||n===8?' ref':''}"><b>${w!=null?w:'—'}</b><small>${n} rep${n>1?'s':''}</small></div>`;
+  }).join('');
 }
 
 // ── BACKUP ───────────────────────────────────────────────
