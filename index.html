@@ -238,11 +238,23 @@ tr.ex-done .ex-name{text-decoration:line-through}
 .conv-field:focus-within{border-color:#888;background:#fff}
 .conv-field input{width:100%;min-width:0;border:none;background:transparent;font-size:24px;font-weight:700;color:#1a1a1a;outline:none;font-variant-numeric:tabular-nums}
 .conv-field span{font-size:13px;font-weight:700;color:#aaa}
+.conv-field input::-webkit-inner-spin-button,.conv-field input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.conv-field input{-moz-appearance:textfield;appearance:textfield}
 .conv-eq{font-size:18px;color:#bbb}
 .conv-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .conv-chip{font-size:12px;font-weight:600;color:#555;background:#f5f2ee;border:none;border-radius:8px;padding:7px 0;cursor:pointer;font-variant-numeric:tabular-nums}
 .conv-chip:active{background:#ebe7e0}
 .conv-note{font-size:10px;color:#bbb;text-align:center;margin-top:10px}
+.rm-reps{flex:0 0 96px}
+.rm-result{display:flex;align-items:baseline;justify-content:space-between;background:#1a1a1a;color:#fff;border-radius:12px;padding:10px 14px;margin-bottom:10px}
+.rm-lbl{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#bbb}
+.rm-val{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.rm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.rm-cell{background:#f5f2ee;border-radius:8px;padding:5px 0;text-align:center;font-variant-numeric:tabular-nums}
+.rm-cell b{display:block;font-size:13px;color:#1a1a1a}
+.rm-cell small{font-size:9px;color:#999;font-weight:700}
+.rm-cell.ref{background:#e8eefe}
+.rm-cell.ref small{color:#2255a3}
 
 /* CARDIO HIST */
 .ic-chart{font-size:11px;opacity:0.35;cursor:pointer;margin-left:3px;vertical-align:middle}
@@ -262,7 +274,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
 </head>
 <body>
 
-<div class="hdr"><h1>BLS — Seb 💪</h1><span id="sync-status" style="font-size:11px;color:#bbb;flex:1;text-align:right;padding-right:8px"></span><button class="conv-btn" onclick="openConv()" aria-label="Convertir kg y lb">kg ⇄ lb</button><span class="home-btn" onclick="goTab('home')">🏠</span></div>
+<div class="hdr"><h1>BLS — Seb 💪</h1><span id="sync-status" style="font-size:11px;color:#bbb;flex:1;text-align:right;padding-right:8px"></span><button class="conv-btn" onclick="openRM()" aria-label="Calculadora de 1RM (Brzycki)">1RM</button><button class="conv-btn" onclick="openConv()" aria-label="Convertir kg y lb">kg ⇄ lb</button><span class="home-btn" onclick="goTab('home')">🏠</span></div>
 
 <div class="tabs">
   <div class="tab tab-home"         onclick="goTab('home')">Home</div>
@@ -479,6 +491,21 @@ tr.ex-done .ex-name{text-decoration:line-through}
     </div>
     <div class="conv-chips" id="conv-chips"></div>
     <div class="conv-note">1 kg = 2,2046 lb</div>
+  </div>
+</div>
+
+<!-- CALCULADORA 1RM (BRZYCKI) -->
+<div class="modal" id="modal-rm" onclick="closeRM(event)">
+  <div class="modal-box conv-box">
+    <div class="modal-hdr"><span></span><span>Calculadora 1RM</span><button onclick="closeRM()" aria-label="Cerrar">✕</button></div>
+    <div class="conv-row">
+      <label class="conv-field"><input type="number" inputmode="decimal" id="rm-kg" placeholder="0" oninput="calcRM()"><span>kg</span></label>
+      <span class="conv-eq">×</span>
+      <label class="conv-field rm-reps"><input type="number" inputmode="numeric" id="rm-r" placeholder="0" oninput="calcRM()"><span>reps</span></label>
+    </div>
+    <div class="rm-result"><span class="rm-lbl">1RM estimado</span><span class="rm-val" id="rm-val">—</span></div>
+    <div class="rm-grid" id="rm-grid"></div>
+    <div class="conv-note" id="rm-note">Brzycki: 1RM = kg × 36 / (37 − reps)</div>
   </div>
 </div>
 
@@ -1607,6 +1634,23 @@ function convFrom(u){
   if(u==='kg') lbEl.value=fmtConv(v*LB_PER_KG); else kgEl.value=fmtConv(v/LB_PER_KG);
 }
 function convSet(v,u){document.getElementById('conv-'+u).value=v;convFrom(u);}
+
+// ── CALCULADORA 1RM (BRZYCKI) ────────────────────────────
+// 1RM = kg × 36 / (37 − reps). La tabla muestra el peso para 1–12 reps; 6 y 8 son las referencias de los gráficos.
+function openRM(){document.getElementById('modal-rm').classList.add('open');calcRM();setTimeout(()=>document.getElementById('rm-kg').focus(),50);}
+function closeRM(e){if(!e||e.target===document.getElementById('modal-rm'))document.getElementById('modal-rm').classList.remove('open');}
+function calcRM(){
+  const kg=parseFloat(document.getElementById('rm-kg').value),r=parseInt(document.getElementById('rm-r').value);
+  const valEl=document.getElementById('rm-val'),grid=document.getElementById('rm-grid'),note=document.getElementById('rm-note');
+  const ok=kg>0&&r>=1&&r<=15;
+  const one=ok?kg*36/(37-r):null;
+  valEl.textContent=ok?fmtConv(one)+' kg':'—';
+  note.textContent=r>12?'Sobre 12 reps la estimación es menos precisa':'Brzycki: 1RM = kg × 36 / (37 − reps)';
+  grid.innerHTML=Array.from({length:12},(_,i)=>i+1).map(n=>{
+    const w=ok?Math.round(one*(37-n)/36*2)/2:null;   // redondeado a 0,5 kg
+    return `<div class="rm-cell${n===6||n===8?' ref':''}"><b>${w!=null?w:'—'}</b><small>${n} rep${n>1?'s':''}</small></div>`;
+  }).join('');
+}
 
 // ── BACKUP ───────────────────────────────────────────────
 function openBackup(){document.getElementById('modal-backup').classList.add('open');}
