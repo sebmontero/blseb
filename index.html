@@ -477,33 +477,34 @@ const CYCLE_START='2026-09-28';
 const WK = {
   pecho:[
     {id:'p1',es:'Press banca barra',         en:'Barbell Bench Press',     tipo:'Compuesto', range:[4,6],  def:50,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
-    {id:'p2b',es:'Press inclinado mancuernas',en:'Incline Dumbbell Press', tipo:'Compuesto', range:[8,12], def:15,  mus:'<b>Principal:</b> Pectoral mayor clavicular · <b>Sec:</b> Deltoides anterior, tríceps',predecessor:{id:'p2',es:'Press banca inclinado',switchDate:'2026-07-27'}},
+    {id:'p2b',es:'Press inclinado mancuernas',en:'Incline Dumbbell Press', tipo:'Compuesto', range:[8,12], def:15,  mus:'<b>Principal:</b> Pectoral mayor clavicular · <b>Sec:</b> Deltoides anterior, tríceps'},
     {id:'ap1',es:'Aperturas en polea',       en:'Cable Chest Fly',         tipo:'Aislamiento',range:[8,12],def:10,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior'},
     {id:'fx1',es:'Flexiones',                en:'Push-up',                 tipo:'Compuesto', kind:'reps', range:null, mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Tríceps, deltoides anterior, core'},
   ],
   piernas:[
     {id:'pl1',es:'Plancha',                  en:'Plank',                   tipo:'Activación',kind:'secs', sets:2, range:[30,45], mus:'<b>Principal:</b> Core · <b>Sec:</b> Glúteos, hombros'},
     {id:'g1',es:'Sentadilla barra',          en:'Barbell Squat',           tipo:'Compuesto', range:[4,6],  def:85,  mus:'<b>Principal:</b> Cuádriceps, glúteo mayor · <b>Sec:</b> Isquios, erector, aductores'},
-    {id:'l1',es:'Peso muerto barra',         en:'Barbell Deadlift',        tipo:'Compuesto', range:[4,6],  def:75,  mus:'<b>Principal:</b> Glúteo mayor, isquios, erector · <b>Sec:</b> Cuádriceps, dorsales'},
+    {id:'rdl1',es:'Peso muerto rumano barra', en:'Romanian Deadlift',       tipo:'Compuesto', range:[6,8],  def:60,  mus:'<b>Principal:</b> Glúteo mayor, isquios · <b>Sec:</b> Erector, aductores'},
     {id:'ht1',es:'Hip thrust barra',         en:'Barbell Hip Thrust',      tipo:'Compuesto', range:[10,12],def:40,  mus:'<b>Principal:</b> Glúteo mayor · <b>Sec:</b> Isquios, aductores'},
-    {id:'g2',es:'Flexión de piernas',        en:'Leg Curl',                tipo:'Aislamiento',range:[8,12],def:80,  mus:'<b>Principal:</b> Isquiotibiales · <b>Sec:</b> Gastrocnemio, poplíteo'},
+    {id:'g2',es:'Flexión de piernas acostado',en:'Lying Leg Curl',                tipo:'Aislamiento',range:[8,12],def:80,  mus:'<b>Principal:</b> Isquiotibiales · <b>Sec:</b> Gastrocnemio, poplíteo'},
   ],
   tsup:[
     {id:'dm1',es:'Dominadas con banda',      en:'Band-Assisted Pull-up',   tipo:'Compuesto', kind:'band', range:[5,8], mus:'<b>Principal:</b> Dorsal ancho · <b>Sec:</b> Bíceps, romboides, trapecio'},
     {id:'u1',es:'Press militar mancuernas',  en:'Seated Dumbbell Press',   tipo:'Compuesto', range:[4,6],  def:15,  mus:'<b>Principal:</b> Deltoides anterior y medio · <b>Sec:</b> Tríceps, trapecio'},
-    {id:'l2b',es:'Remo mancuerna en banca',  en:'Bench-Supported DB Row',  tipo:'Compuesto', range:[8,12], def:20,  mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, deltoides posterior',predecessor:{id:'l2',es:'Remo unilateral mancuerna',switchDate:'2026-06-17'}},
+    {id:'l2b',es:'Remo mancuerna en banca',  en:'Bench-Supported DB Row',  tipo:'Compuesto', range:[8,12], def:20,  mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, deltoides posterior'},
+    {id:'u4',es:'Elevación posterior mancuernas',en:'Dumbbell Rear Lateral Raise',tipo:'Aislamiento',range:[8,12],def:7.5,mus:'<b>Principal:</b> Deltoides posterior · <b>Sec:</b> Romboides, trapecio medio'},
     {id:'p3',es:'Press plano mancuernas',    en:'Dumbbell Bench Press',    tipo:'Compuesto', range:[8,12], def:15,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
     {id:'u2',es:'Remo polea agarre cerrado', en:'Seated Cable Row Close Grip',tipo:'Compuesto',range:[8,12],def:50, mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, trapecio medio'},
   ]
 };
 // Ciclos 1 y 2 (push/pull/upper/legs): para mostrar y editar el historial antiguo
 const OLD_WK={
-  push:[['p1','Press banca barra'],['p2b','Press inclinado mancuernas','p2'],['p3','Press mancuernas'],['p4','Extensión tríceps polea']],
-  pull:[['l1','Peso muerto barra'],['l2b','Remo mancuernas banca','l2'],['l3','Jalón polea alta'],['l4b','Curl mancuernas banca','l4']],
+  push:[['p1','Press banca barra'],['p2','Press banca inclinado barra'],['p2b','Press inclinado mancuernas'],['p3','Press mancuernas'],['p4','Extensión tríceps polea']],
+  pull:[['l1','Peso muerto barra'],['l2','Remo unilateral mancuerna'],['l2b','Remo mancuerna en banca'],['l3','Jalón polea alta'],['l4','Curl alternado mancuernas'],['l4b','Curl martillo inclinado']],
   upper:[['u1','Press militar mancuernas'],['u2','Remo polea agarre cerrado'],['u3','Press banca agarre cerrado'],['u4','Elevación posterior mancuernas']],
-  legs:[['g1','Sentadilla barra'],['g2','Flexión de piernas'],['g3b','Extensión de piernas','g3'],['g4','Zancada estática mancuernas']]
+  legs:[['g1','Sentadilla barra'],['g2','Flexión de piernas acostado'],['g3','Prensa de pierna'],['g3b','Extensión de piernas'],['g4','Zancada estática mancuernas']]
 };
-const OLD_PREV_NAME={p2:'Press banca inclinado',l2:'Remo unilateral mancuerna',l4:'Curl alternado mancuernas',g3:'Prensa de pierna'};
+const OLD_PREV_NAME={};
 // Ventanas de progresión antiguas bajo cada rutina nueva
 const OLD_VIEWS={pecho:['push'],piernas:['legs','pull'],tsup:['upper']};
 const WK_LABEL={pecho:'Pecho',piernas:'Piernas',tsup:'Superior',push:'Push',pull:'Pull',upper:'Upper',legs:'Legs'};
@@ -564,6 +565,8 @@ function cycleStarts(){
   return res;
 }
 function cycleOf(w,starts){let c=null;starts.forEach(x=>{if(w>=x.start)c=x;});return c;}
+// Brzycki: peso que equivale a hacer R reps, a partir de kg × r (reps topadas en 15, donde la fórmula deja de ser fiable)
+function equivKg(kg,r,R){return kg*(37-R)/(37-Math.min(r,15));}
 function lastSess(id){const d=[...getEx(id)].sort((a,b)=>a.date.localeCompare(b.date));return d[d.length-1]||null;}
 
 // ── CALENDAR DAY CELL (shared by modal/inline/home calendars) ───
@@ -1033,7 +1036,7 @@ function showDetail(dateKey){
 function closePopup(e){if(!e||e.target===document.getElementById('popup'))document.getElementById('popup').classList.remove('open');}
 
 // ── PROG TABLE ───────────────────────────────────────────
-const UNIT_MAP={"ap1": "kg", "ht1": "kg", "p1": "kg", "p2b": "kg", "p3": "kg", "p4": null, "l1": "kg", "l2b": "kg", "l3": "lb", "l4b": "kg", "u1": "kg", "u2": null, "u3": "kg", "u4": "kg", "g1": "kg", "g2": "lb", "g3b": "lb", "g4": "kg"};
+const UNIT_MAP={"ap1": "kg", "ht1": "kg", "p1": "kg", "p2b": "kg", "p3": "kg", "p4": null, "l1": "kg", "l2": "kg", "l2b": "kg", "l3": "lb", "l4": "kg", "l4b": "kg", "u1": "kg", "u2": "kg", "g3": "lb", "rdl1": "kg", "u3": "kg", "u4": "kg", "g1": "kg", "g2": "lb", "g3b": "lb", "g4": "kg"};
 const MAIN_IDS=['p1','l1','u1','g1'];
 function exListOf(wk){
   if(WK[wk]) return WK[wk];
@@ -1183,13 +1186,16 @@ function openExChart(wk,exId){
   // Con predecessor: solo sesiones del ejercicio NUEVO (desde switchDate)
   const prevData=ex.predecessor?getEx(ex.predecessor.id).filter(s=>swDate&&s.date>=swDate):[];
   const merged=[...prevData,...currData].sort((a,b)=>a.date.localeCompare(b.date));
+  // Ejercicios con peso: promedio del peso equivalente (Brzycki) a R reps: 6 en principales (rango 4–6), 8 en accesorios.
+  // Con exactamente R reps el punto es el peso real; menos reps lo bajan y más reps lo suben.
+  const R=(ex.range&&ex.range[1]<=6)?6:8;
   const pts=merged.map(s=>{
     const vs=s.sets.filter(x=>x.r>0&&(kind!=='kg'||x.kg>0));
     if(!vs.length)return null;
-    const avgKg=vs.reduce((a,x)=>a+(kind==='kg'?x.kg:x.r),0)/vs.length;
-    return{x:new Date(s.date+'T12:00:00').getTime(),y:Math.round(avgKg*10)/10};
+    const val=vs.reduce((a,x)=>a+(kind==='kg'?equivKg(x.kg,x.r,R):x.r),0)/vs.length;
+    return{x:new Date(s.date+'T12:00:00').getTime(),y:Math.round(val*10)/10,sets:vs.map(x=>fmtSet(ex,x)).join(' / ')};
   }).filter(Boolean);
-  document.getElementById('chart-title').textContent=ex.es;
+  document.getElementById('chart-title').textContent=ex.es+(kind==='kg'?' · equiv. a '+R+' reps':'');
   document.getElementById('chart-overlay').style.display='flex';
   if(_exChart){_exChart.destroy();_exChart=null;}
   if(!pts.length){document.getElementById('chart-empty').style.display='block';return;}
@@ -1236,14 +1242,15 @@ function openExChart(wk,exId){
   _exChart=new Chart(document.getElementById('ex-chart'),{
     type:'line',
     data:{datasets:[
-      {label:'Promedio semanal',data:pts,borderColor:col,backgroundColor:col,borderWidth:2.5,pointRadius:4,pointBackgroundColor:col,pointBorderColor:'#fff',pointBorderWidth:2,tension:0.25,fill:false},
+      {label:'Peso equivalente',data:pts,borderColor:col,backgroundColor:col,borderWidth:2.5,pointRadius:4,pointBackgroundColor:col,pointBorderColor:'#fff',pointBorderWidth:2,tension:0.25,fill:false},
       {label:'Media móvil mensual',data:maPts,borderColor:'#c0392b',backgroundColor:'#c0392b',borderWidth:1.3,borderDash:[5,4],pointRadius:0,tension:0.3,fill:false}
     ]},
     plugins:[switchLinePlugin],
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{
         title:it=>new Date(it[0].parsed.x).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'2-digit'}),
-        label:c=>(c.dataset.label==='Media móvil mensual'?'Media móvil: ':'')+Math.round(c.parsed.y*10)/10+' '+yUnit}}},
+        label:c=>(c.dataset.label==='Media móvil mensual'?'Media móvil: ':'')+Math.round(c.parsed.y*10)/10+' '+yUnit,
+        afterLabel:c=>c.dataset.label==='Peso equivalente'&&c.raw.sets?c.raw.sets:''}}},
       scales:{
         x:{type:'linear',min:chartStart,max:chartEnd,
           grid:{color:'#f2f0ea'},
@@ -1519,17 +1526,17 @@ function renderHomeStats(){
 }
 
 const GOALS={p1:{rm6:70,rm1:81},l1:{rm6:100,rm1:116},u1:{rm6:22.5,rm1:26},g1:{rm6:110,rm1:128}};
-const KEY_TO_TAB={p1:'pecho',l1:'piernas',u1:'tsup',g1:'piernas'};
+const KEY_TO_TAB={p1:'pecho',rdl1:'piernas',u1:'tsup',g1:'piernas'};
 function renderHomeExTable(){
   const KEY_EXERCISES=[
     {id:'p1',es:'Press banca'},
-    {id:'l1',es:'Peso muerto'},
+    {id:'rdl1',es:'P. muerto rumano'},
     {id:'u1',es:'Press militar'},
     {id:'g1',es:'Sentadilla'},
   ];
   const tbl=document.getElementById('home-ex-tbl');
   if(!tbl) return;
-  const ROW_COLORS={p1:{bg:'#fde8e8',fg:'#a33'},l1:{bg:'#e8eefe',fg:'#2255a3'},u1:{bg:'#e8f7ed',fg:'#2a6e3f'},g1:{bg:'#fef8e0',fg:'#856404'}};
+  const ROW_COLORS={p1:{bg:'#fde8e8',fg:'#a33'},rdl1:{bg:'#e8eefe',fg:'#2255a3'},u1:{bg:'#e8f7ed',fg:'#2a6e3f'},g1:{bg:'#fef8e0',fg:'#856404'}};
   const cutoff=addDaysStr(todaySantiago(),-28);
   let html='<thead><tr><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:left">Ejercicio</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">\u00daltimo</th><th style="font-size:10px;color:#aaa;font-weight:600;padding:4px;text-align:right">M\u00e1x Men</th></tr></thead>';
   KEY_EXERCISES.forEach(ex=>{
