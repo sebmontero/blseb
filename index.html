@@ -482,7 +482,7 @@ const WK = {
     {id:'fx1',es:'Flexiones',                en:'Push-up',                 tipo:'Compuesto', kind:'reps', range:null, mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Tríceps, deltoides anterior, core'},
   ],
   piernas:[
-    {id:'pl1',es:'Plancha',                  en:'Plank',                   tipo:'Activación',kind:'secs', sets:2, range:[30,45], mus:'<b>Principal:</b> Core · <b>Sec:</b> Glúteos, hombros'},
+    {id:'pl1',es:'Plancha',                  en:'Plank',                   tipo:'Activación',kind:'secs', range:[30,45], mus:'<b>Principal:</b> Core · <b>Sec:</b> Glúteos, hombros'},
     {id:'g1',es:'Sentadilla barra',          en:'Barbell Squat',           tipo:'Compuesto', range:[4,6],  def:85,  mus:'<b>Principal:</b> Cuádriceps, glúteo mayor · <b>Sec:</b> Isquios, erector, aductores'},
     {id:'rdl1',es:'Peso muerto rumano barra', en:'Romanian Deadlift',       tipo:'Compuesto', range:[6,8],  def:60,  mus:'<b>Principal:</b> Glúteo mayor, isquios · <b>Sec:</b> Erector, aductores'},
     {id:'ht1',es:'Hip thrust barra',         en:'Barbell Hip Thrust',      tipo:'Compuesto', range:[10,12],def:40,  mus:'<b>Principal:</b> Glúteo mayor · <b>Sec:</b> Isquios, aductores'},
@@ -1106,7 +1106,7 @@ function renderProgTable(wk){
       const inW=all.filter(s=>weekStartStr(s.date)===w);
       const sess=inW[inW.length-1];
       const oldBg=w<c3?'background:#f7f5f0;':'';
-      if(!sess&&w<c3){ html+=`<td class="prog-cell" style="${oldBg}"></td>`; return; }
+      if(!sess&&w<c3){ html+=`<td class="prog-cell${colCls(w)}" style="${oldBg}"></td>`; return; }
       if(!sess){
         html+=`<td class="prog-cell${colCls(w)}" style="color:#ddd;cursor:pointer;${oldBg}" onclick="openEditEntry('${wk}','${ex.id}','${defaultDateFor(wk,w)}')">+</td>`;
         return;
