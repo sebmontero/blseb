@@ -565,6 +565,8 @@ function cycleStarts(){
   return res;
 }
 function cycleOf(w,starts){let c=null;starts.forEach(x=>{if(w>=x.start)c=x;});return c;}
+// Brzycki: peso que equivale a hacer R reps, a partir de kg × r (reps topadas en 15, donde la fórmula deja de ser fiable)
+function equivKg(kg,r,R){return kg*(37-R)/(37-Math.min(r,15));}
 function lastSess(id){const d=[...getEx(id)].sort((a,b)=>a.date.localeCompare(b.date));return d[d.length-1]||null;}
 
 // ── CALENDAR DAY CELL (shared by modal/inline/home calendars) ───
@@ -1184,13 +1186,16 @@ function openExChart(wk,exId){
   // Con predecessor: solo sesiones del ejercicio NUEVO (desde switchDate)
   const prevData=ex.predecessor?getEx(ex.predecessor.id).filter(s=>swDate&&s.date>=swDate):[];
   const merged=[...prevData,...currData].sort((a,b)=>a.date.localeCompare(b.date));
+  // Ejercicios con peso: promedio del peso equivalente (Brzycki) a las reps del techo del rango.
+  // Con exactamente R reps el punto es el peso real; menos reps lo bajan y más reps lo suben.
+  const R=(ex.range&&ex.range[1])||8;
   const pts=merged.map(s=>{
     const vs=s.sets.filter(x=>x.r>0&&(kind!=='kg'||x.kg>0));
     if(!vs.length)return null;
-    const avgKg=vs.reduce((a,x)=>a+(kind==='kg'?x.kg:x.r),0)/vs.length;
-    return{x:new Date(s.date+'T12:00:00').getTime(),y:Math.round(avgKg*10)/10};
+    const val=vs.reduce((a,x)=>a+(kind==='kg'?equivKg(x.kg,x.r,R):x.r),0)/vs.length;
+    return{x:new Date(s.date+'T12:00:00').getTime(),y:Math.round(val*10)/10,sets:vs.map(x=>fmtSet(ex,x)).join(' / ')};
   }).filter(Boolean);
-  document.getElementById('chart-title').textContent=ex.es;
+  document.getElementById('chart-title').textContent=ex.es+(kind==='kg'?' · equiv. a '+R+' reps':'');
   document.getElementById('chart-overlay').style.display='flex';
   if(_exChart){_exChart.destroy();_exChart=null;}
   if(!pts.length){document.getElementById('chart-empty').style.display='block';return;}
@@ -1237,14 +1242,15 @@ function openExChart(wk,exId){
   _exChart=new Chart(document.getElementById('ex-chart'),{
     type:'line',
     data:{datasets:[
-      {label:'Promedio semanal',data:pts,borderColor:col,backgroundColor:col,borderWidth:2.5,pointRadius:4,pointBackgroundColor:col,pointBorderColor:'#fff',pointBorderWidth:2,tension:0.25,fill:false},
+      {label:'Peso equivalente',data:pts,borderColor:col,backgroundColor:col,borderWidth:2.5,pointRadius:4,pointBackgroundColor:col,pointBorderColor:'#fff',pointBorderWidth:2,tension:0.25,fill:false},
       {label:'Media móvil mensual',data:maPts,borderColor:'#c0392b',backgroundColor:'#c0392b',borderWidth:1.3,borderDash:[5,4],pointRadius:0,tension:0.3,fill:false}
     ]},
     plugins:[switchLinePlugin],
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{
         title:it=>new Date(it[0].parsed.x).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'2-digit'}),
-        label:c=>(c.dataset.label==='Media móvil mensual'?'Media móvil: ':'')+Math.round(c.parsed.y*10)/10+' '+yUnit}}},
+        label:c=>(c.dataset.label==='Media móvil mensual'?'Media móvil: ':'')+Math.round(c.parsed.y*10)/10+' '+yUnit,
+        afterLabel:c=>c.dataset.label==='Peso equivalente'&&c.raw.sets?c.raw.sets:''}}},
       scales:{
         x:{type:'linear',min:chartStart,max:chartEnd,
           grid:{color:'#f2f0ea'},
