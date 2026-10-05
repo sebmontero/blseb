@@ -10,11 +10,15 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;background:#e0dcd4;color:#1a1a1a;padding:10px;min-height:100vh}
 
 /* HEADER */
-.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;background:#fff;border-radius:10px;padding:7px 10px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
-.hdr h1{font-size:15px;font-weight:700;white-space:nowrap;margin-right:14px}
-.sync-status{font-size:11px;color:#bbb;flex:1;text-align:right;padding-right:10px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;background:#1a1a1a;border-radius:12px;padding:9px 12px;box-shadow:0 2px 6px rgba(0,0,0,0.18)}
+.hdr h1{font-size:16px;font-weight:800;letter-spacing:.06em;color:#fff;white-space:nowrap;margin-right:14px;display:flex;align-items:baseline;gap:7px}
+.hdr-sub{font-size:12px;font-weight:600;letter-spacing:.02em;color:#9a958c}
+.sync-status{font-size:11px;color:#8a857c;flex:1;text-align:right;padding-right:10px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .hdr-tools{display:flex;gap:6px}
-.hdr .home-btn{margin-left:10px;padding-left:12px;border-left:1px solid #ece8e1;align-self:stretch}
+.hdr .home-btn{margin-left:10px;padding:0 0 0 12px;border:none;border-left:1px solid #3a3835;background:none;color:#e8e4dc;opacity:1;align-self:stretch;cursor:pointer}
+.hdr .home-btn:active{color:#fff}
+.hdr .conv-btn{color:#e8e4dc;background:#2a2826;border-color:#3a3835}
+.hdr .conv-btn:active{background:#34312e}
 .btn-hdr{font-size:12px;padding:7px 11px;border-radius:8px;border:1px solid #ccc;background:#fff;color:#555;cursor:pointer;font-weight:500}
 
 .home-btn{font-size:18px;cursor:pointer;line-height:1;display:flex;align-items:center;opacity:0.7}.home-btn:hover{opacity:1}
@@ -270,8 +274,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
 .bar-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;font-variant-numeric:tabular-nums}
 .bar-total span{font-size:12px;color:#999}
 .bar-total b{font-size:22px;color:#1a1a1a}
-.bar-use{width:100%;margin-top:8px;padding:9px;border:1.5px solid #e0ddd8;border-radius:10px;background:#fff;font-size:12px;font-weight:700;color:#555;cursor:pointer}
-.bar-use:active{background:#f5f2ee}
+.bar-lb{text-align:right;font-size:12px;color:#aaa;font-variant-numeric:tabular-nums}
 
 /* CARDIO HIST */
 .ic-chart{font-size:11px;opacity:0.35;cursor:pointer;margin-left:3px;vertical-align:middle}
@@ -291,7 +294,7 @@ tr.ex-done .ex-name{text-decoration:line-through}
 </head>
 <body>
 
-<div class="hdr"><h1>BLS — Seb 💪</h1><span id="sync-status" class="sync-status"></span><div class="hdr-tools"><button class="conv-btn" onclick="openRM()" aria-label="Calculadora de 1RM (Brzycki)">1RM</button><button class="conv-btn" onclick="openConv()" aria-label="Convertir kg y lb">kg ⇄ lb</button></div><span class="home-btn" onclick="goTab('home')" aria-label="Home">🏠</span></div>
+<div class="hdr"><h1>BLS<span class="hdr-sub">Seb</span></h1><span id="sync-status" class="sync-status"></span><div class="hdr-tools"><button class="conv-btn" onclick="openRM()" aria-label="Calculadora de 1RM (Brzycki)">1RM</button><button class="conv-btn" onclick="openConv()" aria-label="Convertir kg y lb">kg ⇄ lb</button></div><button class="home-btn" onclick="goTab('home')" aria-label="Home"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/></svg></button></div>
 
 <div class="tabs">
   <div class="tab tab-home"         onclick="goTab('home')">Home</div>
@@ -508,21 +511,6 @@ tr.ex-done .ex-name{text-decoration:line-through}
     </div>
     <div class="conv-chips" id="conv-chips"></div>
     <div class="conv-note">1 kg = 2,2046 lb</div>
-  </div>
-</div>
-
-<!-- CALCULADORA 1RM (BRZYCKI) -->
-<div class="modal" id="modal-rm" onclick="closeRM(event)">
-  <div class="modal-box conv-box">
-    <div class="modal-hdr"><span></span><span>Calculadora 1RM</span><button onclick="closeRM()" aria-label="Cerrar">✕</button></div>
-    <div class="conv-row">
-      <label class="conv-field"><input type="number" inputmode="decimal" id="rm-kg" placeholder="0" oninput="calcRM()"><span>kg</span></label>
-      <span class="conv-eq">×</span>
-      <label class="conv-field rm-reps"><input type="number" inputmode="numeric" id="rm-r" placeholder="0" oninput="calcRM()"><span>reps</span></label>
-    </div>
-    <div class="rm-result"><span class="rm-lbl">1RM estimado</span><span class="rm-val" id="rm-val">—</span></div>
-    <div class="rm-grid" id="rm-grid"></div>
-    <div class="conv-note" id="rm-note">Brzycki: 1RM = kg × 36 / (37 − reps)</div>
     <div class="bar-calc">
       <div class="bar-title">Sumar barra + discos</div>
       <div class="seg" id="bar-seg">
@@ -538,8 +526,23 @@ tr.ex-done .ex-name{text-decoration:line-through}
         </div>
       </div>
       <div class="bar-total"><span id="bar-detail">20 + 2 × 0 kg</span><b id="bar-total">20 kg</b></div>
-      <button class="bar-use" onclick="useBarTotal()">Usar total en la calculadora ↑</button>
+      <div class="bar-lb" id="bar-lb">44.1 lb</div>
     </div>
+  </div>
+</div>
+
+<!-- CALCULADORA 1RM (BRZYCKI) -->
+<div class="modal" id="modal-rm" onclick="closeRM(event)">
+  <div class="modal-box conv-box">
+    <div class="modal-hdr"><span></span><span>Calculadora 1RM</span><button onclick="closeRM()" aria-label="Cerrar">✕</button></div>
+    <div class="conv-row">
+      <label class="conv-field"><input type="number" inputmode="decimal" id="rm-kg" placeholder="0" oninput="calcRM()"><span>kg</span></label>
+      <span class="conv-eq">×</span>
+      <label class="conv-field rm-reps"><input type="number" inputmode="numeric" id="rm-r" placeholder="0" oninput="calcRM()"><span>reps</span></label>
+    </div>
+    <div class="rm-result"><span class="rm-lbl">1RM estimado</span><span class="rm-val" id="rm-val">—</span></div>
+    <div class="rm-grid" id="rm-grid"></div>
+    <div class="conv-note" id="rm-note">Brzycki: 1RM = kg × 36 / (37 − reps)</div>
   </div>
 </div>
 
@@ -1658,6 +1661,7 @@ function fmtConv(n){return String(Math.round(n*10)/10);}
 function openConv(){
   document.getElementById('conv-chips').innerHTML=CONV_CHIPS.map(c=>`<button class="conv-chip" onclick="convSet(${c.v},'${c.u}')">${c.v} ${c.u}</button>`).join('');
   document.getElementById('modal-conv').classList.add('open');
+  calcBar();
   setTimeout(()=>document.getElementById('conv-kg').focus(),50);
 }
 function closeConv(e){if(!e||e.target===document.getElementById('modal-conv'))document.getElementById('modal-conv').classList.remove('open');}
@@ -1671,7 +1675,7 @@ function convSet(v,u){document.getElementById('conv-'+u).value=v;convFrom(u);}
 
 // ── CALCULADORA 1RM (BRZYCKI) ────────────────────────────
 // 1RM = kg × 36 / (37 − reps). La tabla muestra el peso para 1–12 reps; 6 y 8 son las referencias de los gráficos.
-function openRM(){document.getElementById('modal-rm').classList.add('open');calcRM();calcBar();setTimeout(()=>document.getElementById('rm-kg').focus(),50);}
+function openRM(){document.getElementById('modal-rm').classList.add('open');calcRM();setTimeout(()=>document.getElementById('rm-kg').focus(),50);}
 function closeRM(e){if(!e||e.target===document.getElementById('modal-rm'))document.getElementById('modal-rm').classList.remove('open');}
 // Barra + discos: total en kg = barra + 2 × discos por lado (convertidos si están en lb)
 let barKg=20,barUnit='kg';
@@ -1686,8 +1690,8 @@ function calcBar(){
   const {side,total}=barTotal();
   document.getElementById('bar-detail').textContent=(barKg?barKg+' + ':'')+'2 × '+fmtConv(side)+' '+barUnit;
   document.getElementById('bar-total').textContent=fmtConv(total)+' kg';
+  document.getElementById('bar-lb').textContent='= '+fmtConv(total*LB_PER_KG)+' lb';
 }
-function useBarTotal(){document.getElementById('rm-kg').value=fmtConv(barTotal().total);calcRM();}
 function calcRM(){
   const kg=parseFloat(document.getElementById('rm-kg').value),r=parseInt(document.getElementById('rm-r').value);
   const valEl=document.getElementById('rm-val'),grid=document.getElementById('rm-grid'),note=document.getElementById('rm-note');
