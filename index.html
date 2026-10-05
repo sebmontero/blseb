@@ -1186,9 +1186,9 @@ function openExChart(wk,exId){
   // Con predecessor: solo sesiones del ejercicio NUEVO (desde switchDate)
   const prevData=ex.predecessor?getEx(ex.predecessor.id).filter(s=>swDate&&s.date>=swDate):[];
   const merged=[...prevData,...currData].sort((a,b)=>a.date.localeCompare(b.date));
-  // Ejercicios con peso: promedio del peso equivalente (Brzycki) a las reps del techo del rango.
+  // Ejercicios con peso: promedio del peso equivalente (Brzycki) a R reps: 6 en principales (rango 4–6), 8 en accesorios.
   // Con exactamente R reps el punto es el peso real; menos reps lo bajan y más reps lo suben.
-  const R=(ex.range&&ex.range[1])||8;
+  const R=(ex.range&&ex.range[1]<=6)?6:8;
   const pts=merged.map(s=>{
     const vs=s.sets.filter(x=>x.r>0&&(kind!=='kg'||x.kg>0));
     if(!vs.length)return null;
