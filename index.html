@@ -583,13 +583,11 @@ const WK = {
     {id:'g2',es:'Flexión de piernas acostado',en:'Lying Leg Curl',                tipo:'Aislamiento',range:[10,15],def:85, mus:'<b>Principal:</b> Isquiotibiales · <b>Sec:</b> Gastrocnemio, poplíteo'},
   ],
   tsup:[
-    {id:'hg1',es:'Hang activo',              en:'Active Hang',             tipo:'Activación',kind:'secs', sets:2, range:[10,20], mus:'<b>Principal:</b> Escápulas, dorsal · <b>Sec:</b> Antebrazos, agarre'},
     {id:'dm1',es:'Dominadas con banda',      en:'Band-Assisted Pull-up',   tipo:'Compuesto', kind:'band', range:[5,8], mus:'<b>Principal:</b> Dorsal ancho · <b>Sec:</b> Bíceps, romboides, trapecio'},
     {id:'u1',es:'Press militar mancuernas',  en:'Seated Dumbbell Press',   tipo:'Compuesto', range:[6,8],  def:15,  mus:'<b>Principal:</b> Deltoides anterior y medio · <b>Sec:</b> Tríceps, trapecio'},
     {id:'l2b',es:'Remo mancuerna en banca',  en:'Bench-Supported DB Row',  tipo:'Compuesto', range:[8,12], def:20,  mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, deltoides posterior'},
     {id:'u4',es:'Elevación posterior mancuernas',en:'Dumbbell Rear Lateral Raise',tipo:'Aislamiento',range:[8,12],def:7.5,mus:'<b>Principal:</b> Deltoides posterior · <b>Sec:</b> Romboides, trapecio medio'},
     {id:'u2',es:'Remo polea agarre cerrado', en:'Seated Cable Row Close Grip',tipo:'Compuesto',range:[8,12],def:50, mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, trapecio medio'},
-    {id:'ng1',es:'Negativas de dominada',    en:'Negative Pull-up',        tipo:'Compuesto', kind:'reps', range:[3,3], rlabel:'3 reps · bajada 4–5 s', mus:'<b>Principal:</b> Dorsal ancho · <b>Sec:</b> Bíceps, romboides, core'},
   ]
 };
 // Ciclos 1 y 2 (push/pull/upper/legs): para mostrar y editar el historial antiguo
@@ -621,7 +619,6 @@ function fmtSet(ex,st){
   return String(st.r||'?');
 }
 function rangeLabel(ex){
-  if(ex.rlabel) return ex.rlabel;
   const k=exKind(ex);
   if(k==='reps') return 'máx, 1–2 en reserva';
   if(!ex.range) return '';
