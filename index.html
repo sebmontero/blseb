@@ -576,19 +576,20 @@ const WK = {
     {id:'fx1',es:'Flexiones',                en:'Push-up',                 tipo:'Compuesto', kind:'reps', range:null, mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Tríceps, deltoides anterior, core'},
   ],
   piernas:[
-    {id:'pl1',es:'Plancha',                  en:'Plank',                   tipo:'Activación',kind:'secs', range:[30,45], mus:'<b>Principal:</b> Core · <b>Sec:</b> Glúteos, hombros'},
-    {id:'g1',es:'Sentadilla barra',          en:'Barbell Squat',           tipo:'Compuesto', range:[4,6],  def:85,  mus:'<b>Principal:</b> Cuádriceps, glúteo mayor · <b>Sec:</b> Isquios, erector, aductores'},
+    {id:'pl1',es:'Plancha',                  en:'Plank',                   tipo:'Activación',kind:'secs', range:[45,60], mus:'<b>Principal:</b> Core · <b>Sec:</b> Glúteos, hombros'},
+    {id:'g1',es:'Sentadilla barra',          en:'Barbell Squat',           tipo:'Compuesto', range:[6,8],  def:85,  mus:'<b>Principal:</b> Cuádriceps, glúteo mayor · <b>Sec:</b> Isquios, erector, aductores'},
     {id:'rdl1',es:'Peso muerto rumano barra', en:'Romanian Deadlift',       tipo:'Compuesto', range:[6,8],  def:60,  mus:'<b>Principal:</b> Glúteo mayor, isquios · <b>Sec:</b> Erector, aductores'},
     {id:'ht1',es:'Hip thrust barra',         en:'Barbell Hip Thrust',      tipo:'Compuesto', range:[10,12],def:40,  mus:'<b>Principal:</b> Glúteo mayor · <b>Sec:</b> Isquios, aductores'},
-    {id:'g2',es:'Flexión de piernas acostado',en:'Lying Leg Curl',                tipo:'Aislamiento',range:[8,12],def:80,  mus:'<b>Principal:</b> Isquiotibiales · <b>Sec:</b> Gastrocnemio, poplíteo'},
+    {id:'g2',es:'Flexión de piernas acostado',en:'Lying Leg Curl',                tipo:'Aislamiento',range:[10,15],def:85, mus:'<b>Principal:</b> Isquiotibiales · <b>Sec:</b> Gastrocnemio, poplíteo'},
   ],
   tsup:[
+    {id:'hg1',es:'Hang activo',              en:'Active Hang',             tipo:'Activación',kind:'secs', sets:2, range:[10,20], mus:'<b>Principal:</b> Escápulas, dorsal · <b>Sec:</b> Antebrazos, agarre'},
     {id:'dm1',es:'Dominadas con banda',      en:'Band-Assisted Pull-up',   tipo:'Compuesto', kind:'band', range:[5,8], mus:'<b>Principal:</b> Dorsal ancho · <b>Sec:</b> Bíceps, romboides, trapecio'},
     {id:'u1',es:'Press militar mancuernas',  en:'Seated Dumbbell Press',   tipo:'Compuesto', range:[6,8],  def:15,  mus:'<b>Principal:</b> Deltoides anterior y medio · <b>Sec:</b> Tríceps, trapecio'},
     {id:'l2b',es:'Remo mancuerna en banca',  en:'Bench-Supported DB Row',  tipo:'Compuesto', range:[8,12], def:20,  mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, deltoides posterior'},
     {id:'u4',es:'Elevación posterior mancuernas',en:'Dumbbell Rear Lateral Raise',tipo:'Aislamiento',range:[8,12],def:7.5,mus:'<b>Principal:</b> Deltoides posterior · <b>Sec:</b> Romboides, trapecio medio'},
-    {id:'p3',es:'Press plano mancuernas',    en:'Dumbbell Bench Press',    tipo:'Compuesto', range:[8,12], def:15,  mus:'<b>Principal:</b> Pectoral mayor · <b>Sec:</b> Deltoides anterior, tríceps'},
     {id:'u2',es:'Remo polea agarre cerrado', en:'Seated Cable Row Close Grip',tipo:'Compuesto',range:[8,12],def:50, mus:'<b>Principal:</b> Dorsal ancho, romboides · <b>Sec:</b> Bíceps, trapecio medio'},
+    {id:'ng1',es:'Negativas de dominada',    en:'Negative Pull-up',        tipo:'Compuesto', kind:'reps', range:[3,3], rlabel:'3 reps · bajada 4–5 s', mus:'<b>Principal:</b> Dorsal ancho · <b>Sec:</b> Bíceps, romboides, core'},
   ]
 };
 // Ciclos 1 y 2 (push/pull/upper/legs): para mostrar y editar el historial antiguo
@@ -620,6 +621,7 @@ function fmtSet(ex,st){
   return String(st.r||'?');
 }
 function rangeLabel(ex){
+  if(ex.rlabel) return ex.rlabel;
   const k=exKind(ex);
   if(k==='reps') return 'máx, 1–2 en reserva';
   if(!ex.range) return '';
@@ -1150,14 +1152,23 @@ function findExById(wk,exId){
   }
   return null;
 }
-function weekLabel(w,starts){
-  const {d,m}=ymd(w);const dd=String(d).padStart(2,'0')+'/'+String(m).padStart(2,'0');
+function weekLabel(w,starts,day){
+  const {d,m}=ymd(day||w);const dd=String(d).padStart(2,'0')+'/'+String(m).padStart(2,'0');
   const c=cycleOf(w,starts||cycleStarts());
   if(!c) return `<small style="color:#bbb;font-weight:400">${dd}</small>`;
   const n=Math.round((dateStrToUTCms(w)-dateStrToUTCms(c.start))/(7*86400000))+1;
   const col=c.n===3?'':'color:#b5ad9f';
   if(c.n===1&&w>=addDaysStr(weekStartStr(C2_START),-14)) return `<span style="${col}">Deload</span><br><small style="color:#bbb;font-weight:400">${dd}</small>`;
   return `<span style="${col}">C${c.n} · S${n}</span><br><small style="color:#bbb;font-weight:400">${dd}</small>`;
+}
+// Fecha a mostrar en cada columna: el día de esa rutina en la semana (o, si no hay registro del día, el último ejercicio guardado esa semana)
+function sessionDays(weeks,days,lists){
+  const out={};
+  weeks.forEach(w=>{
+    const d=days.filter(s=>weekStartStr(s.date)===w).map(s=>s.date).sort().pop();
+    out[w]=d||lists.flat().filter(s=>weekStartStr(s.date)===w).map(s=>s.date).sort().pop()||w;
+  });
+  return out;
 }
 // Borde a la izquierda de la primera semana visible de cada ciclo (menos la primera columna)
 function cycleBorders(weeks,starts){
@@ -1185,8 +1196,9 @@ function renderProgTable(wk){
   if(!weeks.length){el.innerHTML='<div class="prog-empty">Aún no hay sesiones guardadas.</div>';return;}
   const c3=weekStartStr(CYCLE_START),starts=cycleStarts(),borders=cycleBorders(weeks,starts);
   const colCls=w=>borders[w]?' c3-start':'';
+  const dayOf=sessionDays(weeks,days,Object.values(dataOf));
 
-  let html='<table class="prog-tbl"><thead><tr><th>Ejercicio</th>'+weeks.map(w=>`<th class="${colCls(w)}">${weekLabel(w,starts)}</th>`).join('')+'</tr></thead><tbody>';
+  let html='<table class="prog-tbl"><thead><tr><th>Ejercicio</th>'+weeks.map(w=>`<th class="${colCls(w)}">${weekLabel(w,starts,dayOf[w])}</th>`).join('')+'</tr></thead><tbody>';
   exList.forEach(ex=>{
     const all=dataOf[ex.id],k=exKind(ex);
     const boldMap=localPeaks(ex,all);
@@ -1253,7 +1265,8 @@ function renderOldTable(o,targetId){
   const weeks=[...wset].sort();
   if(!weeks.length){el.innerHTML='<div class="prog-empty">Sin registros.</div>';return;}
   const borders=cycleBorders(weeks,starts),colCls=w=>borders[w]?' c3-start':'';
-  let html='<table class="prog-tbl"><thead><tr><th>Ejercicio</th>'+weeks.map(w=>`<th class="${colCls(w)}">${weekLabel(w,starts)}</th>`).join('')+'</tr></thead><tbody>';
+  const dayOf=sessionDays(weeks,getH().filter(s=>s.workout===o),rows.map(r=>r.data));
+  let html='<table class="prog-tbl"><thead><tr><th>Ejercicio</th>'+weeks.map(w=>`<th class="${colCls(w)}">${weekLabel(w,starts,dayOf[w])}</th>`).join('')+'</tr></thead><tbody>';
   rows.forEach(({ex,data,prevId})=>{
     const peaks=localPeaks(ex,data),unit=UNIT_MAP[ex.id];
     html+=`<tr><td class="td-ex">${ex.es}${unit?` <span class="ex-unit">(${unit})</span>`:''}${prevId?`<span class="ex-prev">antes: ${OLD_PREV_NAME[prevId]||prevId}</span>`:''}</td>`;
@@ -1280,9 +1293,9 @@ function openExChart(wk,exId){
   // Con predecessor: solo sesiones del ejercicio NUEVO (desde switchDate)
   const prevData=ex.predecessor?getEx(ex.predecessor.id).filter(s=>swDate&&s.date>=swDate):[];
   const merged=[...prevData,...currData].sort((a,b)=>a.date.localeCompare(b.date));
-  // Ejercicios con peso: promedio del peso equivalente (Brzycki) a R reps: 6 en principales (rango 4–6), 8 en accesorios.
+  // Ejercicios con peso: promedio del peso equivalente (Brzycki) a R reps, el techo del rango vigente del ejercicio.
   // Con exactamente R reps el punto es el peso real; menos reps lo bajan y más reps lo suben.
-  const R=(ex.range&&ex.range[1]<=6)?6:8;
+  const R=(ex.range&&ex.range[1])||8;
   const pts=merged.map(s=>{
     const vs=s.sets.filter(x=>x.r>0&&(kind!=='kg'||x.kg>0));
     if(!vs.length)return null;
